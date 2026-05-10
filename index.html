@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Complete Guitar Course — Beginner to Advanced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* Light theme */
+  --bg: #faf6ee;
+  --bg-elev: #ffffff;
+  --bg-muted: #f1ead8;
+  --ink: #1a1614;
+  --ink-soft: #4a4339;
+  --ink-mute: #8b8273;
+  --accent: #c9420f;        /* burnt rust */
+  --accent-2: #d68f23;      /* amber */
+  --accent-3: #1b6f5a;      /* deep teal */
+  --line: #e3dac4;
+  --shadow: 0 1px 2px rgba(60, 40, 20, .06), 0 8px 24px rgba(60, 40, 20, .08);
+  --shadow-lg: 0 4px 12px rgba(60, 40, 20, .08), 0 24px 60px rgba(60, 40, 20, .14);
+
+  /* Chord colors — match book pills (G=green, C=red/coral, D=blue, Em=yellow) + extras */
+  --chord-G: #2f8a4a;   --chord-G-bg: #d8f0de;  --chord-G-ink: #0f3d20;
+  --chord-C: #c93a3a;   --chord-C-bg: #fbdcd6;  --chord-C-ink: #5a1010;
+  --chord-D: #2e6cc4;   --chord-D-bg: #d6e4f7;  --chord-D-ink: #0f2a52;
+  --chord-Em: #d6a420;  --chord-Em-bg: #fbeec0; --chord-Em-ink: #4a3a08;
+  --chord-Am: #8a3fa0;  --chord-Am-bg: #ecd9f3; --chord-Am-ink: #3d1452;
+  --chord-F:  #b85a18;  --chord-F-bg: #f6dac0;  --chord-F-ink: #4d2208;
+  --chord-Bm: #1f8e8e;  --chord-Bm-bg: #cfeeee; --chord-Bm-ink: #0a3838;
+
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Outfit', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-s: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+[data-theme="dark"] {
+  --bg: #14110e;
+  --bg-elev: #1d1813;
+  --bg-muted: #2a2218;
+  --ink: #f4ebd8;
+  --ink-soft: #d2c4a6;
+  --ink-mute: #8e8167;
+  --accent: #ee6a32;
+  --accent-2: #f0b14a;
+  --accent-3: #4ec0a3;
+  --line: #3a2f22;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,.4), 0 24px 60px rgba(0,0,0,.5);
+
+  --chord-G: #6dd685;   --chord-G-bg: #1a3d24;  --chord-G-ink: #c4f2cf;
+  --chord-C: #f07a7a;   --chord-C-bg: #4a1a1a;  --chord-C-ink: #fbcfcb;
+  --chord-D: #6fa8e8;   --chord-D-bg: #1a2e4d;  --chord-D-ink: #d4e4f8;
+  --chord-Em: #f0c74a;  --chord-Em-bg: #4a3a14; --chord-Em-ink: #fbe9b0;
+  --chord-Am: #c685d6;  --chord-Am-bg: #3d1c4a; --chord-Am-ink: #e8d2f0;
+  --chord-F:  #e89460;  --chord-F-bg: #4a2814;  --chord-F-ink: #f6d4b8;
+  --chord-Bm: #5dc4c4;  --chord-Bm-bg: #103838; --chord-Bm-ink: #c4eaea;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 40%),
+    radial-gradient(circle at 85% 100%, color-mix(in srgb, var(--accent-3) 6%, transparent), transparent 40%);
+  background-attachment: fixed;
+  transition: background-color .4s ease, color .4s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Top bar / theme toggle --- */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px;
+  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: var(--display); font-style: italic; font-weight: 500; font-size: 22px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.brand span { color: var(--accent); }
+.topbar nav { display: flex; gap: 22px; font-size: 14px; }
+.topbar nav a { color: var(--ink-soft); text-decoration: none; }
+.topbar nav a:hover { color: var(--accent); }
+
+.theme-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--bg-elev);
+  padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  font-family: var(--body); color: var(--ink); font-size: 13px;
+  transition: all .2s ease;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle .icon { width: 16px; height: 16px; }
+
+/* --- Hero --- */
+.hero {
+  padding: 100px 32px 80px;
+  max-width: 1200px; margin: 0 auto;
+  position: relative;
+}
+.hero .eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: .98; letter-spacing: -.03em;
+  margin: 0 0 28px;
+  color: var(--ink);
+}
+.hero h1 em {
+  font-style: italic; color: var(--accent);
+  font-weight: 300;
+}
+.hero .lede {
+  max-width: 640px; font-size: 20px; color: var(--ink-soft); line-height: 1.6;
+  margin-bottom: 40px;
+}
+.hero-meta {
+  display: flex; gap: 40px; flex-wrap: wrap; padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.hero-meta .stat .n {
+  font-family: var(--display); font-size: 36px; font-weight: 500; color: var(--accent);
+  line-height: 1;
+}
+.hero-meta .stat .l {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--ink-mute); margin-top: 6px;
+}
+
+/* --- Layout --- */
+.wrap {
+  max-width: 1100px; margin: 0 auto; padding: 0 32px 120px;
+}
+section.part {
+  margin: 80px 0;
+  padding-top: 40px;
+  border-top: 1px dashed var(--line);
+}
+section.part > .part-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+section.part > h2 {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -.02em;
+  margin: 0 0 24px;
+}
+section.part > h2 em { font-style: italic; color: var(--accent); }
+
+h3 {
+  font-family: var(--display); font-weight: 500;
+  font-size: 30px; line-height: 1.2; letter-spacing: -.01em;
+  margin: 56px 0 16px;
+}
+h4 {
+  font-family: var(--display); font-weight: 500; font-style: italic;
+  font-size: 22px; margin: 32px 0 10px; color: var(--ink);
+}
+h5 {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent-3); margin: 24px 0 8px;
+  font-weight: 600;
+}
+p { margin: 0 0 1em; }
+p strong { color: var(--ink); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--accent-2); }
+
+ul, ol { padding-left: 22px; margin: 0 0 1.2em; }
+li { margin-bottom: .35em; }
+li::marker { color: var(--accent); }
+
+/* --- Chord pills --- */
+.chord {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .85em; font-weight: 700;
+  padding: 2px 9px; border-radius: 5px;
+  margin: 0 1px;
+  border: 1px solid currentColor;
+  letter-spacing: .02em;
+  vertical-align: baseline;
+}
+.chord.G  { color: var(--chord-G);  background: var(--chord-G-bg);  color: var(--chord-G-ink);  border-color: var(--chord-G); }
+.chord.C  { color: var(--chord-C);  background: var(--chord-C-bg);  color: var(--chord-C-ink);  border-color: var(--chord-C); }
+.chord.D  { color: var(--chord-D);  background: var(--chord-D-bg);  color: var(--chord-D-ink);  border-color: var(--chord-D); }
+.chord.Em { color: var(--chord-Em); background: var(--chord-Em-bg); color: var(--chord-Em-ink); border-color: var(--chord-Em); }
+.chord.Am { color: var(--chord-Am); background: var(--chord-Am-bg); color: var(--chord-Am-ink); border-color: var(--chord-Am); }
+.chord.F  { color: var(--chord-F);  background: var(--chord-F-bg);  color: var(--chord-F-ink);  border-color: var(--chord-F); }
+.chord.Bm { color: var(--chord-Bm); background: var(--chord-Bm-bg); color: var(--chord-Bm-ink); border-color: var(--chord-Bm); }
+
+/* --- Cards --- */
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin: 24px 0;
+  box-shadow: var(--shadow);
+}
+.card.accent {
+  border-left: 4px solid var(--accent);
+}
+.card.tip {
+  background: color-mix(in srgb, var(--accent-2) 10%, var(--bg-elev));
+  border-color: color-mix(in srgb, var(--accent-2) 40%, var(--line));
+}
+.card.warn {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-elev));
+  border-left: 4px solid var(--accent);
+}
+.card.warn::before {
+  content: "⚠ "; color: var(--accent); font-weight: 700;
+}
+.card .card-title {
+  font-family: var(--display); font-style: italic; font-weight: 500;
+  font-size: 20px; margin-bottom: 6px; color: var(--ink);
+}
+
+/* --- Tables --- */
+table {
+  width: 100%; border-collapse: collapse; margin: 20px 0;
+  font-size: 15px;
+  background: var(--bg-elev);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+th {
+  background: var(--bg-muted);
+  font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 600;
+  padding: 12px 16px; text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+td {
+  padding: 12px 16px; border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+tr:last-child td { border-bottom: 0; }
+tr:hover td { background: color-mix(in srgb, var(--accent) 4%, var(--bg-elev)); }
+
+/* --- Code / song charts --- */
+pre, code.block {
+  display: block;
+  background: var(--bg-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 18px 20px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--ink);
+  margin: 16px 0;
+}
+code.inline {
+  font-family: var(--mono); font-size: .9em;
+  background: var(--bg-muted); padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+/* --- Song chart --- */
+.song-chart {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 24px 0;
+  box-shadow: var(--shadow);
+  font-family: var(--mono); font-size: 13px; line-height: 2;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  overflow-x: auto;
+}
+.song-meta {
+  font-family: var(--body);
+  font-style: italic; color: var(--ink-mute);
+  font-size: 14px; margin-bottom: 14px; line-height: 1.5;
+  white-space: normal;
+}
+.song-meta .tempo {
+  font-family: var(--mono); font-style: normal;
+  display: inline-block; margin-left: 10px;
+  background: var(--bg-muted); padding: 2px 8px; border-radius: 4px;
+  font-size: 12px; color: var(--accent);
+}
+.section-label {
+  display: inline-block;
+  font-family: var(--body);
+  font-style: italic; color: var(--accent-3);
+  font-size: 14px; font-weight: 600;
+  margin: 12px 0 4px;
+}
+.strum-line {
+  font-family: var(--mono); font-size: 16px; color: var(--accent);
+  letter-spacing: .15em;
+  margin: 6px 0 12px;
+}
+
+/* --- Image prompt blocks --- */
+.img-prompt {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent-3) 12%, var(--bg-elev)),
+    color-mix(in srgb, var(--accent-2) 8%, var(--bg-elev)));
+  border: 1px dashed var(--accent-3);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin: 18px 0;
+  font-size: 14px;
+}
+.img-prompt .label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--accent-3); font-weight: 700; display: block; margin-bottom: 8px;
+}
+.img-prompt p { color: var(--ink-soft); margin: 0; font-style: italic; }
+
+/* --- YouTube link --- */
+.yt-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #ff0000; color: #fff !important;
+  padding: 5px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 500;
+  text-decoration: none !important;
+  margin: 4px 6px 4px 0;
+  transition: transform .15s ease;
+}
+.yt-link:hover { transform: translateY(-1px); }
+.yt-link svg { width: 14px; height: 14px; }
+.spotify-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #1db954; color: #fff !important;
+  padding: 5px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 500;
+  text-decoration: none !important;
+  margin: 4px 6px 4px 0;
+}
+.spotify-link:hover { transform: translateY(-1px); }
+.link-row { margin: 6px 0 14px; }
+
+/* --- Day cards (course timeline) --- */
+.day-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; margin: 24px 0;
+}
+.day-card {
+  background: var(--bg-elev); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 20px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  position: relative;
+}
+.day-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+.day-card .day-num {
+  display: inline-block; background: var(--accent); color: white;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  padding: 3px 10px; border-radius: 999px; margin-bottom: 10px;
+}
+.day-card h4 {
+  margin: 0 0 8px; font-size: 17px; font-style: normal;
+  font-family: var(--body); font-weight: 600;
+}
+.day-card ul { font-size: 14px; color: var(--ink-soft); padding-left: 18px; margin: 0; }
+.day-card.pattern .day-num { background: var(--accent-3); }
+.day-card.chord-day .day-num { background: var(--accent-2); color: #1a1614; }
+
+/* --- Chord diagram --- */
+.chord-diagram {
+  display: inline-block;
+  margin: 12px 18px 12px 0;
+  text-align: center;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  vertical-align: top;
+}
+.chord-diagram .name {
+  font-family: var(--display); font-style: italic; font-size: 24px;
+  font-weight: 600; margin-bottom: 8px;
+}
+.chord-diagram svg { display: block; margin: 0 auto; }
+
+/* --- Fretboard / strumming visual --- */
+.viz {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin: 20px 0;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.viz svg { max-width: 100%; height: auto; }
+
+/* --- Strumming pattern visual --- */
+.strum-pattern {
+  display: flex; gap: 6px; align-items: center; justify-content: center;
+  flex-wrap: wrap; margin: 18px 0;
+}
+.strum-cell {
+  width: 44px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-size: 26px; font-weight: 700;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: var(--bg-elev);
+}
+.strum-cell.down { color: var(--chord-D); border-color: var(--chord-D); background: var(--chord-D-bg); }
+.strum-cell.up { color: var(--chord-C); border-color: var(--chord-C); background: var(--chord-C-bg); }
+.strum-cell.skip { color: var(--ink-mute); border-style: dashed; opacity: .5; }
+
+/* --- Quote --- */
+blockquote {
+  border-left: 3px solid var(--accent);
+  margin: 20px 0; padding: 8px 22px;
+  font-family: var(--display); font-style: italic; font-size: 19px;
+  color: var(--ink-soft);
+}
+blockquote.muted { border-color: var(--ink-mute); color: var(--ink-mute); font-size: 15px; }
+
+/* --- TOC --- */
+.toc {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  margin: 60px 0;
+  box-shadow: var(--shadow);
+}
+.toc h3 {
+  margin: 0 0 24px;
+  font-style: italic; color: var(--accent);
+}
+.toc-cols {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+.toc-col h5 { color: var(--accent); margin-top: 0; }
+.toc-col ol { padding-left: 22px; font-size: 15px; }
+.toc-col ol li { margin-bottom: 6px; }
+.toc-col a { color: var(--ink-soft); text-decoration: none; }
+.toc-col a:hover { color: var(--accent); }
+
+/* --- Footer --- */
+footer {
+  border-top: 1px solid var(--line);
+  margin-top: 80px; padding: 60px 32px;
+  text-align: center;
+  color: var(--ink-mute); font-size: 14px;
+}
+footer .sig {
+  font-family: var(--display); font-style: italic; font-size: 28px;
+  color: var(--accent); margin-bottom: 8px;
+}
+
+/* --- Decorative --- */
+.deco-divider {
+  text-align: center; color: var(--ink-mute); margin: 50px 0;
+  font-family: var(--display); font-size: 24px; letter-spacing: 1em;
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px) {
+  .hero { padding: 60px 20px 50px; }
+  .hero h1 { font-size: 44px; }
+  .wrap { padding: 0 20px 80px; }
+  .topbar { padding: 12px 18px; flex-wrap: wrap; gap: 8px; }
+  .topbar nav { display: none; }
+  .card { padding: 22px; }
+  table { font-size: 13px; }
+  th, td { padding: 8px 10px; }
+  .song-chart { padding: 16px; font-size: 12px; }
+  .strum-cell { width: 36px; height: 46px; font-size: 22px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-muted); }
+::-webkit-scrollbar-thumb { background: var(--ink-mute); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* fade-in */
+.fade-in { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">The <em style="font-style: italic">Complete</em> <span>Guitar Course</span></div>
+  <nav>
+    <a href="#part-foundations">Foundations</a>
+    <a href="#part-strumming">Strumming</a>
+    <a href="#part-chords">Chords</a>
+    <a href="#part-songbook">Songbook</a>
+    <a href="#part-theory">Theory</a>
+    <a href="#part-advanced">Advanced</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="eyebrow">A 31-day course · expanded for the long road</div>
+  <h1>Learn the guitar.<br/><em>Then keep going.</em></h1>
+  <p class="lede">A complete, opinionated handbook covering everything from holding the instrument to fingerstyle, music theory, recording, raag basics, and 33+ songs you'll actually want to play.</p>
+  <div class="hero-meta">
+    <div class="stat"><div class="n">31</div><div class="l">Day Course</div></div>
+    <div class="stat"><div class="n">33+</div><div class="l">Songs</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">Genres Covered</div></div>
+    <div class="stat"><div class="n">∞</div><div class="l">Practice Hours</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h3>What's inside</h3>
+  <div class="toc-cols">
+    <div class="toc-col">
+      <h5>Part 0 — Foundations</h5>
+      <ol>
+        <li><a href="#why">Why learn guitar</a></li>
+        <li><a href="#overview">Course overview</a></li>
+        <li><a href="#parts">Parts of the guitar</a></li>
+        <li><a href="#action">Guitar action (setup)</a></li>
+        <li><a href="#metronome">The metronome</a></li>
+        <li><a href="#tuning">Tuning</a></li>
+      </ol>
+      <h5>Part 1 — Strumming</h5>
+      <ol start="7">
+        <li><a href="#strumming">Days 1–15: Strumming</a></li>
+      </ol>
+      <h5>Part 2 — Chords</h5>
+      <ol start="8">
+        <li><a href="#chords-days">Days 16–31: Chords</a></li>
+        <li><a href="#completion">Course completion</a></li>
+      </ol>
+    </div>
+    <div class="toc-col">
+      <h5>Part 3 — Songbook</h5>
+      <ol start="10">
+        <li><a href="#part-songbook">33 song charts</a></li>
+        <li><a href="#bonus-bollywood">Bonus Bollywood songs</a></li>
+      </ol>
+      <h5>Part 4 — Music Theory</h5>
+      <ol start="12">
+        <li><a href="#theory-basics">Notes & saargam</a></li>
+        <li><a href="#scales">Scales & intervals</a></li>
+        <li><a href="#chord-construction">Chord construction</a></li>
+        <li><a href="#progressions">Progressions</a></li>
+        <li><a href="#circle">Circle of fifths</a></li>
+        <li><a href="#raag">Raag basics</a></li>
+        <li><a href="#modes">Modes & pentatonic</a></li>
+      </ol>
+    </div>
+    <div class="toc-col">
+      <h5>Part 5 — Advanced</h5>
+      <ol start="19">
+        <li><a href="#barre">Barre chords</a></li>
+        <li><a href="#caged">CAGED system</a></li>
+        <li><a href="#fingerstyle">Fingerstyle PIMA</a></li>
+        <li><a href="#techniques">Hammer-ons, bends, slides</a></li>
+        <li><a href="#patterns">Strumming library</a></li>
+        <li><a href="#riffs">Famous riffs</a></li>
+        <li><a href="#genres">Genre lessons</a></li>
+      </ol>
+      <h5>Part 6 — Practice & Beyond</h5>
+      <ol start="26">
+        <li><a href="#routine">Practice routines</a></li>
+        <li><a href="#ear">Ear training</a></li>
+        <li><a href="#recording">Recording basics</a></li>
+        <li><a href="#mistakes">Common mistakes</a></li>
+        <li><a href="#maintenance">Maintenance</a></li>
+        <li><a href="#buying">Buying guide</a></li>
+        <li><a href="#hacks">Beginner song hacks</a></li>
+        <li><a href="#progress">90-day progress chart</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PART 0 — FOUNDATIONS -->
+<!-- ============================================ -->
+<section class="part" id="part-foundations">
+  <div class="part-label">Part 0</div>
+  <h2><em>Foundations</em></h2>
+
+  <h3 id="why">1. Why learn guitar</h3>
+  <blockquote>The smartest way to learn guitar is to play things that are fun. Be the rockstar you always dreamed of.</blockquote>
+  <div class="card warn">
+    <strong>Don't skip preparation.</strong> Everyone is different — but if you stay consistent, you <em>will</em> rock. Twenty minutes a day beats two hours once a week.
+  </div>
+
+  <h3 id="overview">2. Course overview</h3>
+  <p>Two parts. Sixteen days each. By the end you'll have four chord shapes, four strumming patterns, 31 practiced songs, and the foundation to play almost anything in any language.</p>
+  <table>
+    <thead><tr><th>Part</th><th>What you learn</th><th>Days</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Part 1 — Strumming</strong></td><td>Four strumming patterns, basic timing, song practice</td><td>15</td></tr>
+      <tr><td><strong>Part 2 — Chords</strong></td><td>D, C, G, Em chord shapes; transitions; full songs</td><td>16</td></tr>
+      <tr><td><strong>Bonus parts</strong></td><td>Theory, raag, fingerstyle, recording, gigging</td><td>Lifetime</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Do's & Don'ts</h4>
+  <ul>
+    <li><strong>Track your progress</strong> — print the 90-day chart at the end and stick it to your wall.</li>
+    <li><strong>Don't skip lessons</strong> — follow step-by-step.</li>
+    <li><strong>Never miss a day</strong> — twenty minutes is better than zero.</li>
+    <li><strong>Watch tutorial videos</strong> — see Part 6 for a curated list.</li>
+  </ul>
+
+  <h3 id="parts">3. Parts of the guitar</h3>
+  <p>Get familiar with these terms. They show up everywhere from chord diagrams to repair shops.</p>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt for AI generation</span>
+    <p>"A clean, minimalist line-art illustration of an acoustic guitar, side-on view, with elegant labeled callouts pointing to: Headstock, Tuning Keys, Nut, Fretboard, Frets (3rd & 6th highlighted), Fret Wire, Strings (1st labeled at bottom, 6th at top), Soundhole, Bridge, and Body. Use a warm cream background with dark charcoal lines and burnt-orange accents on the labels. Editorial textbook aesthetic, vintage music theory book vibe."</p>
+  </div>
+
+  <div class="viz">
+    <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Guitar parts diagram">
+      <!-- Body -->
+      <ellipse cx="160" cy="120" rx="100" ry="72" fill="none" stroke="currentColor" stroke-width="2"/>
+      <ellipse cx="160" cy="120" rx="22" ry="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="135" y="142" width="50" height="14" rx="3" fill="currentColor" opacity=".35"/>
+      <!-- Neck -->
+      <rect x="250" y="108" width="240" height="24" fill="none" stroke="currentColor" stroke-width="2"/>
+      <!-- Frets -->
+      <line x1="290" y1="108" x2="290" y2="132" stroke="currentColor" stroke-width="1"/>
+      <line x1="330" y1="108" x2="330" y2="132" stroke="currentColor" stroke-width="1"/>
+      <line x1="370" y1="108" x2="370" y2="132" stroke="currentColor" stroke-width="1"/>
+      <line x1="410" y1="108" x2="410" y2="132" stroke="currentColor" stroke-width="1"/>
+      <line x1="450" y1="108" x2="450" y2="132" stroke="currentColor" stroke-width="1"/>
+      <!-- Strings -->
+      <line x1="60" y1="112" x2="490" y2="112" stroke="currentColor" stroke-width=".5"/>
+      <line x1="60" y1="116" x2="490" y2="116" stroke="currentColor" stroke-width=".7"/>
+      <line x1="60" y1="120" x2="490" y2="120" stroke="currentColor" stroke-width=".9"/>
+      <line x1="60" y1="124" x2="490" y2="124" stroke="currentColor" stroke-width="1.1"/>
+      <line x1="60" y1="128" x2="490" y2="128" stroke="currentColor" stroke-width="1.3"/>
+      <!-- Headstock -->
+      <path d="M490 100 L555 92 L555 148 L490 140 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="510" cy="104" r="3" fill="currentColor"/>
+      <circle cx="530" cy="100" r="3" fill="currentColor"/>
+      <circle cx="510" cy="136" r="3" fill="currentColor"/>
+      <circle cx="530" cy="140" r="3" fill="currentColor"/>
+      <!-- Labels -->
+      <g font-family="JetBrains Mono, monospace" font-size="10" fill="var(--accent)">
+        <text x="100" y="40">Body</text><line x1="115" y1="44" x2="155" y2="80" stroke="var(--accent)" stroke-width=".7"/>
+        <text x="135" y="180">Bridge</text><line x1="155" y1="172" x2="158" y2="158" stroke="var(--accent)" stroke-width=".7"/>
+        <text x="288" y="98">Frets</text>
+        <text x="380" y="98">Fret Wire</text>
+        <text x="510" y="80">Tuning Keys</text><line x1="525" y1="84" x2="525" y2="98" stroke="var(--accent)" stroke-width=".7"/>
+        <text x="60" y="100">Strings</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="action">4. Guitar action</h3>
+  <p><strong>Action</strong> = the gap between the strings and the fretboard. Too high and your fingers will hate you; too low and the strings buzz.</p>
+  <p><strong>How to measure:</strong> tighten the 6th string, hold a small ruler at the 12th fret, and read off the gap.</p>
+  <table>
+    <thead><tr><th>Action</th><th>Range</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Low</td><td>&lt; 2.2 mm</td><td style="color:var(--chord-C)">❌ Buzzy</td></tr>
+      <tr><td><strong>Perfect</strong></td><td><strong>2.2 – 2.8 mm</strong></td><td style="color:var(--chord-G)">✅ Sweet spot</td></tr>
+      <tr><td>High</td><td>&gt; 2.8 mm</td><td style="color:var(--chord-C)">❌ Sore fingers</td></tr>
+    </tbody>
+  </table>
+  <div class="card tip">
+    Most music shops will adjust action for free. If you're handy, a YouTube video plus an Allen key takes about 10 minutes.
+  </div>
+
+  <h3 id="metronome">5. The metronome</h3>
+  <blockquote>Greats like Sachin and Rahman played with perfect timing. Yours starts here.</blockquote>
+  <p>A metronome helps you stay <em>on the beat</em>. Free apps work fine — <strong>GuitarTuna</strong> has one built in.</p>
+  <p>Two parameters to know:</p>
+  <ol>
+    <li><strong>Beat count (time signature)</strong> — clicks per bar. <code class="inline">4/4</code> means 4 clicks per bar.</li>
+    <li><strong>Tempo</strong> — speed of those clicks, in BPM. 4/4 at <code class="inline">80</code> sounds slower than 4/4 at <code class="inline">120</code>.</li>
+  </ol>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt</span>
+    <p>"A clean, modern phone-screen mockup of a metronome app interface, dark background, large white tempo number '72' centered, +/- buttons on either side, big circular play button in the middle, '4/4' time signature label at the bottom with four small dots above it. Settings gear icon top-left. Apple SF Pro feel. Drop shadow under the phone."</p>
+  </div>
+
+  <h3 id="tuning">6. Tuning</h3>
+  <blockquote>Slow internet is frustrating. So is an untuned guitar.</blockquote>
+  <p>Tuning sets the pitch of each open string by turning the tuning keys. Use a free app like <strong>GuitarTuna</strong> until your ears can do it themselves.</p>
+
+  <h4>The mnemonic</h4>
+  <p style="font-family:var(--display);font-style:italic;font-size:24px;color:var(--accent);text-align:center;margin:24px 0">"every <strong>B</strong>ody <strong>G</strong>oes <strong>D</strong>ancing <strong>A</strong>fter <strong>E</strong>ating"</p>
+
+  <table>
+    <thead><tr><th>String</th><th>1st (thinnest)</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th><th>6th (thickest)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Note</strong></td><td>e</td><td>B</td><td>G</td><td>D</td><td>A</td><td>E</td></tr>
+      <tr><td><strong>Mnemonic</strong></td><td>every</td><td>Body</td><td>Goes</td><td>Dancing</td><td>After</td><td>Eating</td></tr>
+    </tbody>
+  </table>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt</span>
+    <p>"Three side-by-side close-up photographs of a guitar headstock with a digital tuner overlay on the top string. Left image: tuner shows '-7' with a red 'TOO LOW!' label; the string visualisation curves downward in red. Middle image: tuner shows a green checkmark with the letter 'E' clear and centred. Right image: tuner shows '+10' with a red 'TOO HIGH!' label; string curves upward. Warm wood headstock, brass tuning pegs, soft studio lighting."</p>
+  </div>
+
+  <div class="card warn">
+    Always check tuning before playing. Even pro guitars drift after temperature changes or a flight.
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 1 — STRUMMING -->
+<!-- ============================================ -->
+<section class="part" id="part-strumming">
+  <div class="part-label">Part 1 · Days 1–15</div>
+  <h2><em>Strumming</em></h2>
+  <p>Strumming is just <strong>downstroke (D)</strong> and <strong>upstroke (U)</strong> motion of your strumming hand. We'll learn the four most-used patterns in popular music.</p>
+
+  <h3 id="patterns-intro">The four core patterns</h3>
+
+  <div class="card accent">
+    <div class="card-title">Pattern 1 — Downstrokes</div>
+    <p><strong>1 bar = D D D D</strong> · The starter. Plain, even, on every beat.</p>
+    <div class="strum-pattern">
+      <div class="strum-cell down">↓</div><div class="strum-cell down">↓</div>
+      <div class="strum-cell down">↓</div><div class="strum-cell down">↓</div>
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">Pattern 2 — Alternate Beat (1-2-1-2)</div>
+    <p><strong>1 bar = D D D D</strong> with accents on alternate beats. Used in rock 'n' roll, peppy, and dance songs.</p>
+    <div class="strum-pattern">
+      <div class="strum-cell down" style="opacity:1">↓</div>
+      <div class="strum-cell down" style="opacity:.55">↓</div>
+      <div class="strum-cell down" style="opacity:1">↓</div>
+      <div class="strum-cell down" style="opacity:.55">↓</div>
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">Pattern 3 — Down-Up</div>
+    <p><strong>1 bar = D U D U</strong> · Introduces the upstroke. The bedrock of country and folk.</p>
+    <div class="strum-pattern">
+      <div class="strum-cell down">↓</div><div class="strum-cell up">↑</div>
+      <div class="strum-cell down">↓</div><div class="strum-cell up">↑</div>
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">Pattern 4 — Pop Strum</div>
+    <p><strong>1 bar = D _ DU _ DU</strong> · Six strokes, two skips (after the 1st and 4th). Learn this pattern and you can play hundreds of songs. Foundation for the more advanced 16-beat pattern.</p>
+    <div class="strum-pattern">
+      <div class="strum-cell down">↓</div>
+      <div class="strum-cell skip">·</div>
+      <div class="strum-cell down">↓</div>
+      <div class="strum-cell up">↑</div>
+      <div class="strum-cell skip">·</div>
+      <div class="strum-cell down">↓</div>
+      <div class="strum-cell up">↑</div>
+    </div>
+  </div>
+
+  <h3 id="strumming">15-day strumming schedule</h3>
+
+  <div class="day-grid">
+    <div class="day-card pattern">
+      <div class="day-num">Day 1 · Pattern 1</div>
+      <h4>Downstrokes</h4>
+      <ul><li><em>Kal ho na ho</em> — 30 reps. Try at tempo 60, 80, 100, 120.</li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 2</div>
+      <h4>Practice</h4>
+      <ul><li><em>Raabta</em> — 20 reps</li><li><em>Channa Mereya</em> — 20 reps</li></ul>
+    </div>
+    <div class="day-card pattern">
+      <div class="day-num">Day 3 · Pattern 2</div>
+      <h4>Alternate Beat</h4>
+      <ul><li><em>Zindagi ek safar</em> — 30 reps</li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 4</div>
+      <h4>Practice</h4>
+      <ul><li><em>Mere sapno ki rani</em> — try tempo 160, 180, 220</li><li><em>Ye chand sa roshan chehra</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 5</div>
+      <h4>Practice</h4>
+      <ul><li><em>Jingle Bell</em></li><li><em>Sar jo tera chakraye</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 6</div>
+      <h4>Practice</h4>
+      <ul><li><em>Aaj kal tere mere pyaar ke</em></li><li><em>Hai apna dil to awara</em></li></ul>
+    </div>
+    <div class="day-card pattern">
+      <div class="day-num">Day 7 · Pattern 3</div>
+      <h4>Down-Up</h4>
+      <ul><li><em>Kal ho na ho</em> — tempo 80 only</li><li><em>Give me some sunshine</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 8</div>
+      <h4>Practice</h4>
+      <ul><li><em>Channa Mereya</em></li><li><em>Main kabhi batlata nahi</em></li></ul>
+    </div>
+    <div class="day-card pattern">
+      <div class="day-num">Day 9 · Pattern 4</div>
+      <h4>Pop Strum</h4>
+      <ul><li><em>Pyaar hua ikraar hua</em> — 30 reps</li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 10</div>
+      <h4>Practice</h4>
+      <ul><li><em>Raabta</em></li><li><em>Chahun mein ya na</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 11</div>
+      <h4>Practice</h4>
+      <ul><li><em>Chukar mere mann ko</em></li><li><em>Dum maaro dum</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 12</div>
+      <h4>Practice</h4>
+      <ul><li><em>Ye shaam mastani</em></li><li><em>Baar baar din ye aaye</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 13</div>
+      <h4>Practice</h4>
+      <ul><li><em>Mere saamne wali khidki</em></li><li><em>Hothon se chu lo tum</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 14</div>
+      <h4>Practice</h4>
+      <ul><li><em>Happy Birthday to You</em></li><li><em>Main tenu samjhawan ki</em></li></ul>
+    </div>
+    <div class="day-card">
+      <div class="day-num">Day 15</div>
+      <h4>Practice</h4>
+      <ul><li><em>Ajeeb dastan hai yeh</em> — 30 reps</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 2 — CHORDS -->
+<!-- ============================================ -->
+<section class="part" id="part-chords">
+  <div class="part-label">Part 2 · Days 16–31</div>
+  <h2><em>Chords</em></h2>
+  <p>A <strong>chord</strong> is three or more notes played together. We'll learn just <strong>four</strong> — and with these four, you can play hundreds of songs in any language.</p>
+
+  <p>Meet the cast:</p>
+  <p style="text-align:center;font-size:24px;margin:30px 0">
+    <span class="chord D">D</span> &nbsp;
+    <span class="chord C">C</span> &nbsp;
+    <span class="chord G">G</span> &nbsp;
+    <span class="chord Em">Em</span>
+  </p>
+
+  <div class="card warn">
+    <strong>Heads up.</strong> Your fingers will hurt for the next 15 days — there's no shortcut to building that callus. And: cut the nails on your chord-playing hand. Long nails make pressing strings impossible.
+  </div>
+
+  <h3 id="chords-days">The four chord shapes</h3>
+
+  <h4 style="display:inline-block">Chord 1 · <span class="chord D">D Major</span></h4>
+  <p>Played with the 1st, 2nd & 3rd fingers.</p>
+  <ul>
+    <li><strong>1st finger</strong> — 3rd string, 2nd fret</li>
+    <li><strong>2nd finger</strong> — 1st string, 2nd fret</li>
+    <li><strong>3rd finger</strong> — 2nd string, 3rd fret</li>
+  </ul>
+
+  <div class="chord-diagram">
+    <div class="name" style="color:var(--chord-D)">D Major</div>
+    <svg viewBox="0 0 140 170" width="140" height="170">
+      <!-- Nut -->
+      <rect x="20" y="20" width="100" height="6" fill="currentColor"/>
+      <!-- Strings -->
+      <g stroke="currentColor" stroke-width="1">
+        <line x1="20" y1="26" x2="20" y2="160"/>
+        <line x1="40" y1="26" x2="40" y2="160"/>
+        <line x1="60" y1="26" x2="60" y2="160"/>
+        <line x1="80" y1="26" x2="80" y2="160"/>
+        <line x1="100" y1="26" x2="100" y2="160"/>
+        <line x1="120" y1="26" x2="120" y2="160"/>
+      </g>
+      <!-- Frets -->
+      <g stroke="currentColor" stroke-width=".7">
+        <line x1="20" y1="60" x2="120" y2="60"/>
+        <line x1="20" y1="95" x2="120" y2="95"/>
+        <line x1="20" y1="130" x2="120" y2="130"/>
+      </g>
+      <!-- X marks for muted (5th, 6th strings) -->
+      <text x="14" y="14" font-size="11" font-family="JetBrains Mono" fill="var(--chord-C)">×</text>
+      <text x="34" y="14" font-size="11" font-family="JetBrains Mono" fill="var(--chord-C)">×</text>
+      <!-- O for open 4th string -->
+      <circle cx="60" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
+      <!-- Finger dots -->
+      <circle cx="80" cy="42" r="9" fill="var(--chord-D)"/><text x="80" y="46" text-anchor="middle" font-size="10" fill="white" font-weight="700">1</text>
+      <circle cx="120" cy="42" r="9" fill="var(--chord-D)"/><text x="120" y="46" text-anchor="middle" font-size="10" fill="white" font-weight="700">2</text>
+      <circle cx="100" cy="78" r="9" fill="var(--chord-D)"/><text x="100" y="82" text-anchor="middle" font-size="10" fill="white" font-weight="700">3</text>
+    </svg>
+  </div>
+
+  <h4 style="display:inline-block">Chord 2 · <span class="chord C">C Major</span></h4>
+  <p>Played with the 1st, 2nd & 3rd fingers. You'll combine it with D in many songs.</p>
+  <ul>
+    <li><strong>1st finger</strong> — 2nd string, 1st fret</li>
+    <li><strong>2nd finger</strong> — 4th string, 2nd fret</li>
+    <li><strong>3rd finger</strong> — 5th string, 3rd fret</li>
+  </ul>
+
+  <div class="chord-diagram">
+    <div class="name" style="color:var(--chord-C)">C Major</div>
+    <svg viewBox="0 0 140 170" width="140" height="170">
+      <rect x="20" y="20" width="100" height="6" fill="currentColor"/>
+      <g stroke="currentColor" stroke-width="1">
+        <line x1="20" y1="26" x2="20" y2="160"/><line x1="40" y1="26" x2="40" y2="160"/>
+        <line x1="60" y1="26" x2="60" y2="160"/><line x1="80" y1="26" x2="80" y2="160"/>
+        <line x1="100" y1="26" x2="100" y2="160"/><line x1="120" y1="26" x2="120" y2="160"/>
+      </g>
+      <g stroke="currentColor" stroke-width=".7">
+        <line x1="20" y1="60" x2="120" y2="60"/>
+        <line x1="20" y1="95" x2="120" y2="95"/>
+        <line x1="20" y1="130" x2="120" y2="130"/>
+      </g>
+      <text x="14" y="14" font-size="11" font-family="JetBrains Mono" fill="var(--chord-C)">×</text>
+      <circle cx="120" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="60" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
+      <!-- Fingers -->
+      <circle cx="100" cy="42" r="9" fill="var(--chord-C)"/><text x="100" y="46" text-anchor="middle" font-size="10" fill="white" font-weight="700">1</text>
+      <circle cx="80" cy="78" r="9" fill="var(--chord-C)"/><text x="80" y="82" text-anchor="middle" font-size="10" fill="white" font-weight="700">2</text>
+      <circle cx="40" cy="113" r="9" fill="var(--chord-C)"/><text x="40" y="117" text-anchor="middle" font-size="10" fill="white" font-weight="700">3</text>
+    </svg>
+  </div>
+
+  <h4 style="display:inline-block">Chord 3 · <span class="chord G">G Major</span></h4>
+  <p>Played with the 1st, 2nd & 4th fingers. You'll use C and D alongside.</p>
+  <ul>
+    <li><strong>1st finger</strong> — 5th string, 2nd fret</li>
+    <li><strong>2nd finger</strong> — 6th string, 3rd fret</li>
+    <li><strong>4th finger</strong> — 1st string, 3rd fret</li>
+  </ul>
+
+  <div class="chord-diagram">
+    <div class="name" style="color:var(--chord-G)">G Major</div>
+    <svg viewBox="0 0 140 170" width="140" height="170">
+      <rect x="20" y="20" width="100" height="6" fill="currentColor"/>
+      <g stroke="currentColor" stroke-width="1">
+        <line x1="20" y1="26" x2="20" y2="160"/><line x1="40" y1="26" x2="40" y2="160"/>
+        <line x1="60" y1="26" x2="60" y2="160"/><line x1="80" y1="26" x2="80" y2="160"/>
+        <line x1="100" y1="26" x2="100" y2="160"/><line x1="120" y1="26" x2="120" y2="160"/>
+      </g>
+      <g stroke="currentColor" stroke-width=".7">
+        <line x1="20" y1="60" x2="120" y2="60"/>
+        <line x1="20" y1="95" x2="120" y2="95"/>
+        <line x1="20" y1="130" x2="120" y2="130"/>
+      </g>
+      <!-- Open strings -->
+      <circle cx="60" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="80" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="100" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <!-- Fingers -->
+      <circle cx="40" cy="78" r="9" fill="var(--chord-G)"/><text x="40" y="82" text-anchor="middle" font-size="10" fill="white" font-weight="700">1</text>
+      <circle cx="20" cy="113" r="9" fill="var(--chord-G)"/><text x="20" y="117" text-anchor="middle" font-size="10" fill="white" font-weight="700">2</text>
+      <circle cx="120" cy="113" r="9" fill="var(--chord-G)"/><text x="120" y="117" text-anchor="middle" font-size="10" fill="white" font-weight="700">4</text>
+    </svg>
+  </div>
+
+  <h4 style="display:inline-block">Chord 4 · <span class="chord Em">E Minor</span></h4>
+  <p>The easiest chord on the guitar. Just 2nd & 3rd fingers.</p>
+  <ul>
+    <li><strong>2nd finger</strong> — 5th string, 2nd fret</li>
+    <li><strong>3rd finger</strong> — 4th string, 2nd fret</li>
+  </ul>
+
+  <div class="chord-diagram">
+    <div class="name" style="color:var(--chord-Em)">E Minor</div>
+    <svg viewBox="0 0 140 170" width="140" height="170">
+      <rect x="20" y="20" width="100" height="6" fill="currentColor"/>
+      <g stroke="currentColor" stroke-width="1">
+        <line x1="20" y1="26" x2="20" y2="160"/><line x1="40" y1="26" x2="40" y2="160"/>
+        <line x1="60" y1="26" x2="60" y2="160"/><line x1="80" y1="26" x2="80" y2="160"/>
+        <line x1="100" y1="26" x2="100" y2="160"/><line x1="120" y1="26" x2="120" y2="160"/>
+      </g>
+      <g stroke="currentColor" stroke-width=".7">
+        <line x1="20" y1="60" x2="120" y2="60"/>
+        <line x1="20" y1="95" x2="120" y2="95"/>
+        <line x1="20" y1="130" x2="120" y2="130"/>
+      </g>
+      <circle cx="20" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="60" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="80" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="100" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="120" cy="12" r="4" fill="none" stroke="currentColor"/>
+      <circle cx="40" cy="42" r="9" fill="var(--chord-Em)"/><text x="40" y="46" text-anchor="middle" font-size="10" fill="white" font-weight="700">2</text>
+      <circle cx="60" cy="42" r="9" fill="var(--chord-Em)"/><text x="60" y="46" text-anchor="middle" font-size="10" fill="white" font-weight="700">3</text>
+    </svg>
+  </div>
+
+  <div style="clear:both"></div>
+
+  <h3 id="chord-schedule">16-day chord schedule</h3>
+
+  <div class="day-grid">
+    <div class="day-card chord-day"><div class="day-num">Day 16 · D Chord</div><h4>D Major</h4><ul><li><em>Phoolon ke rang se</em> — 30 reps</li></ul></div>
+    <div class="day-card"><div class="day-num">Day 17</div><h4>D practice</h4><ul><li><em>Hothon se chu lo tum</em></li><li><em>Dum maaro dum</em> (1st stanza)</li></ul></div>
+    <div class="day-card"><div class="day-num">Day 18</div><h4>D practice</h4><ul><li><em>Ye chand sa roshan chehra</em></li><li><em>Ek ladki bheegi bhaagi si</em></li></ul></div>
+    <div class="day-card chord-day"><div class="day-num">Day 19 · C Chord</div><h4>C Major</h4><ul><li><em>Pyaar hua ikraar hua</em> (v2)</li></ul></div>
+    <div class="day-card"><div class="day-num">Day 20</div><h4>C+D practice</h4><ul><li><em>Kal ho na ho</em></li><li><em>Raabta</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 21</div><h4>C+D practice</h4><ul><li><em>Channa mereya</em></li><li><em>Zindagi ek safar</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 22</div><h4>C+D practice</h4><ul><li><em>Mere sapno ki rani</em> — 160→220</li><li><em>Mera mann kehne laga</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 23</div><h4>C+D practice</h4><ul><li><em>Chahun mein ya na</em></li><li><em>Chukar mere mann ko</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 24</div><h4>C+D practice</h4><ul><li><em>Ajeeb dastan hai yeh</em></li><li><em>Maula mere maula</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 25</div><h4>C+D practice</h4><ul><li><em>Main tenu samjhawan ki</em></li><li><em>Hai apna dil to awara</em></li></ul></div>
+    <div class="day-card chord-day"><div class="day-num">Day 26 · G Chord</div><h4>G Major</h4><ul><li><em>Ye chand sa roshan chehra</em> — 30 reps</li></ul></div>
+    <div class="day-card"><div class="day-num">Day 27</div><h4>G practice</h4><ul><li><em>Aaj kal tere mere pyaar ke</em></li><li><em>Chukar mere mann ko</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 28</div><h4>G practice</h4><ul><li><em>Sar jo tera chakraye</em></li><li><em>Hai apna dil to awara</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 29</div><h4>G practice</h4><ul><li><em>Maula mere maula</em></li><li><em>Main tenu samjhawan ki</em></li></ul></div>
+    <div class="day-card"><div class="day-num">Day 30</div><h4>G practice</h4><ul><li><em>Mere samne wali khidki</em></li><li><em>Papa kehte hain bada naam</em></li></ul></div>
+    <div class="day-card chord-day"><div class="day-num">Day 31 · Em</div><h4>E Minor</h4><ul><li><em>Pyaar hua ikraar hua</em> (both versions)</li><li><em>Zindagi ek safar</em></li></ul></div>
+  </div>
+
+  <h3 id="completion">Course completion & post-work</h3>
+  <p>Congratulations — you've reached the finish line. By now you can play hundreds of songs with the four chords and four strumming patterns you've internalised.</p>
+
+  <h4>What's next</h4>
+  <ul>
+    <li><strong>Polish</strong> — for the next week, replay every song in this book to perfection.</li>
+    <li><strong>Add a fifth chord</strong> — A minor (Am). It opens dozens more songs.</li>
+    <li><strong>Move to barre chords</strong> — covered in Part 5.</li>
+    <li><strong>Study theory</strong> — Part 4 gives you a working understanding of <em>why</em> these chords go together.</li>
+  </ul>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt — completion certificate</span>
+    <p>"A vintage-style certificate of completion with ornate Art Deco border in deep burnt-orange and cream, central title 'COMPLETE GUITAR COURSE — Foundations Achieved' in elegant serif type, room for a name on a calligraphic line below, a small acoustic guitar illustration in the lower-centre, and the date '___________' on the bottom right. Aged-paper texture background. Editorial, handsome, frameable."</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 3 — SONGBOOK -->
+<!-- ============================================ -->
+<section id="part-songbook">
+  <div class="part-label">Part 3 · 33+ Songs</div>
+  <h2><em>Songbook</em></h2>
+  <p>The complete songbook from the 31-day course, plus bonus Bollywood requests. Each song uses our four core chords. <strong>YouTube links</strong> are reference videos — listen first, then play along. Default time signature is 4/4 unless noted.</p>
+
+  <div class="card tip">
+    <strong>How to read these charts:</strong> Coloured pills like <span class="chord G">G</span> show when to change chord. Each pill sits above (or just before) the lyric where the change happens. Strum arrows at the top of the song show the strumming pattern.
+  </div>
+
+  <h3 id="song-1">1. Kal ho na ho</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Sonu Nigam · Movie — Kal ho na ho <span class="tempo">4/4 · ♩=80</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=kal+ho+na+ho+guitar+chords+tutorial" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Kal%20Ho%20Na%20Ho" target="_blank">♫ Spotify</a>
+</div>
+<span class="strum-line">↓ ↓ ↓ ↓   ↓ ↓ ↓ ↓   ↓ ↓ ↓ ↓   ↓ ↓ ↓</span>
+
+<span class="chord G">G</span> Har ghadi badal rahi hai  <span class="chord Em">Em</span> roop zindagi
+<span class="chord G">G</span> chhaon hai kahin kahin hai <span class="chord Em">Em</span> dhoop zindagi  har pal
+<span class="chord C">C</span> yahaan jee bhar  <span class="chord G">G</span> jiyo jo hai
+<span class="chord C">C</span> samaan kal ho na  <span class="chord G">G</span> ho
+
+<span class="section-label">— Verse 1 —</span>
+<span class="chord D">D</span> Chahe jo tumhe pure  <span class="chord C">C</span> dil se
+<span class="chord D">D</span> milta hai wo mush... -  <span class="chord G">G</span> ...kil se
+<span class="chord D">D</span> aise jo koi ka... -  <span class="chord C">C</span> ...hin hai
+<span class="chord D">D</span> par wohi sabse ha... -  <span class="chord G">G</span> ...seen hai  iss haath
+<span class="chord C">C</span> ko    tum thaam  <span class="chord G">G</span> lo  wo maher... -
+<span class="chord C">C</span> ... - baan  kal ho na  <span class="chord G">G</span> ho...
+
+<span class="section-label">— Verse 2 —</span>
+<span class="chord D">D</span> Palkon ke leke   <span class="chord C">C</span> saaye   <span class="chord D">D</span> paas koi jo  <span class="chord C">C</span> aaye
+<span class="chord D">D</span> laakh sambhalo   <span class="chord D">D</span> pagal dil ko   <span class="chord D">D</span> dil dhadhke hi  <span class="chord G">G</span> jaaye  par soch
+<span class="chord C">C</span> lo   is pal hai  <span class="chord G">G</span> jo   woh das... -
+<span class="chord C">C</span> ... - taan   kal ho na  <span class="chord G">G</span> ho.</div>
+
+  <h3 id="song-2">2. Raabta (Kehte hai khuda)</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Hamsika, Arijit Singh · Movie — Agent Vinod <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=raabta+kehte+hai+khuda+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Raabta%20Agent%20Vinod" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Kehte hai khuda ne iss   <span class="chord Em">Em</span> Jahaan mein sabhi ke liye
+<span class="chord G">G</span> Kisi na kisi ko hai      <span class="chord Em">Em</span> Banaya har kisi ke liye
+<span class="chord C">C</span> Tera milna hai uss       <span class="chord C">C</span> Rab ka ishara maanu
+<span class="chord D">D</span> Mujhko banaya tere       <span class="chord D">D</span> Jaise hi kisi ke liye
+<span class="chord G">G</span> Kuch to hai tujhse        <span class="chord G">G</span> raabta
+<span class="chord Em">Em</span> Kuch to hai tujhse      <span class="chord Em">Em</span> raabta
+
+<span class="chord G">G</span> Kaise hum jaane humein   <span class="chord G">G</span> Kya pata
+<span class="chord Em">Em</span> Kuch to hai tujhse      <span class="chord Em">Em</span> raabta
+<span class="chord C">C</span> Tu humsafar hai          <span class="chord C">C</span> Phir kya fikar hai
+<span class="chord D">D</span> Jeene ki wajah yahi hai  <span class="chord D">D</span> Marna isi ke liye
+<span class="chord G">G</span> Kehte hai khuda ne iss   <span class="chord Em">Em</span> Jahaan mein sabhi ke liye</div>
+
+  <h3 id="song-3">3. Channa Mereya</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Arijit Singh · Movie — Ae Dil Hai Mushkil <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=channa+mereya+guitar+chords+arijit" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Channa%20Mereya" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span>            <span class="chord G">G</span> Accha  chalta hun duaaon mein   <span class="chord C">C</span> yaad rakhana   mere   <span class="chord C">C</span> zikr ka zubaan pe
+<span class="chord D">D</span> swaad rakhana  dil ke   <span class="chord G">G</span> sandukon mein mere acche  <span class="chord C">C</span> kaam rakhana   chitti   <span class="chord C">C</span> taaron mein bhi mera
+<span class="chord D">D</span> salaam rakhana             <span class="chord Em">Em</span> andhera tera           <span class="chord C">C</span> maine le liya mera   <span class="chord C">C</span> ujla sitara tere
+<span class="chord D">D</span> naam kiya   channa         <span class="chord G">G</span> mereya mereya   channa  <span class="chord C">C</span> mereya mereya  channa <span class="chord C">C</span> mereya mereya  beli...-
+<span class="chord D">D</span> ya o piya   channa         <span class="chord G">G</span> mereya mereya   channa  <span class="chord C">C</span> mereya mereya  channa <span class="chord C">C</span> mereya mereya  beli...-
+<span class="chord D">D</span> ...- ya O piya
+
+<span class="section-label">— Verse 2 —</span>
+<span class="chord G">G</span> Hmmm....mehfil mein teri  <span class="chord C">C</span> hum na rahe to       <span class="chord C">C</span> Gum to nahi hai     <span class="chord D">D</span> Gum to nahi hai
+<span class="chord G">G</span> Qisse humari              <span class="chord C">C</span> Nazdeekiyon se        <span class="chord C">C</span> Kam to nahi hai     <span class="chord D">D</span> Kam to nahi hai
+<span class="chord G">G</span> Itni dafah                <span class="chord C">C</span> Subah ko meri meine   <span class="chord C">C</span> Aanchal mein baith  <span class="chord D">D</span> Shaam kiya  Channa</div>
+
+  <h3 id="song-4">4. Zindagi Ek Safar</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Andaz <span class="tempo">2/4 · ♩=160</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=zindagi+ek+safar+hai+suhana+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Zindagi%20Ek%20Safar" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Zinda... -    <span class="chord Em">Em</span> ...- gi  Ek far  <span class="chord Em">Em</span> Safar hai   <span class="chord D">D</span> Suhanaaaaa
+<span class="chord D">D</span> Yahaan  <span class="chord C">C</span> kal  <span class="chord C">C</span> Kya ho kisne  <span class="chord Em">Em</span> jana
+<span class="chord Em">Em</span> Zinda... -    <span class="chord Em">Em</span> ...- gi  Ek far  <span class="chord Em">Em</span> Safar hai   <span class="chord D">D</span> Suhanaaaaa
+<span class="chord D">D</span> Yahaan  <span class="chord C">C</span> kal  <span class="chord C">C</span> Kya ho kisne  <span class="chord Em">Em</span> jana
+
+<span class="section-label">— Verse —</span>
+<span class="chord Em">Em</span> Maut aanii... -  <span class="chord Em">Em</span> Nii... hai   <span class="chord Em">Em</span> Aayegi ek  <span class="chord Em">Em</span> din
+<span class="chord Em">Em</span> Jaan jaanii... - <span class="chord Em">Em</span> Nii... hai   <span class="chord Em">Em</span> Jayegi ek  <span class="chord Em">Em</span> din   Aisi
+<span class="chord Em">Em</span> Baaton se        <span class="chord Em">Em</span> Kya  Ghab... - <span class="chord D">D</span> -ranaa     <span class="chord D">D</span> Aaaaaa  yahaan
+<span class="chord C">C</span> kal  <span class="chord C">C</span> Kya ho kisne  <span class="chord Em">Em</span> jana</div>
+
+  <h3 id="song-5">5. Mere Sapno Ki Rani</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Aradhana <span class="tempo">2/4 · ♩=160–220</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=mere+sapno+ki+rani+guitar+chords+tutorial" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Mere%20Sapno%20Ki%20Rani" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span>               <span class="chord Em">Em</span>              <span class="chord Em">Em</span> Mere    <span class="chord Em">Em</span> Sapno ki   Rani kab
+<span class="chord Em">Em</span> Aayegi tu     <span class="chord Em">Em</span>    aaye      <span class="chord Em">Em</span> Rut mas... -          <span class="chord Em">Em</span> ...tani kab
+<span class="chord C">C</span> Aayegi tu      <span class="chord C">C</span> biti          <span class="chord Em">Em</span> Jaye zind... -        <span class="chord D">D</span> ..gani kab
+<span class="chord C">C</span> Aayegi tu      <span class="chord C">C</span> chali         <span class="chord D">D</span> Aa tu... -             <span class="chord D">D</span> ...uuuu...Chali
+<span class="chord Em">Em</span> aaa....
+
+<span class="section-label">— Verse —</span>
+<span class="chord Em">Em</span> Kya hai bha... -  <span class="chord Em">Em</span> ...- rosa  <span class="chord Em">Em</span> Aashiq    <span class="chord Em">Em</span> Dil ka
+<span class="chord D">D</span> Aur ki...-          <span class="chord D">D</span> ...- si pe <span class="chord C">C</span> Ye aa      <span class="chord C">C</span> Jaaye  aa ga..--
+<span class="chord D">D</span> ... - ya to   ba...- <span class="chord D">D</span> Hut pach...- <span class="chord C">C</span> ... - tayegi  <span class="chord C">C</span> Tu ........ Mere
+<span class="chord Em">Em</span> Sapno ki    <span class="chord Em">Em</span> Rani kab    <span class="chord Em">Em</span> Aayegi tu __    ...and Chorus Continues</div>
+
+  <h3 id="song-6">6. Ye Chand Sa Roshan Chehra</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Mohammad Rafi · Movie — Kashmir Ki Kali <span class="tempo">2/4 · ♩=160</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=ye+chand+sa+roshan+chehra+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Ye%20Chand%20Sa%20Roshan%20Chehra" target="_blank">♫ Spotify</a>
+</div>
+<span class="strum-line">↓ ↓ ↓ ↓   ↓ ↓ ↓ ↓   ↓ ↓ ↓ ↓</span>
+
+<span class="chord G">G</span>                  <span class="chord G">G</span>            Ye  <span class="chord G">G</span> chand sa roshan         <span class="chord G">G</span> chehra zul.... -
+<span class="chord D">D</span> ...- fon ka rang  <span class="chord D">D</span> sunehra Ye.    <span class="chord G">G</span> jheel si neeli          <span class="chord G">G</span> aankhein koi
+<span class="chord D">D</span> raaz hai in mein  <span class="chord D">D</span> gehra taa.... -<span class="chord G">G</span> ...- reef ka ..-        <span class="chord G">G</span> ...- run kya
+<span class="chord G">G</span> uskiiii...        <span class="chord G">G</span>      jis       <span class="chord D">D</span> ne                      <span class="chord D">D</span> tumei ba.... -
+<span class="chord G">G</span> ...- naya
+
+<span class="section-label">— Verse —</span>
+                      <span class="chord G">G</span> Ye             <span class="chord G">G</span> cheez ka.. -            <span class="chord G">G</span> ...- yamat
+<span class="chord G">G</span> ki hai...         <span class="chord G">G</span>      lo        <span class="chord D">D</span> ..- gon se su ...-      <span class="chord D">D</span> ..- na kar.. -
+<span class="chord C">C</span> ... - te          <span class="chord G">G</span> the   tumheii...  <span class="chord G">G</span> dekh ke              <span class="chord G">G</span> meine
+<span class="chord G">G</span> mana              <span class="chord G">G</span>      woh       <span class="chord D">D</span> theek ka... -           <span class="chord D">D</span> ... - ha kar... -</div>
+
+  <h3 id="song-7">7. Jingle Bells</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Jimmy Buffet (& many others) <span class="tempo">2/4</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=jingle+bells+easy+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Jingle%20Bells" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Dashing through the   <span class="chord G">G</span> Snow  In a   <span class="chord G">G</span> One horse open   <span class="chord C">C</span> sleigh
+<span class="chord C">C</span> O'er the field we    <span class="chord D">D</span> go             <span class="chord D">D</span> Laughing all the <span class="chord G">G</span> way
+<span class="chord G">G</span> Bells on bob tails    <span class="chord G">G</span> ring           <span class="chord G">G</span> Making spirit   <span class="chord C">C</span> bright
+<span class="chord C">C</span> What fun it is to    <span class="chord D">D</span> laugh and sing <span class="chord D">D</span> A sleighing song <span class="chord G">G</span> tonight
+
+<span class="section-label">— Chorus —</span>
+<span class="chord G">G</span> Jingle bells,         <span class="chord G">G</span> Jingle bells   <span class="chord G">G</span> Jingle all       <span class="chord G">G</span> The way. Oh,
+<span class="chord C">C</span> what fun it is to    <span class="chord C">C</span> Ride in a      <span class="chord D">D</span> One horse open   <span class="chord D">D</span> sleigh
+<span class="chord G">G</span> Jingle bells,         <span class="chord G">G</span> Jingle bells   <span class="chord G">G</span> Jingle all       <span class="chord G">G</span> The way
+<span class="chord C">C</span> Oh, what fun it is to <span class="chord C">C</span> Ride in a      <span class="chord D">D</span> One horse open   <span class="chord G">G</span> sleigh</div>
+
+  <h3 id="song-8">8. Sar Jo Tera Chakraye</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Mohammad Rafi · Movie — Pyaasa <span class="tempo">2/4 · ♩=160</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=sar+jo+tera+chakraye+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Sar%20Jo%20Tera%20Chakraye" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Sar  jo  tera  chak-     <span class="chord G">G</span> raye  ya       <span class="chord D">D</span> Dil duba         <span class="chord D">D</span> jaye
+<span class="chord C">C</span> Aaja pyaare              <span class="chord C">C</span> Paas humare    <span class="chord D">D</span> Kaahe ghabh-     <span class="chord D">D</span> raaaye
+<span class="chord G">G</span> Kaahe ghabh-             <span class="chord G">G</span> raaaye
+
+<span class="section-label">— Verse 1 —</span>
+<span class="chord G">G</span> Tel mera ho              <span class="chord G">G</span> Muski          <span class="chord G">G</span> Gandh lage na    <span class="chord G">G</span> khushki
+<span class="chord D">D</span> Jiske sir par            <span class="chord D">D</span> Hath phira dun <span class="chord C">C</span> Kismat chamke    <span class="chord G">G</span> uski
+<span class="chord G">G</span> Sun Sun Sun              <span class="chord G">G</span> Arey baba sun  <span class="chord G">G</span> Is champi mein   <span class="chord G">G</span> Bade bade gun
+<span class="chord G">G</span> Lakh dukho ki            <span class="chord D">D</span> Ek dawa hai    <span class="chord C">C</span> Kyun na azam-    <span class="chord D">D</span> maayein</div>
+
+  <h3 id="song-9">9. Aaj Kal Tere Mere Pyaar</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Mohammad Rafi, Suman Kalyanpur · Movie — Brahmachari <span class="tempo">2/4 · ♩=160</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=aaj+kal+tere+mere+pyaar+ke+charche+guitar" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Aaj%20Kal%20Tere%20Mere%20Pyaar%20Ke%20Charche" target="_blank">♫ Spotify</a>
+</div>
+                              <span class="chord G">G</span> Aaj kal     <span class="chord G">G</span> Tere mere pyaar ke  <span class="chord G">G</span> Charche har Ja..-
+<span class="chord C">C</span> Baan par                  <span class="chord C">C</span>   Sabko    <span class="chord D">D</span> Malum ha aur         <span class="chord D">D</span> Sabko        khabar
+<span class="chord G">G</span> Ho gayi  to__   Kya       <span class="chord G">G</span> Aaj kal    <span class="chord G">G</span> Tere mere pyaar ke   <span class="chord G">G</span> Charche har Ja..-
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span> Humnei                    <span class="chord G">G</span> To Pyaar    <span class="chord G">G</span> Mein Aisa            <span class="chord G">G</span> Kaam kar
+<span class="chord G">G</span> Liya pyaar                <span class="chord D">D</span> Ki raah     <span class="chord D">D</span> Mein apna            <span class="chord C">C</span> Naam kar</div>
+
+  <h3 id="song-10">10. Hai Apna Dil To Awaara</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Hemant Kumar · Movie — Solva Saal <span class="tempo">2/4 · ♩=160</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=hai+apna+dil+to+awara+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Hai%20Apna%20Dil%20To%20Awara" target="_blank">♫ Spotify</a>
+</div>
+<span class="section-label">— Chorus —</span>
+<span class="chord G">G</span>                           <span class="chord G">G</span>    Hai      <span class="chord G">G</span> Apana             <span class="chord G">G</span> dil   to
+<span class="chord C">C</span> Awaaaaraaaa.. -           <span class="chord C">C</span> ... - aaaa  Na  <span class="chord D">D</span> Jaane         <span class="chord D">D</span> kispe
+<span class="chord G">G</span> Aayee... -                <span class="chord G">G</span> ... - ga       Hai <span class="chord G">G</span> Apana       <span class="chord G">G</span> dil   to
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span>   Ha... -                 <span class="chord G">G</span> ... - Seeno ne bu...- <span class="chord G">G</span> ...-laya  ga..... -    <span class="chord G">G</span> ...-le se bhi  la ... -
+<span class="chord G">G</span> ... - gaya   ba... -      <span class="chord C">C</span> ... - hut sam ...-    <span class="chord C">C</span> ... - jhaya  ya..-    <span class="chord D">D</span> ... - hi na sam... -</div>
+
+  <h3 id="song-11">11. Give Me Some Sunshine</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Suraj Jagan, Sharman Joshi · Movie — 3 Idiots <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=give+me+some+sunshine+guitar+chords+3+idiots" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Give%20Me%20Some%20Sunshine" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Saari umar  hum    <span class="chord D">D</span> Mar mar ke  jee liye   <span class="chord G">G</span> Ek pal to ab  humein   <span class="chord D">D</span> Jeene do  <span class="chord C">C</span> jeene do  <span class="chord D">D</span>
+<span class="chord G">G</span> Saari umar  hum    <span class="chord D">D</span> Mar mar ke  jee liye   <span class="chord G">G</span> Ek pal to ab  humein   <span class="chord D">D</span> Jeene do  <span class="chord C">C</span> jeene do  <span class="chord D">D</span>
+<span class="chord G">G</span> Na Na   <span class="chord C">C</span> Na-na  <span class="chord G">G</span> Na-na Na Na Na-na      <span class="chord G">G</span> Na Na  <span class="chord C">C</span> Na-na       <span class="chord D">D</span> Na Na Na Na Na Na=na
+<span class="chord G">G</span> Give me some sunshine  <span class="chord D">D</span> Give me some rain  <span class="chord G">G</span> Give me another chance <span class="chord D">D</span> I want to grow up once again <span class="chord C">C</span><span class="chord D">D</span>
+<span class="chord G">G</span> Bachpan to  Gaya   <span class="chord D">D</span> Jawani bhi Gayi        <span class="chord G">G</span> Ek pal to ab  humein   <span class="chord C">C</span> Jeene do  <span class="chord D">D</span> jeene do</div>
+
+  <h3 id="song-12">12. Main Kabhi Batlata Nahi</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Sonu Nigam · Movie — Phir Milenge <span class="tempo">4/4 · ♩=80</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=main+kabhi+batlata+nahi+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Main%20Kabhi%20Batlata%20Nahi" target="_blank">♫ Spotify</a>
+</div>
+<em style="color:var(--ink-mute)">Lyrics not captured in original scan. Practiced on Day 8. Common chord set: G, Em, C, D — same family as the rest of the songbook.</em></div>
+
+  <h3 id="song-13a">13a. Pyaar Hua Ikraar Hua (v1 — single chord)</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Manna Dey, Lata Mangeshkar · Movie — Shree 420 <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=pyaar+hua+ikraar+hua+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Pyaar%20Hua%20Ikraar%20Hua" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Pyaar hua ik..-    <span class="chord Em">Em</span> ...-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord Em">Em</span> Darta hai dil
+<span class="chord Em">Em</span> Pyaar hua ik..-    <span class="chord Em">Em</span> ...-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord Em">Em</span> Darta hai dil
+<span class="chord Em">Em</span> Kehta hai dil ras..- <span class="chord Em">Em</span> Ta muskhil maa..-   <span class="chord Em">Em</span> ..-lum nahi hai  ka..- <span class="chord Em">Em</span> ..-haan manzil
+<span class="chord Em">Em</span> Pyaar hua ik..-    <span class="chord Em">Em</span> ...-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord Em">Em</span> Darta hai dil</div>
+
+  <h3 id="song-13b">13b. Pyaar Hua Ikraar Hua (v2 — multiple chords)</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Manna Dey, Lata Mangeshkar · Movie — Shree 420 <span class="tempo">4/4 · ♩=100</span></div>
+                          <span class="chord Em">Em</span> ..-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord C">C</span> Darta hai dil <span class="chord Em">Em</span>
+<span class="chord Em">Em</span> Pyaar hua ik..-      <span class="chord Em">Em</span> ..-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord C">C</span> Darta hai dil <span class="chord Em">Em</span>
+<span class="chord Em">Em</span> Kehta hai dil ras..- <span class="chord Em">Em</span> Ta muskhil maa..-    ..-lum nahi hai  ka..-       <span class="chord Em">Em</span> ..-haan manzil
+<span class="chord Em">Em</span> Pyaar hua ik..-      <span class="chord Em">Em</span> ..-raar hua hai      <span class="chord Em">Em</span> Pyaar se phir kyun     <span class="chord C">C</span> Darta hai dil <span class="chord Em">Em</span></div>
+
+  <h3 id="song-14">14. Chahun Main Ya Na</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Arijit Singh, Palak Mucchal · Movie — Aashiqui 2 <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=chahun+main+ya+na+guitar+chords+aashiqui+2" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Chahun%20Main%20Ya%20Na" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Tu hi ye mujhko          <span class="chord D">D</span> Bata de            <span class="chord C">C</span> Chahun main Ya na    <span class="chord D">D</span>
+<span class="chord Em">Em</span> Apne tu dil ka           <span class="chord D">D</span> Pata de            <span class="chord C">C</span> Chahun main ya na    <span class="chord D">D</span>
+<span class="chord Em">Em</span> Itna bata doon tujhko    <span class="chord D">D</span> Chahat pe meri mujhko  <span class="chord C">C</span> Yu to nahii ikhtiy.. - <span class="chord D">D</span> ... - aar
+<span class="chord Em">Em</span> Phir bhi ye socha dil ne <span class="chord D">D</span> Ab to laga hai milne   <span class="chord C">C</span> Poochu tujhe ek   <span class="chord D">D</span> baar
+<span class="chord Em">Em</span> Tu hi ye mujhko          <span class="chord D">D</span> Bata de            <span class="chord C">C</span> Chahun main Ya na    <span class="chord D">D</span>
+
+<span class="section-label">— Verse —</span>
+<span class="chord Em">Em</span> Aisi kabhi              <span class="chord C">C</span> Pahele hui            <span class="chord C">C</span> Na thi khawahi.. - <span class="chord D">D</span> ...- shein
+<span class="chord Em">Em</span> Kisi se bhi              <span class="chord C">C</span> Milne ki              <span class="chord C">C</span> Na ki thi koshi.. - <span class="chord D">D</span> ...-shein</div>
+
+  <h3 id="song-15">15. Chukar Mere Mann Ko</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Yaarana <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=chukar+mere+mann+ko+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Chukar%20Mere%20Mann%20Ko" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Chukar mere               <span class="chord D">D</span> Mann ko kiya       <span class="chord D">D</span> Tune kya          <span class="chord G">G</span> ishara
+<span class="chord G">G</span> Badlaaa ye                <span class="chord C">C</span> mausam              <span class="chord D">D</span> Lage pyaara jag  <span class="chord G">G</span> saraa
+<span class="chord G">G</span> Chukar mere               <span class="chord D">D</span> Mann ko kiya       <span class="chord G">G</span> Tune kya          <span class="chord D">D</span> ishara
+<span class="chord G">G</span> Badlaaa ye                <span class="chord C">C</span> mausam              <span class="chord D">D</span> Lage pyaara jag  <span class="chord G">G</span> saraa
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span> Tu jo kahe jeevan          <span class="chord G">G</span> bhar              <span class="chord G">G</span> Tere liye main gaa..-  <span class="chord C">C</span> ..-un
+<span class="chord C">C</span> Tere liye main gaa...-     <span class="chord G">G</span> ..-un             <span class="chord G">G</span> Geet tere hothon       <span class="chord G">G</span> pe</div>
+
+  <h3 id="song-16">16. Dum Maro Dum</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Asha Bhosle · Movie — Hare Krishna Hare Raam <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=dum+maaro+dum+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Dum%20Maro%20Dum" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Dum maro dum             <span class="chord Em">Em</span>                  <span class="chord Em">Em</span> Mit jaye gum          <span class="chord Em">Em</span>
+<span class="chord D">D</span> Bolo subah shaam         <span class="chord D">D</span>                   <span class="chord Em">Em</span> Hare krishna Hare Raam <span class="chord Em">Em</span> Hare krishna Hare Raam
+
+<span class="section-label">— Verse —</span>
+<span class="chord Em">Em</span> Duniya ne humko          <span class="chord D">D</span> Diya kya          <span class="chord D">D</span> Duniya ne humse        <span class="chord C">C</span> Liya kya
+<span class="chord C">C</span> Hum sabki parvaah        <span class="chord D">D</span> Kare kyun         <span class="chord D">D</span> Sabne humara           <span class="chord Em">Em</span> Kiya kya
+<span class="chord Em">Em</span> Tu ru ru ru ru ru <span class="chord D">D</span>   <span class="chord C">C</span> Ru ru <span class="chord Em">Em</span>        <span class="chord Em">Em</span> Tu ru ru ru ru ru <span class="chord D">D</span> <span class="chord C">C</span> Ru ru <span class="chord Em">Em</span></div>
+
+  <h3 id="song-17">17. Ye Shaam Mastani</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Mohammad Rafi · Movie — Farz <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=ye+shaam+mastani+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Ye%20Shaam%20Mastani" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Ye shaam mas..-           <span class="chord G">G</span> ..-taani mad..-    <span class="chord G">G</span> ..-hoosh kiye         <span class="chord G">G</span> Jaaye mujhe
+<span class="chord G">G</span> door koi                  <span class="chord C">C</span> kheche teri        <span class="chord D">D</span> Aur liye              <span class="chord G">G</span> jaaye
+<span class="chord G">G</span> Ye shaam mas..-           <span class="chord G">G</span> ..-taani mad..-    <span class="chord G">G</span> ..-hoosh kiye         <span class="chord G">G</span> Jaaye mujhe
+<span class="chord G">G</span> door koi                  <span class="chord C">C</span> kheche teri        <span class="chord D">D</span> Aur liye              <span class="chord G">G</span> jaaye
+
+<span class="section-label">— Verse —</span>
+<span class="chord C">C</span> Duur Rehti hai            <span class="chord G">G</span> Kyun mere          <span class="chord C">C</span> Paas aati             <span class="chord G">G</span> Nahi ho..-</div>
+
+  <h3 id="song-18">18. Baar Baar Din Ye Aaye</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Mohammad Rafi · Movie — Farz <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=baar+baar+din+ye+aaye+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Baar%20Baar%20Din%20Ye%20Aaye" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Baar Baar Din             <span class="chord G">G</span> Ye aaye            <span class="chord G">G</span> Baar baar dil         <span class="chord D">D</span> Ye gaaye
+<span class="chord G">G</span> Baar Baar Din             <span class="chord G">G</span> Ye aaye            <span class="chord G">G</span> Baar baar dil         <span class="chord D">D</span> Ye gaaye   Tum
+<span class="chord C">C</span> Jiyo hazaaron             <span class="chord C">C</span> Saal ye meri       <span class="chord D">D</span> Hai aaarz... -        <span class="chord G">G</span> .... Oooo  Happy birth.. -
+<span class="chord C">C</span> Day to you                <span class="chord C">C</span>    Happy birth.. - <span class="chord G">G</span> Day to you            <span class="chord G">G</span>            Happy birth.. -
+<span class="chord D">D</span> Day to Suni ..-           <span class="chord D">D</span> ..- Ta Happy birth.. - <span class="chord G">G</span> Day to you.</div>
+
+  <h3 id="song-19">19. Happy Birthday To You</h3>
+  <div class="song-chart">
+<div class="song-meta">Songwriters — Patty &amp; Mildred J. Hill <span class="tempo">3/4</span></div>
+                              <span class="chord D">D</span> Happy birthday to    <span class="chord D">D</span> You          <span class="chord D">D</span> Happy birthday to   <span class="chord G">G</span> you
+<span class="chord G">G</span> Happy birthday dear       <span class="chord C">C</span> Mathew               <span class="chord D">D</span> Happy birthday to   <span class="chord G">G</span> you
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span> From good friends and    <span class="chord D">D</span> true                 <span class="chord D">D</span> From old friends and <span class="chord G">G</span> new
+<span class="chord G">G</span> May good luck with        <span class="chord C">C</span> you                  <span class="chord D">D</span> And happiness        <span class="chord G">G</span> too</div>
+
+  <h3 id="song-20">20. Mere Samne Wali Khidki</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Padosan <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=mere+samne+wali+khidki+mein+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Mere%20Samne%20Wali%20Khidki%20Mein" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span>            Mere            <span class="chord G">G</span> samne wali         <span class="chord D">D</span> Khidki mein ek      <span class="chord Em">Em</span> chandh ka tukda
+<span class="chord C">C</span> Rehta hai     af..-        <span class="chord G">G</span> ..-soos hai ye ki  <span class="chord C">C</span> Wo humse kuch        <span class="chord D">D</span> Ukhda ukhda
+<span class="chord G">G</span> rehta hai      Mere        <span class="chord G">G</span> samne wali         <span class="chord D">D</span> Khidki mein ek      <span class="chord Em">Em</span> chandh ka tukda
+<span class="chord C">C</span> Rehta hai
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span>              Bar..-        <span class="chord G">G</span> ..- saat bhi aakar <span class="chord G">G</span> chali gayi   ba.. - <span class="chord D">D</span> ..-dal bhi garaj kar
+<span class="chord G">G</span> Baras gaye   par           <span class="chord G">G</span> Uski ek    jha..-  <span class="chord G">G</span> ..- lak ke hum eh   <span class="chord D">D</span> Husan ke malik</div>
+
+  <h3 id="song-21">21. Hothon Se Chu Lo Tum</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Jagjit Singh · Movie — Prem Geet <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=hothon+se+chu+lo+tum+guitar+chords+jagjit" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Hothon%20Se%20Chu%20Lo%20Tum" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span>   Ho..-                   <span class="chord G">G</span> ..-Thon se chu lo   <span class="chord D">D</span> Tum mera           <span class="chord D">D</span> Geet amar kar
+<span class="chord G">G</span> Do  Ho..-                  <span class="chord G">G</span> ..-Thon se chu lo   <span class="chord D">D</span> Tum mera           <span class="chord D">D</span> Geet amar kar
+<span class="chord G">G</span> Do  Ban                   <span class="chord G">G</span> Jao meeti           <span class="chord D">D</span> Meri  meri          <span class="chord D">D</span> Preet amar kar
+<span class="chord G">G</span> Do  Ho..-                  <span class="chord G">G</span> ..-Thon se chu lo   <span class="chord D">D</span> Tum mera           <span class="chord D">D</span> Geet amar kar</div>
+
+  <h3 id="song-22">22. Main Tenu Samjhawan Ki</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Shreya Ghoshal · Movie — Humpty Sharma Ki Dulhania <span class="tempo">4/4 · ♩=100</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=main+tenu+samjhawan+ki+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Main%20Tenu%20Samjhawan%20Ki" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span>      Main tenu sam..-      <span class="chord D">D</span> ..-jhanwan ki      <span class="chord G">G</span>      Na tere bina   <span class="chord D">D</span> Lagda ji
+<span class="chord G">G</span>      main tenu sam..-      <span class="chord D">D</span> ..-jhanwan ki      <span class="chord G">G</span>      Na tere bina   <span class="chord D">D</span> Lagda ji
+<span class="chord G">G</span>      Tu ki jaane           <span class="chord C">C</span> Pyaaaaar  me..-    <span class="chord D">D</span> ..-ra  main karoon inte..-  <span class="chord C">C</span> ..-zaaaaar  te..-
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span> Mere dil ne                <span class="chord Em">Em</span> Chun laiyaa ne    <span class="chord C">C</span> Tere dil diyaan      <span class="chord G">G</span> rahaan
+<span class="chord G">G</span> Tu jo mere                 <span class="chord Em">Em</span> Naal tu rehta     <span class="chord C">C</span> Turpe meriyaan       <span class="chord G">G</span> Saahaa  Jeena</div>
+
+  <h3 id="song-23">23. Ajeeb Dastan Hai Yeh</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Lata Mangeshkar · Movie — Dil Apna Aur Preet Parai <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=ajeeb+dastan+hai+yeh+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Ajeeb%20Dastan%20Hai%20Yeh" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Ajeeb dastan hai           <span class="chord G">G</span> yeh                <span class="chord G">G</span> kahan shuru kahan    <span class="chord D">D</span> khatam
+<span class="chord D">D</span> yeh manzilein hain kaun    <span class="chord C">C</span> si                 <span class="chord D">D</span> na wo samajh sake na <span class="chord G">G</span> hum
+<span class="chord G">G</span> Ajeeb dastan hai           <span class="chord G">G</span> yeh                <span class="chord G">G</span> kahan shuru kahan    <span class="chord D">D</span> khatam
+
+<span class="section-label">— Verse —</span>
+<span class="chord G">G</span> Kisi ka pyar leke           <span class="chord C">C</span> tum               <span class="chord C">C</span> naya jahan banawo.-   <span class="chord G">G</span> -ge
+<span class="chord D">D</span> yeh shaam jab bhi aaye..-  <span class="chord C">C</span> ..-gi              <span class="chord C">C</span> tum humko yaad aawo..- <span class="chord G">G</span> -ge</div>
+
+  <h3 id="song-24">24. Ek Ladki Bheegi Bhaagi Si</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Chalti Ka Naam Gadi <span class="tempo">4/4 · at your own pace</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=ek+ladki+bheegi+bhaagi+si+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Ek%20Ladki%20Bheegi%20Bhaagi%20Si" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span>            Ek                <span class="chord Em">Em</span> ladki bheegi   <span class="chord Em">Em</span> bhaagi si  So..-    <span class="chord Em">Em</span> ..-ti raaton mein
+<span class="chord Em">Em</span> jaag si  mile                <span class="chord G">G</span> ek ajnabi se koi  <span class="chord D">D</span> aage na peeche     <span class="chord C">C</span> tum hi kaho ye koi
+<span class="chord Em">Em</span> baat hai
+
+<span class="section-label">— Verse —</span>
+<span class="chord Em">Em</span>   Dil                        <span class="chord Em">Em</span> hi dil mein chali <span class="chord Em">Em</span> jati hai  big..- <span class="chord Em">Em</span> ..-di bigdi chali
+<span class="chord Em">Em</span> aati hai  dhundh..-          <span class="chord C">C</span> ..-lati hui bal..- <span class="chord G">G</span> ..-khati hui      <span class="chord D">D</span> sawan ki sooni raat</div>
+
+  <h3 id="song-25">25. Phoolon Ke Rang Se</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kishor Kumar · Movie — Prem Pujari <span class="tempo">4/4 · ♩=90</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=phoolon+ke+rang+se+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Phoolon%20Ke%20Rang%20Se" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Phoolon ke rang se          <span class="chord G">G</span> Dil ki kalam se    <span class="chord D">D</span> Tujhko leke roz     <span class="chord D">D</span> paati
+<span class="chord G">G</span> Kaise bataun                <span class="chord G">G</span> Kisi kis tarah se  <span class="chord D">D</span> Pal pal tu mujhko   <span class="chord D">D</span> satati
+<span class="chord D">D</span> Tere hi sapne     <span class="chord C">C</span>      <span class="chord D">D</span> Lekar mein soya <span class="chord C">C</span> <span class="chord G">G</span> Teri hi yaadon mein <span class="chord G">G</span> jaaga
+<span class="chord G">G</span> Tere khayalon mein          <span class="chord G">G</span> Uljha raha yoon    <span class="chord D">D</span> Jaise ki mala mein  <span class="chord D">D</span> Dhaga haan</div>
+
+  <h3 id="song-26">26. Mera Mann Kehne Laga</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Falak Shabir · Movie — Nautanki Saala <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=mera+mann+kehne+laga+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Mera%20Mann%20Kehne%20Laga" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Tujhse hi to mi..-          <span class="chord G">G</span> ..-li hai rahat   <span class="chord C">C</span> tu hi me..-          <span class="chord C">C</span> ..-ri hai chahat
+<span class="chord Em">Em</span> tujhe hi to ju..-          <span class="chord Em">Em</span> ..-di hai zindag..- <span class="chord D">D</span> ..-gi              <span class="chord D">D</span>
+<span class="chord G">G</span> teri doori hai              <span class="chord G">G</span> kuch adhoori     <span class="chord C">C</span> saans aadhi hai       <span class="chord C">C</span> kuch hai puri
+<span class="chord Em">Em</span> ankhon mein ye             <span class="chord Em">Em</span> kaisi hai na..- <span class="chord D">D</span> ..-mi                 <span class="chord D">D</span>   mera</div>
+
+  <h3 id="song-27">27. Maula Mere Maula</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Roop Kumar Rathod · Movie — Anwar <span class="tempo">4/4 · ♩=120</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=maula+mere+maula+guitar+chords+anwar" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Maula%20Mere%20Maula" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span>     Aankhien                <span class="chord G">G</span> teri              <span class="chord G">G</span>            kitni ha..-  <span class="chord Em">Em</span> ..-seen
+<span class="chord Em">Em</span> eeeeen                     <span class="chord C">C</span> ki inka           <span class="chord D">D</span> aashiq                  <span class="chord C">C</span> main ban ga..-
+<span class="chord D">D</span> ..-ya hun                   <span class="chord C">C</span> mujhko ba..-      <span class="chord D">D</span> ..-saale inmein         <span class="chord G">G</span> tu
+<span class="chord G">G</span> tuuuuuu                     <span class="chord Em">Em</span> maula mere maula mere <span class="chord C">C</span> maula mere maula mere <span class="chord Em">Em</span> maula mere maula mere</div>
+
+  <h3 id="song-28">28. Papa Kehte Hain Bada Naam</h3>
+  <div class="song-chart">
+<div class="song-meta">Movie — Qayamat Se Qayamat Tak <span class="tempo">4/4 · at your own pace</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=papa+kehte+hain+bada+naam+karega+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Papa%20Kehte%20Hain" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Papa keh..-                 <span class="chord G">G</span> -...te hain bada  <span class="chord C">C</span> naam kare... -        <span class="chord D">D</span> -...ga
+<span class="chord G">G</span> beta hu...-                  <span class="chord G">G</span> -...mara aisa     <span class="chord C">C</span> kaam kare.... -      <span class="chord D">D</span> -...ga magar
+<span class="chord G">G</span> ye to                        <span class="chord G">G</span>            koi na  <span class="chord Em">Em</span> jaane              <span class="chord Em">Em</span> ki meri
+<span class="chord C">C</span> manzil                       <span class="chord C">C</span>    hai            <span class="chord D">D</span> kahaan                <span class="chord D">D</span>
+<span class="chord G">G</span> papa keh..-                  <span class="chord G">G</span> -...te hain bada  <span class="chord C">C</span> naam kare.. -         <span class="chord D">D</span> -...ga</div>
+
+  <h3 id="song-29">29. Summer of '69 — Bryan Adams</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Bryan Adams · 1984 <span class="tempo">4/4 · ♩=140</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=summer+of+69+easy+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Summer%20of%2069" target="_blank">♫ Spotify</a>
+</div>
+<em style="color:var(--ink-mute)">Bryan Adams' classic uses just D, A, Bm, G — but with the 4 chords you have, here's a usable transposition (capo 2 keeps original key with G, D, Em, C shapes):</em>
+
+<span class="chord D">D</span> I got my first real six-string,    <span class="chord G">G</span> Bought it at the five and dime
+<span class="chord D">D</span> Played it till my fingers bled,    <span class="chord G">G</span> It was the summer of sixty-nine
+
+<span class="chord Em">Em</span> Me and some guys from school,      <span class="chord G">G</span> Had a band and we tried real hard
+<span class="chord D">D</span> Jimmy quit, Jody got married,      <span class="chord C">C</span> I shoulda known we'd never get far
+
+<span class="section-label">— Chorus —</span>
+Oh when I look back now,
+<span class="chord D">D</span> That summer seemed to last fo<span class="chord G">G</span>rever
+And if I had the choice,
+<span class="chord D">D</span> Yeah, I'd always wanna be <span class="chord G">G</span> there
+<span class="chord D">D</span> Those were the <span class="chord G">G</span> best days of my <span class="chord D">D</span> life</div>
+
+  <h3 id="song-30">30. Wonderful Tonight — Eric Clapton</h3>
+  <div class="song-chart">
+<div class="song-meta">Singer — Eric Clapton · 1977 <span class="tempo">4/4 · ♩=86</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=wonderful+tonight+easy+guitar+chords+clapton" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Wonderful%20Tonight" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> It's late in the <span class="chord D">D</span> evening,
+She's <span class="chord C">C</span> wondering what clothes to <span class="chord G">G</span> wear
+<span class="chord G">G</span> She puts on her <span class="chord D">D</span> make-up,
+And <span class="chord C">C</span> brushes her long blonde <span class="chord G">G</span> hair
+And then she <span class="chord C">C</span> asks me, <span class="chord D">D</span> "Do I look all <span class="chord G">G</span> right?"
+And I <span class="chord C">C</span> say, "Yes, you look <span class="chord D">D</span> wonderful to<span class="chord G">G</span>night"
+
+<span class="section-label">— Chorus —</span>
+And I <span class="chord C">C</span> feel <span class="chord D">D</span> wonderful to<span class="chord Em">Em</span>night,
+'Cause I <span class="chord C">C</span> see the <span class="chord D">D</span> love light in your <span class="chord G">G</span> eyes</div>
+
+  <h3 id="song-31">31. Yellow — Coldplay</h3>
+  <div class="song-chart">
+<div class="song-meta">Band — Coldplay · 2000 <span class="tempo">4/4 · ♩=87</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=yellow+coldplay+easy+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Yellow%20Coldplay" target="_blank">♫ Spotify</a>
+</div>
+<em style="color:var(--ink-mute)">Original is in B major — use Capo on fret 7 with G, Em, D, C shapes to match the recording.</em>
+
+<span class="chord G">G</span> Look at the stars,
+<span class="chord D">D</span> Look how they shine for <span class="chord C">C</span> you
+And <span class="chord G">G</span> everything you <span class="chord D">D</span> do
+Yeah they were all <span class="chord C">C</span> yellow
+
+<span class="chord G">G</span> I came along,
+<span class="chord D">D</span> I wrote a song for <span class="chord C">C</span> you
+And <span class="chord G">G</span> all the things you <span class="chord D">D</span> do
+And it was called <span class="chord C">C</span> yellow
+
+<span class="section-label">— Chorus —</span>
+So then I <span class="chord G">G</span> took my turn
+<span class="chord D">D</span> Oh what a thing to've <span class="chord C">C</span> done
+And it was all <span class="chord G">G</span> yellow</div>
+
+  <!-- BONUS BOLLYWOOD SONGS -->
+  <h3 id="bonus-bollywood">Bonus Bollywood — by popular request</h3>
+  <p>Five more songs that anyone playing in India will be asked to play. All use the same four-chord vocabulary.</p>
+
+  <h4 id="song-tum-hi-ho">Tum Hi Ho — Aashiqui 2</h4>
+  <div class="song-chart">
+<div class="song-meta">Singer — Arijit Singh · Movie — Aashiqui 2 <span class="tempo">4/4 · ♩=66</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=tum+hi+ho+guitar+chords+aashiqui+2+easy" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Tum%20Hi%20Ho%20Aashiqui%202" target="_blank">♫ Spotify</a>
+</div>
+<em style="color:var(--ink-mute)">Original key uses Bm—F#m—G—D. Easy version with Capo 2 keeps original sound using Em, Am(open), C, G shapes — or play in C major using these:</em>
+
+<span class="chord Em">Em</span> Hum tere bin ab reh nahi sak<span class="chord C">C</span>te
+Tere bina kya wajood me<span class="chord G">G</span>ra <span class="chord D">D</span>
+<span class="chord Em">Em</span> Tujhse juda gar ho jaayen<span class="chord C">C</span>ge
+Toh khud se hi ho jaayen ju<span class="chord G">G</span>da <span class="chord D">D</span>
+
+<span class="section-label">— Chorus —</span>
+Kyunki <span class="chord C">C</span> tum hi ho,  <span class="chord G">G</span> ab tum hi ho
+<span class="chord D">D</span> Zindagi ab <span class="chord Em">Em</span> tum hi ho
+<span class="chord C">C</span> Chain bhi, <span class="chord G">G</span> mera dard bhi
+<span class="chord D">D</span> Meri aashiqui ab <span class="chord Em">Em</span> tum hi ho</div>
+
+  <h4 id="song-tujhe-kitna">Tujhe Kitna Chahne Lage — Kabir Singh</h4>
+  <div class="song-chart">
+<div class="song-meta">Singer — Arijit Singh · Movie — Kabir Singh <span class="tempo">4/4 · ♩=84</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=tujhe+kitna+chahne+lage+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Tujhe%20Kitna%20Chahne%20Lage" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord G">G</span> Pehle bhi main, <span class="chord D">D</span> tumko dekha hai
+<span class="chord C">C</span> Pehle bhi main, <span class="chord G">G</span> tumse mila hoon
+Phir <span class="chord Em">Em</span> jaane kyun, <span class="chord C">C</span> aisa lagta hai
+<span class="chord G">G</span> Jaise, mujhe <span class="chord D">D</span> tujhse, <span class="chord G">G</span> kuch ka<span class="chord C">C</span>am hai
+
+<span class="section-label">— Chorus —</span>
+<span class="chord Em">Em</span> Tujhe kitna chahne <span class="chord C">C</span> lage hum
+<span class="chord G">G</span> Tujhe kitna chahne <span class="chord D">D</span> lage hum
+<span class="chord Em">Em</span> Yaaron ko bhi nahi, <span class="chord C">C</span> yeh bata sakte
+<span class="chord G">G</span> Tujhe kitna chahne <span class="chord D">D</span> lage <span class="chord G">G</span> hum</div>
+
+  <h4 id="song-kabira">Kabira — Yeh Jawaani Hai Deewani</h4>
+  <div class="song-chart">
+<div class="song-meta">Singer — Tochi Raina, Rekha Bhardwaj · Movie — YJHD <span class="tempo">4/4 · ♩=88</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=kabira+yeh+jawaani+guitar+chords+easy" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Kabira%20Yeh%20Jawaani" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Kaisi teri khu<span class="chord C">C</span>dgarzi
+<span class="chord G">G</span> Na dhoop chune na <span class="chord D">D</span> chhaaon
+<span class="chord Em">Em</span> Kaisi teri khu<span class="chord C">C</span>dgarzi
+<span class="chord G">G</span> Kisi thaur tikey na <span class="chord D">D</span> paaon
+
+<span class="section-label">— Chorus —</span>
+<span class="chord Em">Em</span> Re Kabira maan ja, <span class="chord C">C</span> re faqeera maan ja
+<span class="chord G">G</span> Aaja tujhko pukaare teri <span class="chord D">D</span> parchayian
+<span class="chord Em">Em</span> Re Kabira maan ja, <span class="chord C">C</span> re faqeera maan ja
+<span class="chord G">G</span> Kaisa tu hai nirmohi, kaisa <span class="chord D">D</span> harjayian</div>
+
+  <h4 id="song-iktara">Iktara — Wake Up Sid</h4>
+  <div class="song-chart">
+<div class="song-meta">Singer — Kavita Seth, Amitabh Bhattacharya · Movie — Wake Up Sid <span class="tempo">4/4 · ♩=92</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=iktara+wake+up+sid+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Iktara%20Wake%20Up%20Sid" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord C">C</span> Hairaton ke silsile <span class="chord G">G</span> khwabon ke kaafile
+Aankhein bhi he<span class="chord Em">Em</span>raan hain rahat-<span class="chord D">D</span>ein paresh<span class="chord C">C</span>aan hain
+<span class="chord C">C</span> Bechain dhadkanein <span class="chord G">G</span> jaane yeh kya kahein
+Jaagi si <span class="chord Em">Em</span> bekhabar koi to <span class="chord D">D</span> aaye
+
+<span class="section-label">— Chorus —</span>
+<span class="chord C">C</span> Iktara, <span class="chord G">G</span> Iktara
+<span class="chord Em">Em</span> Iktara, ho <span class="chord D">D</span> Iktara
+<span class="chord C">C</span> Hai dil bhi, mera <span class="chord G">G</span> Iktara, ho <span class="chord Em">Em</span> Iktara <span class="chord D">D</span></div>
+
+  <h4 id="song-galliyan">Galliyan — Ek Villain</h4>
+  <div class="song-chart">
+<div class="song-meta">Singer — Ankit Tiwari · Movie — Ek Villain <span class="tempo">4/4 · ♩=68</span></div>
+<div class="link-row">
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=galliyan+ek+villain+guitar+chords" target="_blank">▶ YouTube tutorial</a>
+  <a class="spotify-link" href="https://open.spotify.com/search/Galliyan%20Ek%20Villain" target="_blank">♫ Spotify</a>
+</div>
+<span class="chord Em">Em</span> Yahin doob jaaun, <span class="chord C">C</span> ke main doob jaaun
+<span class="chord G">G</span> Teri galliyaan, <span class="chord D">D</span> galliyaan
+<span class="chord Em">Em</span> Teri galliyaan
+<span class="chord Em">Em</span> Mujhko bhaaun, <span class="chord C">C</span> main jaaun
+<span class="chord G">G</span> Teri galliyaan, <span class="chord D">D</span> galliyaan, <span class="chord Em">Em</span> teri galliyaan
+
+<span class="section-label">— Chorus —</span>
+<span class="chord Em">Em</span> Sooni sooni si re, <span class="chord C">C</span> meri zindagi yeh
+<span class="chord G">G</span> Tu suney khamoshi <span class="chord D">D</span> meri
+<span class="chord Em">Em</span> Tu hi rooh ka mera, <span class="chord C">C</span> tu hi noor ka mera
+<span class="chord G">G</span> Wajood ka tu hai <span class="chord D">D</span> mera</div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 4 — MUSIC THEORY -->
+<!-- ============================================ -->
+<section class="part" id="part-theory">
+  <div class="part-label">Part 4 · Theory</div>
+  <h2><em>Music Theory</em><br/>(in Hindi notation)</h2>
+  <p>The minimum theory you need to understand <strong>why</strong> the four chords work together — and to one day write your own songs. We'll use the Hindi <strong>sargam</strong> (सरगम) system throughout.</p>
+
+  <h3 id="theory-basics">1. Notes &amp; Sargam</h3>
+  <p>In Hindi music, a note is called a <strong>स्वर (swar)</strong>. There are seven natural notes (शुद्ध स्वर) and five altered ones (कोमल/तीव्र), making twelve in total — same as Western music, just named differently.</p>
+
+  <h4>The seven natural sargam notes</h4>
+  <table>
+    <thead><tr><th>Sa</th><th>Re</th><th>Ga</th><th>Ma</th><th>Pa</th><th>Dha</th><th>Ni</th><th>Sa'</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>सा</strong></td><td><strong>रे</strong></td><td><strong>ग</strong></td><td><strong>म</strong></td><td><strong>प</strong></td><td><strong>ध</strong></td><td><strong>नि</strong></td><td><strong>सां</strong></td>
+      </tr>
+      <tr>
+        <td>Shadja</td><td>Rishabh</td><td>Gandhar</td><td>Madhyam</td><td>Pancham</td><td>Dhaivat</td><td>Nishad</td><td>Tar Sa</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>The 12 swaras (full chromatic)</h4>
+  <table>
+    <thead><tr><th>#</th><th>Swar</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>सा (Sa)</strong></td><td>Shuddha (natural)</td></tr>
+      <tr><td>2</td><td><strong>रे♭ (komal Re)</strong></td><td>Komal (flat)</td></tr>
+      <tr><td>3</td><td><strong>रे (Re)</strong></td><td>Shuddha</td></tr>
+      <tr><td>4</td><td><strong>ग♭ (komal Ga)</strong></td><td>Komal</td></tr>
+      <tr><td>5</td><td><strong>ग (Ga)</strong></td><td>Shuddha</td></tr>
+      <tr><td>6</td><td><strong>म (Ma)</strong></td><td>Shuddha</td></tr>
+      <tr><td>7</td><td><strong>म' (tivra Ma)</strong></td><td>Tivra (sharp)</td></tr>
+      <tr><td>8</td><td><strong>प (Pa)</strong></td><td>Shuddha</td></tr>
+      <tr><td>9</td><td><strong>ध♭ (komal Dha)</strong></td><td>Komal</td></tr>
+      <tr><td>10</td><td><strong>ध (Dha)</strong></td><td>Shuddha</td></tr>
+      <tr><td>11</td><td><strong>नि♭ (komal Ni)</strong></td><td>Komal</td></tr>
+      <tr><td>12</td><td><strong>नि (Ni)</strong></td><td>Shuddha</td></tr>
+    </tbody>
+  </table>
+  <div class="card tip">
+    <strong>Sa is moveable.</strong> Unlike fixed-pitch notation, in Indian music <em>Sa</em> is wherever you set your tonic. If you tune Sa to the open 5th string (A), the pitches shift accordingly.
+  </div>
+
+  <h3 id="pitch-clock">2. The Sargam Clock</h3>
+  <p>Arrange all 12 swaras on a circle. Move clockwise — pitch rises by a half-step (ardh-swar). Two steps clockwise = a whole step (poorn-swar).</p>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt</span>
+    <p>"A circular 'sargam clock' diagram showing all 12 Hindustani swaras arranged like a clock face: सा at 12, then clockwise रे♭, रे, ग♭, ग, म, म', प, ध♭, ध, नि♭, नि. Each swar in a small circle. A curved arrow showing 'Pitch increases →' going clockwise, with one labelled 'Half step (अर्ध स्वर)' between two adjacent swaras and another labelled 'Whole step (पूर्ण स्वर)' spanning two. Warm cream paper texture, hand-drawn ink style, Devanagari + English labels."</p>
+  </div>
+
+  <div class="viz">
+    <svg viewBox="0 0 400 400" width="380" height="380">
+      <circle cx="200" cy="200" r="150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 4"/>
+      <g font-family="Fraunces, serif" font-size="20" font-weight="600" text-anchor="middle">
+        <text x="200" y="58" fill="var(--accent)">सा</text>
+        <text x="275" y="80" fill="currentColor">रे♭</text>
+        <text x="328" y="138" fill="currentColor">रे</text>
+        <text x="350" y="208" fill="currentColor">ग♭</text>
+        <text x="328" y="278" fill="currentColor">ग</text>
+        <text x="275" y="332" fill="currentColor">म</text>
+        <text x="200" y="358" fill="var(--accent)">म'</text>
+        <text x="125" y="332" fill="currentColor">प</text>
+        <text x="72" y="278" fill="currentColor">ध♭</text>
+        <text x="50" y="208" fill="currentColor">ध</text>
+        <text x="72" y="138" fill="currentColor">नि♭</text>
+        <text x="125" y="80" fill="currentColor">नि</text>
+      </g>
+      <text x="200" y="195" font-family="Outfit" font-size="11" font-style="italic" text-anchor="middle" fill="var(--ink-mute)">Pitch ↑</text>
+      <text x="200" y="215" font-family="Outfit" font-size="11" font-style="italic" text-anchor="middle" fill="var(--ink-mute)">clockwise</text>
+      <path d="M 240 195 a 50 50 0 0 1 -10 30" fill="none" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr)"/>
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/></marker></defs>
+    </svg>
+  </div>
+
+  <h3 id="scales">3. The Major Scale (Bilawal Thaat)</h3>
+  <p>The major scale uses all <em>shuddha</em> (natural) swaras. The interval pattern is:</p>
+  <p style="text-align:center;font-family:var(--mono);font-size:18px;color:var(--accent)">whole · whole · half · whole · whole · whole · half</p>
+  <p>So from <strong>Sa</strong>:</p>
+  <p style="text-align:center;font-size:22px;font-family:var(--display);font-style:italic;color:var(--ink)">सा — रे — ग — म — प — ध — नि — सां</p>
+
+  <h4>Minor Scale (Asavari Thaat)</h4>
+  <p>Use komal Ga, komal Dha, and komal Ni:</p>
+  <p style="text-align:center;font-size:22px;font-family:var(--display);font-style:italic;color:var(--ink)">सा — रे — ग♭ — म — प — ध♭ — नि♭ — सां</p>
+
+  <h3 id="thaats">4. The 10 Thaats — Hindustani Music's Modes</h3>
+  <p>A <em>thaat</em> is the parent scale that a raag is built from. There are ten thaats in modern Hindustani classical, each defined by which swaras are komal/tivra:</p>
+  <table>
+    <thead><tr><th>Thaat</th><th>Swaras</th><th>Mood</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bilawal</strong></td><td>S R G M P D N (all shuddha)</td><td>Bright, joyous</td></tr>
+      <tr><td><strong>Khamaj</strong></td><td>S R G M P D N♭</td><td>Romantic, light</td></tr>
+      <tr><td><strong>Kafi</strong></td><td>S R G♭ M P D N♭</td><td>Soulful, devotional</td></tr>
+      <tr><td><strong>Asavari</strong></td><td>S R G♭ M P D♭ N♭</td><td>Melancholic</td></tr>
+      <tr><td><strong>Bhairavi</strong></td><td>S R♭ G♭ M P D♭ N♭</td><td>Devotional, deep</td></tr>
+      <tr><td><strong>Bhairav</strong></td><td>S R♭ G M P D♭ N</td><td>Serious, dawn</td></tr>
+      <tr><td><strong>Kalyan / Yaman</strong></td><td>S R G M' P D N</td><td>Romantic, dusk</td></tr>
+      <tr><td><strong>Marwa</strong></td><td>S R♭ G M' P D N</td><td>Restless, sunset</td></tr>
+      <tr><td><strong>Poorvi</strong></td><td>S R♭ G M' P D♭ N</td><td>Devotional, evening</td></tr>
+      <tr><td><strong>Todi</strong></td><td>S R♭ G♭ M' P D♭ N</td><td>Intense, morning</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="raag">5. Raag basics — Bhairav, Yaman, Bhairavi</h3>
+  <p>A <strong>raag</strong> is more than a scale — it's a melodic personality. Each has rules about which swaras to emphasise (vadi, samvadi), forbidden movements (varjit), characteristic phrases (pakad), and the time of day or season it suits.</p>
+
+  <h4 style="color:var(--chord-D)">Raag Yaman (राग यमन)</h4>
+  <ul>
+    <li><strong>Thaat:</strong> Kalyan</li>
+    <li><strong>Swaras:</strong> सा रे ग म' प ध नि सां (tivra Madhyam — म')</li>
+    <li><strong>Time:</strong> Early evening (sandhi-prakash)</li>
+    <li><strong>Vadi:</strong> Ga · <strong>Samvadi:</strong> Ni</li>
+    <li><strong>Pakad (signature phrase):</strong> नि रे ग म' प, म' ग रे सा</li>
+    <li><strong>Mood:</strong> Romantic, peaceful, expansive</li>
+    <li><strong>Famous Bollywood:</strong> <em>Jiya Le Gayi Ji</em> (Anpadh), <em>Eri Sakhi Mangal Gao</em></li>
+  </ul>
+
+  <h4 style="color:var(--chord-Em)">Raag Bhairav (राग भैरव)</h4>
+  <ul>
+    <li><strong>Thaat:</strong> Bhairav</li>
+    <li><strong>Swaras:</strong> सा रे♭ ग म प ध♭ नि सां (komal Re &amp; Dha)</li>
+    <li><strong>Time:</strong> Early morning (just before sunrise)</li>
+    <li><strong>Vadi:</strong> Dha · <strong>Samvadi:</strong> Re</li>
+    <li><strong>Pakad:</strong> ग म ध♭ प, ग म रे♭ सा</li>
+    <li><strong>Mood:</strong> Devotional, serene, weighty</li>
+    <li><strong>Famous Bollywood:</strong> <em>Mohe Bhool Gaye Saawariya</em> (Baiju Bawra), <em>Jago Mohan Pyare</em></li>
+  </ul>
+
+  <h4 style="color:var(--chord-C)">Raag Bhairavi (राग भैरवी)</h4>
+  <ul>
+    <li><strong>Thaat:</strong> Bhairavi</li>
+    <li><strong>Swaras:</strong> सा रे♭ ग♭ म प ध♭ नि♭ सां (all five komal possibilities)</li>
+    <li><strong>Time:</strong> Late morning, but traditionally played to <em>conclude</em> any concert regardless of time</li>
+    <li><strong>Vadi:</strong> Ma · <strong>Samvadi:</strong> Sa</li>
+    <li><strong>Pakad:</strong> म ग♭ रे♭ सा, नि♭ ध♭ प</li>
+    <li><strong>Mood:</strong> Bittersweet, devotional, deeply moving</li>
+    <li><strong>Famous Bollywood:</strong> <em>Aaj Sajan Mohe Ang Laga Lo</em> (Pyaasa), <em>Tu Ganga Ki Mauj</em></li>
+  </ul>
+
+  <div class="card tip">
+    <strong>Why this matters for guitarists:</strong> Bollywood songwriters lean heavily on raag colour. Knowing Yaman lets you instantly hear why <em>Channa Mereya</em> feels nostalgic; knowing Bhairavi explains why <em>Tum Hi Ho</em> feels bittersweet.
+  </div>
+
+  <h3 id="chord-construction">6. Chord construction</h3>
+  <p>A chord is built by stacking thirds. Pick a swar, skip one, pick the next, skip one, pick the next.</p>
+
+  <table>
+    <thead><tr><th>Chord type</th><th>Formula (from Sa)</th><th>Mood</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Major</strong></td><td>सा &nbsp;·&nbsp; ग &nbsp;·&nbsp; प</td><td>Bright, happy</td></tr>
+      <tr><td><strong>Minor</strong></td><td>सा &nbsp;·&nbsp; ग♭ &nbsp;·&nbsp; प</td><td>Sad, soft</td></tr>
+      <tr><td><strong>Diminished</strong></td><td>सा &nbsp;·&nbsp; ग♭ &nbsp;·&nbsp; प♭</td><td>Tense, unstable</td></tr>
+      <tr><td><strong>Augmented</strong></td><td>सा &nbsp;·&nbsp; ग &nbsp;·&nbsp; प♯</td><td>Mysterious, eerie</td></tr>
+      <tr><td><strong>Major 7</strong></td><td>सा · ग · प · नि</td><td>Dreamy, jazz</td></tr>
+      <tr><td><strong>Dominant 7</strong></td><td>सा · ग · प · नि♭</td><td>Bluesy, leading</td></tr>
+      <tr><td><strong>Minor 7</strong></td><td>सा · ग♭ · प · नि♭</td><td>Smooth, soulful</td></tr>
+      <tr><td><strong>sus2</strong></td><td>सा · रे · प</td><td>Open, suspended</td></tr>
+      <tr><td><strong>sus4</strong></td><td>सा · म · प</td><td>Pulled, yearning</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="progressions">7. Chord progressions</h3>
+  <p>The seven diatonic chords of any major key. In our four-chord world (key of G), the four star chords are positions <strong>I, IV, V, vi</strong>:</p>
+  <table>
+    <thead><tr><th>Position</th><th>Quality</th><th>Key of G</th><th>Key of D</th><th>Key of C</th></tr></thead>
+    <tbody>
+      <tr><td><strong>I</strong></td><td>Major</td><td><span class="chord G">G</span></td><td><span class="chord D">D</span></td><td><span class="chord C">C</span></td></tr>
+      <tr><td>ii</td><td>minor</td><td>Am</td><td>Em</td><td>Dm</td></tr>
+      <tr><td>iii</td><td>minor</td><td>Bm</td><td>F#m</td><td>Em</td></tr>
+      <tr><td><strong>IV</strong></td><td>Major</td><td><span class="chord C">C</span></td><td><span class="chord G">G</span></td><td>F</td></tr>
+      <tr><td><strong>V</strong></td><td>Major</td><td><span class="chord D">D</span></td><td>A</td><td><span class="chord G">G</span></td></tr>
+      <tr><td><strong>vi</strong></td><td>minor</td><td><span class="chord Em">Em</span></td><td>Bm</td><td>Am</td></tr>
+      <tr><td>vii°</td><td>diminished</td><td>F#°</td><td>C#°</td><td>B°</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Progressions you'll recognise everywhere</h4>
+  <table>
+    <thead><tr><th>Name</th><th>Positions</th><th>In G</th><th>Famous example</th></tr></thead>
+    <tbody>
+      <tr><td>The Axis</td><td>I-V-vi-IV</td><td><span class="chord G">G</span> <span class="chord D">D</span> <span class="chord Em">Em</span> <span class="chord C">C</span></td><td>Most pop songs ever</td></tr>
+      <tr><td>50s Doo-Wop</td><td>I-vi-IV-V</td><td><span class="chord G">G</span> <span class="chord Em">Em</span> <span class="chord C">C</span> <span class="chord D">D</span></td><td>Stand By Me</td></tr>
+      <tr><td>Sad pop</td><td>vi-IV-I-V</td><td><span class="chord Em">Em</span> <span class="chord C">C</span> <span class="chord G">G</span> <span class="chord D">D</span></td><td>Tum Hi Ho</td></tr>
+      <tr><td>Bollywood ballad</td><td>vi-V-IV-V</td><td><span class="chord Em">Em</span> <span class="chord D">D</span> <span class="chord C">C</span> <span class="chord D">D</span></td><td>Channa Mereya</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="hindi-progressions">8. Songwriting in Hindi — Bollywood patterns</h3>
+  <p>Two progressions account for an embarrassing percentage of Hindi pop. Loop either of these and you'll have an instant Bollywood feel:</p>
+
+  <div class="card">
+    <div class="card-title">Pattern A · Em–D–C–G</div>
+    <p style="font-size:24px;text-align:center;margin:14px 0">
+      <span class="chord Em">Em</span> → <span class="chord D">D</span> → <span class="chord C">C</span> → <span class="chord G">G</span>
+    </p>
+    <p>Used in: <em>Channa Mereya</em>, <em>Tum Hi Ho</em>, <em>Tujhe Kitna Chahne Lage</em>, <em>Galliyan</em>, hundreds more.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Pattern B · Am–F–C–G</div>
+    <p style="font-size:24px;text-align:center;margin:14px 0">
+      <span class="chord Am">Am</span> → <span class="chord F">F</span> → <span class="chord C">C</span> → <span class="chord G">G</span>
+    </p>
+    <p>Same vibe, different home key. Used in: <em>Phir Le Aaya Dil</em>, <em>Agar Tum Saath Ho</em>, classic ghazal-pop.</p>
+  </div>
+
+  <h3 id="circle">9. The Circle of Fifths (Hindi-style)</h3>
+  <p>Move clockwise, you add one tivra (sharp). Counter-clockwise, you add one komal (flat). Neighbours on the circle share most of their swaras — useful for picking a key that's easy to modulate to.</p>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt</span>
+    <p>"A circle-of-fifths diagram with twelve points around a circle, each labelled with a Hindi key name in Devanagari (e.g., सा-major, रे-major, etc.) plus the number of sharps/flats. Use warm gradient between burnt-orange and teal. Outer ring = major keys, inner ring = relative minors. Vintage music-textbook aesthetic."</p>
+  </div>
+
+  <h3 id="modes">10. Pentatonic & Blues for guitar solos</h3>
+  <p>The pentatonic scale (5 notes) is your first soloing scale. It cannot sound wrong over its key.</p>
+
+  <h4>Major Pentatonic — सा रे ग प ध</h4>
+  <p>Bright, country, joyous. Maps to many Bollywood "happy" leads.</p>
+
+  <h4>Minor Pentatonic — सा ग♭ म प नि♭</h4>
+  <p>The blues-rock backbone. Add the तीव्र-म ("blue note") for the full <strong>blues scale</strong>.</p>
+
+  <pre>E-minor pentatonic — Box 1 (open position)
+e |--0--3--|
+B |--0--3--|
+G |--0--2--|
+D |--0--2--|
+A |--0--2--|
+E |--0--3--|</pre>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 5 — ADVANCED -->
+<!-- ============================================ -->
+<section class="part" id="part-advanced">
+  <div class="part-label">Part 5 · Advanced Technique</div>
+  <h2><em>Beyond</em> the four chords</h2>
+
+  <h3 id="barre">1. Barre chords</h3>
+  <p>A <strong>barre chord</strong> is when one finger presses multiple strings at once. Master two shapes — E-shape and A-shape — and you can play <em>any</em> chord, anywhere on the neck.</p>
+
+  <h4>E-shape barre (root on the 6th string)</h4>
+  <p>Take the open E shape, slide it up, and barre with your index finger across all six strings.</p>
+  <table>
+    <thead><tr><th>Fret</th><th>Major chord</th><th>Minor chord</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>F</td><td>Fm</td></tr>
+      <tr><td>3</td><td>G</td><td>Gm</td></tr>
+      <tr><td>5</td><td>A</td><td>Am</td></tr>
+      <tr><td>7</td><td>B</td><td>Bm</td></tr>
+      <tr><td>8</td><td>C</td><td>Cm</td></tr>
+      <tr><td>10</td><td>D</td><td>Dm</td></tr>
+    </tbody>
+  </table>
+
+  <h4>A-shape barre (root on the 5th string)</h4>
+  <p>Take the open A shape, slide up, barre with index across the top 5 strings.</p>
+  <table>
+    <thead><tr><th>Fret</th><th>Major chord</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>A♯ / B♭</td></tr><tr><td>3</td><td>C</td></tr><tr><td>5</td><td>D</td></tr><tr><td>7</td><td>E</td></tr><tr><td>10</td><td>G</td></tr>
+    </tbody>
+  </table>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt</span>
+    <p>"A close-up photograph of a hand playing a barre chord on the 5th fret of an acoustic guitar, index finger laid flat across all six strings, other three fingers forming the E shape behind it, warm natural lighting, shallow depth of field. Coloured callout arrows pointing to: 'Index = barre', 'Other 3 = E shape', 'Fret 5 = A major'. Editorial textbook style."</p>
+  </div>
+
+  <h3 id="caged">2. The CAGED system</h3>
+  <p>Every chord can be played five ways using the open <strong>C, A, G, E, D</strong> shapes moved up the neck. Memorize these for one chord (say G) and you've unlocked the entire fretboard.</p>
+  <table>
+    <thead><tr><th>Shape</th><th>G played at fret…</th></tr></thead>
+    <tbody>
+      <tr><td>G shape</td><td>open (fret 1–3)</td></tr>
+      <tr><td>E shape (barre)</td><td>fret 3</td></tr>
+      <tr><td>D shape</td><td>fret 5</td></tr>
+      <tr><td>C shape</td><td>fret 7</td></tr>
+      <tr><td>A shape (barre)</td><td>fret 10</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="fingerstyle">3. Fingerstyle basics — PIMA</h3>
+  <p>In Spanish/classical notation:</p>
+  <table>
+    <thead><tr><th>Letter</th><th>Hindi/Hindi-speaker term</th><th>String</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P</strong> (pulgar)</td><td>अंगूठा (thumb)</td><td>Bass strings (E, A, D)</td></tr>
+      <tr><td><strong>I</strong> (índice)</td><td>तर्जनी (index)</td><td>G string</td></tr>
+      <tr><td><strong>M</strong> (medio)</td><td>मध्यमा (middle)</td><td>B string</td></tr>
+      <tr><td><strong>A</strong> (anular)</td><td>अनामिका (ring)</td><td>High e string</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Travis pattern</strong> — try over a C chord:</p>
+  <pre>P  I  M  A  M  I  (repeat)
+bass-G-B-e-B-G</pre>
+
+  <h3 id="techniques">4. Hammer-ons, pull-offs, slides, bends</h3>
+  <table>
+    <thead><tr><th>Technique</th><th>Notation</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Hammer-on</strong></td><td><code class="inline">5h7</code></td><td>Pluck once, then "hammer" finger onto a higher fret to sound it without re-plucking.</td></tr>
+      <tr><td><strong>Pull-off</strong></td><td><code class="inline">7p5</code></td><td>Pluck, then pull finger off so a lower fret rings out.</td></tr>
+      <tr><td><strong>Slide</strong></td><td><code class="inline">5/7</code> or <code class="inline">7\5</code></td><td>Pluck, slide finger up (/) or down (\) to a different fret.</td></tr>
+      <tr><td><strong>Bend</strong></td><td><code class="inline">7b9</code></td><td>Push string sideways to raise pitch. 1 fret = half-step; 2 frets = full bend.</td></tr>
+      <tr><td><strong>Vibrato</strong></td><td><code class="inline">~</code></td><td>Quick small bends back and forth for emotion.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="palm-mute">5. Palm muting & power chords</h3>
+  <p><strong>Palm muting</strong> — rest the side of your strumming-hand palm lightly on the strings near the bridge. Strings still ring, but muffled. The "chugga-chugga" of rock and metal.</p>
+  <p><strong>Power chords</strong> — just root + 5th, no third. Neither major nor minor. Movable shape, sounds enormous through distortion.</p>
+  <pre>G5 power chord:
+e |---x---
+B |---x---
+G |---x---
+D |---5---
+A |---5---
+E |---3---</pre>
+
+  <h3 id="patterns">6. Strumming patterns library</h3>
+  <p>Beyond the four core patterns, here are four more you'll use constantly:</p>
+  <table>
+    <thead><tr><th>#</th><th>Name</th><th>Pattern</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td>5</td><td>8-beat basic</td><td>D D U U D U</td><td>The all-purpose acoustic strum</td></tr>
+      <tr><td>6</td><td>16-beat</td><td>D D U _ U D _ D U</td><td>Modern pop, R&amp;B</td></tr>
+      <tr><td>7</td><td>Reggae skank</td><td>_ U _ U (no downbeats)</td><td>Bob Marley</td></tr>
+      <tr><td>8</td><td>Waltz (3/4)</td><td>D _ D · D _ D</td><td>Ghazals, ballads</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="capo">7. Capo</h3>
+  <p>A capo is a clamp that shortens the strings, raising every chord's pitch. Use it to match your voice or play familiar shapes in any key.</p>
+  <table>
+    <thead><tr><th>Capo at fret</th><th>G shape sounds like</th><th>C shape</th><th>D shape</th><th>Em shape</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>G</td><td>C</td><td>D</td><td>Em</td></tr>
+      <tr><td>2</td><td>A</td><td>D</td><td>E</td><td>F♯m</td></tr>
+      <tr><td>3</td><td>A♯/B♭</td><td>D♯/E♭</td><td>F</td><td>Gm</td></tr>
+      <tr><td>5</td><td>C</td><td>F</td><td>G</td><td>Am</td></tr>
+      <tr><td>7</td><td>D</td><td>G</td><td>A</td><td>Bm</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="riffs">8. Famous riffs every guitarist learns</h3>
+
+  <h4>Smoke on the Water — Deep Purple</h4>
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=smoke+on+the+water+riff+tutorial+slow" target="_blank">▶ Tutorial</a>
+  <pre>D|------------------|----------------|
+A|------------------|----------------|
+E|--0-3-5---0-3-6-5-|--0-3-5--3-0----|
+   (play with two fingers — root + 5th, like a power chord)</pre>
+
+  <h4>Sweet Child O' Mine — Guns N' Roses (intro)</h4>
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=sweet+child+o+mine+intro+tutorial+slow" target="_blank">▶ Tutorial</a>
+  <pre>e|--------12-15-14-12-15-14--12-15-14-12-15-14-|
+B|---15---------------------------------------|
+G|--14-----------------------------------------|
+D|---------------------------------------------|
+   (sequence repeats with subtle finger movement on top string)</pre>
+
+  <h4>Stairway to Heaven — Led Zeppelin (intro)</h4>
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=stairway+to+heaven+intro+tutorial+fingerstyle" target="_blank">▶ Tutorial</a>
+  <pre>e|--7----5----------|
+B|---8----6---------|
+G|----7---5---------|
+D|-7----7---7---5---|
+A|-------5----6-----|
+E|------------------|
+   (Fingerpick with PIMA — the Am chord descending)</pre>
+
+  <h4>Channa Mereya — arpeggio intro</h4>
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=channa+mereya+intro+arpeggio+guitar+lesson" target="_blank">▶ Tutorial</a>
+  <pre>Pattern over G–C–G–C–D–Em (arpeggiated, not strummed):
+e|--3-----0-----3-----0-----2-----0----|
+B|----0-----1-----0-----1-----3-----0--|
+G|------0-----0-----0-----0-----2-----0|
+D|-------------------------------------|
+A|--2--3-----2--3---------2-------2----|
+E|--3--------3---------------------0---|</pre>
+
+  <h3 id="genres">9. Genre-specific lessons</h3>
+
+  <h4>Bollywood</h4>
+  <p>Lean on the Em–D–C–G or Am–F–C–G loop. Add a fingerpicked arpeggio for ballads, the pop-strum for upbeat numbers. Many Bollywood songs sit in raag Yaman or Kafi — colour them by emphasising the relevant swaras during fills.</p>
+
+  <h4>Ghazal</h4>
+  <p>Almost always in 3/4 or slow 4/4 with sparse strumming. Use sus2 and sus4 chords to create the floating, contemplative feel. Em–Am–C–B7 (B7 instead of D) brings the classic ghazal tension.</p>
+
+  <h4>Sufi</h4>
+  <p>Drone-heavy. Pick a tonic chord (often Em) and hold it while the melody travels. Add a capo to match the qawwali's pitch. Listen to <em>Tu Maane Ya Na Maane</em>, <em>Allah Hoo</em>.</p>
+
+  <h4>Rock</h4>
+  <p>Power chords + palm muting + distortion. Riff first, lyrics second. Five-chord vocabulary: E5, A5, D5, G5, C5. Try "Smoke on the Water" or "Seven Nation Army" as your first rock song.</p>
+
+  <h4>Blues</h4>
+  <p>The 12-bar blues form is your sandbox. In E: <code class="inline">E E E E A A E E B A E B</code>. Use the E minor pentatonic + blue note. Bend the 3rd and 5th. Listen to BB King.</p>
+
+  <h4>Country</h4>
+  <p>D-U-D-U all day. Travis-pick verses, strum choruses. Heavy use of G, C, D, Em — your existing vocabulary. Listen to <em>Wagon Wheel</em>, <em>Take Me Home Country Roads</em>.</p>
+
+  <h4>Classical (Spanish/fingerstyle)</h4>
+  <p>Nylon strings, no pick. PIMA right-hand, all four left-hand fingers. Play <em>Romance</em>, <em>Cavatina</em>, or arpeggiated Bach.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 6 — PRACTICE & EAR -->
+<!-- ============================================ -->
+<section class="part" id="part-practice">
+  <div class="part-label">Part 6 · Practice &amp; Ear</div>
+  <h2><em>Practice</em> &amp; ear training</h2>
+  <p>Skill comes from focused, consistent practice — not from how much time you spend with the instrument in your lap. Pick one of these routines and stick to it.</p>
+
+  <h3 id="routine">1. Practice routines</h3>
+
+  <div class="card accent">
+    <div class="card-title">30-minute routine — busy days</div>
+    <ul>
+      <li><strong>5 min</strong> — warmup: chromatic exercise, finger stretches</li>
+      <li><strong>10 min</strong> — chord changes (G→C, G→D, C→D) to a metronome</li>
+      <li><strong>10 min</strong> — one song, focused</li>
+      <li><strong>5 min</strong> — strumming pattern drill</li>
+    </ul>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">60-minute routine — your default</div>
+    <ul>
+      <li><strong>5 min</strong> — warmup</li>
+      <li><strong>10 min</strong> — scales (one mode + pentatonic)</li>
+      <li><strong>15 min</strong> — chord changes / barre chord drill</li>
+      <li><strong>20 min</strong> — two songs</li>
+      <li><strong>5 min</strong> — ear training (interval recognition)</li>
+      <li><strong>5 min</strong> — free play / improvisation</li>
+    </ul>
+  </div>
+
+  <div class="card accent">
+    <div class="card-title">90-minute routine — weekends</div>
+    <p>Take the 60-minute routine and add:</p>
+    <ul>
+      <li><strong>+15 min</strong> — technique work (bends, slides, fingerstyle)</li>
+      <li><strong>+15 min</strong> — theory study or learning a new song from scratch</li>
+    </ul>
+  </div>
+
+  <div class="card tip">
+    <strong>The golden rule:</strong> slow &amp; clean beats fast &amp; sloppy every single time. If you can't play it slowly, you can't play it fast.
+  </div>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt — practice routine wall poster</span>
+    <p>"A vertical poster designed for a music room wall, in the style of a vintage train schedule or art-deco theatre playbill. Title at top: 'DAILY GUITAR PRACTICE — 60 minutes'. Six time-blocks listed below, each with its own retro icon (warm-up = sun, scales = ladder, chords = handshake, songs = music sheet, ear training = ear, free play = paper plane). Burnt-orange and cream colour palette, distressed paper texture, decorative borders. Frameable."</p>
+  </div>
+
+  <h3 id="ear">2. Ear training</h3>
+  <p>Your ear is more important than your hands. Spend five minutes a day on this and within months you'll start to hear songs and instinctively know what chord is playing.</p>
+
+  <h4>Daily 5-minute drill (sargam-based)</h4>
+  <ol>
+    <li><strong>Sing the natural sargam</strong> — सा रे ग म प ध नि सां, slowly, in tune.</li>
+    <li><strong>Sing intervals</strong> — from Sa, jump to Ga (third), Pa (fifth), Sa' (octave). Match against your guitar.</li>
+    <li><strong>Identify chord quality</strong> — major or minor? Have a friend (or a YouTube video) play random chords; guess the type before they reveal.</li>
+    <li><strong>Match pitch</strong> — pluck a string, sing it back, then check with a tuner.</li>
+  </ol>
+
+  <h4>Songs by ear — start simple</h4>
+  <ul>
+    <li><em>Happy Birthday</em></li>
+    <li><em>Twinkle Twinkle</em> (in sargam: सा सा प प ध ध प · म म ग ग रे रे सा)</li>
+    <li><em>Sare Jahaan Se Achchha</em></li>
+    <li><em>Jingle Bells</em></li>
+  </ul>
+  <p>Find each melody on one string, by trial and error. This builds <strong>relative pitch</strong> — the practical skill of hearing what's coming next.</p>
+
+  <h4>Apps</h4>
+  <ul>
+    <li><strong>Functional Ear Trainer</strong> — best free interval app</li>
+    <li><strong>EarMaster</strong> — comprehensive, paid</li>
+    <li><strong>Tenuto</strong> — clean, iOS</li>
+    <li><strong>Toned Ear</strong> — browser-based, free</li>
+  </ul>
+
+  <h3 id="reading">3. Reading chord charts &amp; tabs</h3>
+
+  <h4>Chord diagram cheat-sheet</h4>
+  <ul>
+    <li><strong>Numbers above strings</strong> = which finger to use (1=index, 2=middle, 3=ring, 4=pinky)</li>
+    <li><strong>×</strong> above a string = don't play that string</li>
+    <li><strong>○</strong> above a string = play it open (no finger)</li>
+    <li><strong>Top horizontal bar</strong> = the nut (top of the fretboard)</li>
+  </ul>
+
+  <h4>Tab basics</h4>
+  <pre>e |--0--3--5--|     ← thinnest string (high E)
+B |--1--3--5--|
+G |--0--0--5--|
+D |--2--0--5--|
+A |--3--2--5--|
+E |--x--3--5--|     ← thickest string (low E)
+   ↑
+   x = mute / don't play</pre>
+  <p>Each line is a string (top = high). Numbers = fret to press. <strong>Vertical alignment</strong> means play together (chord). <strong>Left to right</strong> = time.</p>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 7 — RECORDING -->
+<!-- ============================================ -->
+<section class="part" id="part-recording">
+  <div class="part-label">Part 7 · Recording</div>
+  <h2><em>Home recording</em> basics</h2>
+  <p>Once you can play a song cleanly, the next leap is hearing yourself <em>back</em>. It exposes timing problems, weak chord changes, and tone issues you'd never notice in the moment.</p>
+
+  <h3 id="recording-setup">1. Minimum gear</h3>
+  <ul>
+    <li>A laptop (any modern one)</li>
+    <li>An <strong>audio interface</strong> — Focusrite Scarlett Solo, PreSonus AudioBox, or Behringer UMC22 (₹6,000–₹12,000)</li>
+    <li>For acoustic: a <strong>microphone</strong> — Shure SM57 (~₹9,000) or Audio-Technica AT2020 (~₹8,000)</li>
+    <li>For electric: a quarter-inch cable straight into the interface (no mic needed)</li>
+    <li><strong>Closed-back headphones</strong> — never use speakers (they cause feedback when monitoring)</li>
+    <li>A <strong>DAW</strong> (Digital Audio Workstation) — free options below</li>
+  </ul>
+
+  <h4>Free DAWs to start</h4>
+  <table>
+    <thead><tr><th>DAW</th><th>Platform</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GarageBand</strong></td><td>Mac</td><td>Free, pre-installed</td></tr>
+      <tr><td><strong>Reaper</strong></td><td>Mac, Windows, Linux</td><td>60-day free trial → ₹5,000</td></tr>
+      <tr><td><strong>Cakewalk</strong> (BandLab)</td><td>Windows</td><td>Free</td></tr>
+      <tr><td><strong>BandLab</strong></td><td>Browser, mobile</td><td>Free</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="signal-chain">2. Signal chain</h3>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt — signal flow diagram</span>
+    <p>"A clean horizontal flowchart showing the recording signal chain for an electric guitar. Six boxes connected by arrows, each with an icon: 1) Guitar (illustrated electric guitar icon), 2) Audio Interface (rectangular box with knobs), 3) DAW (laptop screen icon), 4) Amp Sim plugin (amplifier icon), 5) Effects (pedal icon), 6) Output (headphones/speaker icon). Burnt-orange arrows. Warm cream background. Editorial infographic style, like an REI gear-explainer."</p>
+  </div>
+
+  <h4>Acoustic chain</h4>
+  <p style="font-family:var(--mono);font-size:14px;color:var(--accent);text-align:center">Guitar → Mic (12th fret, ~6 inches) → Audio Interface → DAW</p>
+
+  <h4>Electric chain (direct/DI)</h4>
+  <p style="font-family:var(--mono);font-size:14px;color:var(--accent);text-align:center">Guitar → Audio Interface (Hi-Z input) → DAW → Amp Sim → Effects → Master</p>
+
+  <h3 id="amp-sims">3. Free amp sims</h3>
+  <ul>
+    <li><strong>Neural DSP</strong> — free trials of paid plugins, the modern gold standard</li>
+    <li><strong>AmpliTube CS</strong> — free version with surprising depth</li>
+    <li><strong>TH-U Free</strong> — full-featured free amp sim</li>
+    <li><strong>Guitar Rig 6 Player</strong> — Native Instruments' free version</li>
+  </ul>
+
+  <h3 id="effects">4. Essential effects (in order)</h3>
+  <ol>
+    <li><strong>Tuner</strong> — always first in the chain</li>
+    <li><strong>Compressor</strong> — evens out dynamics</li>
+    <li><strong>Overdrive / Distortion</strong> — your "tone"</li>
+    <li><strong>EQ</strong> — cut muddy lows around 200–400 Hz, lift presence at 3 kHz</li>
+    <li><strong>Modulation</strong> — chorus, flanger (optional)</li>
+    <li><strong>Delay</strong> — echo</li>
+    <li><strong>Reverb</strong> — last, gives space</li>
+  </ol>
+
+  <h3 id="mic-placement">5. Mic placement for acoustic</h3>
+  <table>
+    <thead><tr><th>Position</th><th>Sound</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td><strong>12th fret, 6–8" away</strong></td><td>Bright, balanced</td><td style="color:var(--chord-G)">✅ Best starting point</td></tr>
+      <tr><td>Above the bridge</td><td>Harsh, attack-heavy</td><td>Use sparingly</td></tr>
+      <tr><td>At the soundhole</td><td>Boomy bass</td><td style="color:var(--chord-C)">❌ Avoid</td></tr>
+      <tr><td>Over your shoulder</td><td>Player's perspective</td><td>Try as a second mic</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="tracking-tips">6. Tracking tips</h3>
+  <ul>
+    <li><strong>Always record to a click track</strong> — it makes editing a thousand times easier.</li>
+    <li><strong>Multiple takes</strong> — record three full passes, pick the best.</li>
+    <li><strong>Double-track rhythm guitars</strong> — record the same part twice, pan one left and one right. Instant thickness.</li>
+    <li><strong>Tune between every take</strong> — strings detune surprisingly fast.</li>
+    <li><strong>Sing while you play</strong> if you'll add vocals later — your timing improves dramatically.</li>
+  </ul>
+
+  <h3 id="studio-etiquette">7. Studio session etiquette</h3>
+  <p>One day someone will book you for a session. Showing up with skill is half the job; showing up like a professional is the other half.</p>
+  <div class="card accent">
+    <div class="card-title">Before the session</div>
+    <ul>
+      <li>Arrive 15 minutes early. Set up quietly while the engineer dials your sound.</li>
+      <li>Bring fresh strings (changed within 48 hours), spare picks, capo, slide, tuner, and a backup cable.</li>
+      <li>Listen to the demo on the way over. Don't show up cold.</li>
+      <li>Email any chord charts in advance — engineers love this.</li>
+    </ul>
+  </div>
+  <div class="card accent">
+    <div class="card-title">During the session</div>
+    <ul>
+      <li>Play to the click. Always. Even when it feels stiff — the producer can swing it later.</li>
+      <li>Mistakes are fine; recovering quickly is the skill. Don't apologise for two minutes after a fluff.</li>
+      <li>The producer's word is final, even if you disagree musically.</li>
+      <li>Don't noodle between takes. Mute the strings or rest the guitar. Engineer ears need the silence.</li>
+      <li>Phones on silent. No exceptions.</li>
+    </ul>
+  </div>
+  <div class="card accent">
+    <div class="card-title">After</div>
+    <ul>
+      <li>Pack quickly. Studios are billed by the hour.</li>
+      <li>Send a polite thank-you. The next call usually comes from the engineer, not the artist.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- PART 8 — BEYOND -->
+<!-- ============================================ -->
+<section class="part" id="part-beyond">
+  <div class="part-label">Part 8 · Beyond</div>
+  <h2>The <em>long game</em></h2>
+  <p>You've finished the 31 days. Here's everything that helps you keep growing — common pitfalls, beginner shortcuts, gear advice, maintenance, and a 90-day chart to keep you accountable.</p>
+
+  <h3 id="mistakes">1. Common mistakes (and how to fix them)</h3>
+
+  <div class="card warn">
+    <strong>Buzzing strings</strong>
+    <p style="margin-top:6px">The most common beginner sound. Three causes: (1) finger not pressing hard enough, (2) finger placed too far from the fret wire (always press just <em>behind</em> the wire, not in the middle), or (3) action too low. Fix by repositioning your finger first; if every chord buzzes, get the action checked.</p>
+  </div>
+
+  <div class="card warn">
+    <strong>Weak chord transitions</strong>
+    <p style="margin-top:6px">You can play each chord cleanly, but switching between them creates a half-second pause. Fix: practice <strong>just</strong> the transition. Two chords, slowly, no strumming, just lift-and-place. 20 reps a day for a week kills this problem.</p>
+  </div>
+
+  <div class="card warn">
+    <strong>The "death grip"</strong>
+    <p style="margin-top:6px">Squeezing the neck like you're choking it. Causes pain, bad tone, and slow speed. Fix: thumb behind the neck, light pressure. Try playing a chord, then relax your hand <em>just</em> until the strings start to buzz, then add the tiniest amount back. That's correct pressure.</p>
+  </div>
+
+  <div class="card warn">
+    <strong>Ignoring the 4th finger (pinky)</strong>
+    <p style="margin-top:6px">Beginners use index, middle, and ring — and pretend the pinky doesn't exist. This caps your ceiling permanently. Fix: do daily chromatic exercises (1-2-3-4 on each string, every fret) to build pinky strength. Within two weeks it's no longer the weak link.</p>
+  </div>
+
+  <div class="card warn">
+    <strong>Practising only what you already know</strong>
+    <p style="margin-top:6px">Comfortable practice isn't real practice. If everything you played today felt easy, you didn't progress. Aim to spend half your practice on things you can't quite play yet.</p>
+  </div>
+
+  <h3 id="hacks">2. Two-finger and one-finger song hacks</h3>
+  <p>Day 1, before you've built any callus or memorised any shape, you can already play real songs.</p>
+
+  <h4>One-finger songs (just Em — 2 fingers, but easy)</h4>
+  <p>Em uses two fingers; nothing else. Songs that work with just Em:</p>
+  <ul>
+    <li><em>Pyaar Hua Ikraar Hua</em> (v1)</li>
+    <li><em>Hare Krishna Hare Raam</em> chant</li>
+    <li>Any one-chord drone-style sufi piece</li>
+  </ul>
+
+  <h4>Two-chord songs (Em + D)</h4>
+  <ul>
+    <li><em>Zindagi Ek Safar</em> (mostly Em + D)</li>
+    <li><em>Eleanor Rigby</em> — Beatles (Em + C, but Em + D works as a starter)</li>
+    <li><em>Horse with No Name</em> — America (Em + D6add9, simplifies to Em + D)</li>
+  </ul>
+
+  <h4>Three-chord songs (Em + D + C)</h4>
+  <p>Add C and you unlock dozens more — most folk songs, most camp-fire singalongs, most early Beatles.</p>
+
+  <div class="card tip">
+    <strong>The 4-chord cheat:</strong> Em → C → G → D played as a loop fits an embarrassing percentage of pop songs ever written. Loop it on a backing track and try singing any pop song you know — you'll be shocked how many fit.
+  </div>
+
+  <h3 id="maintenance">3. Maintenance</h3>
+
+  <h4>Changing strings (step-by-step)</h4>
+  <ol>
+    <li><strong>Loosen</strong> the old string by turning the tuning peg until it's slack.</li>
+    <li><strong>Cut</strong> with wire cutters near the soundhole, pull through the bridge pin (acoustic) or tailpiece (electric).</li>
+    <li><strong>Pop the bridge pin out</strong> with a string winder (or pliers — gently).</li>
+    <li><strong>Insert new string</strong> ball-end first into the bridge hole. Push the bridge pin back in firmly while pulling slack out of the string.</li>
+    <li><strong>Thread through the tuning post</strong>, leaving about 2 inches of slack.</li>
+    <li><strong>Wind</strong>, making sure each new wrap goes <em>below</em> the previous one (this locks the string).</li>
+    <li><strong>Tune up</strong>, then stretch each string by pulling it gently away from the fretboard a few times. Re-tune.</li>
+    <li>Strings will go out of tune for the first day — this is normal. Re-tune frequently.</li>
+  </ol>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt — string changing diagram</span>
+    <p>"An exploded-view diagram showing acoustic guitar string-changing in 6 numbered steps, like an IKEA instruction manual. Each step shows a hand interacting with the guitar's bridge or headstock. Step 1: loosening tuning peg. Step 2: cutting old string. Step 3: removing bridge pin. Step 4: inserting new string ball-end. Step 5: threading through tuning post. Step 6: winding properly. Clean line-art on cream background, burnt-orange numbered circles."</p>
+  </div>
+
+  <h4>Humidity</h4>
+  <p>Wood guitars hate humidity extremes. Ideal range: <strong>45–55%</strong>. Below 35% and the wood cracks; above 65% and the neck warps. In dry winters, use a soundhole humidifier (Oasis, D'Addario Humidipak) — ₹1,500 buys one that lasts years.</p>
+
+  <h4>Neck adjustment (truss rod)</h4>
+  <p>If your action goes up over time and the neck looks bowed, the truss rod needs adjustment. <strong>Don't DIY this without a tutorial</strong> — over-tightening can crack the neck. Most music shops do it for ₹200–500.</p>
+
+  <h4>Intonation</h4>
+  <p>Your guitar is "intonated" when fretted notes match open notes at the 12th fret. If a chord at fret 7 sounds out of tune even though your open strings are perfect, intonation is off. Fix: at the bridge, lengthen or shorten the saddle for that string. Again, most shops do this in 10 minutes.</p>
+
+  <h4>Routine care</h4>
+  <ul>
+    <li>Wipe down strings with a soft cloth after every session — extends string life dramatically.</li>
+    <li>Polish the body with a dedicated guitar polish every few months. Never use furniture polish.</li>
+    <li>Store in a case (not on a stand) if humidity in your area swings hard.</li>
+    <li>Loosen strings a quarter-turn each if storing for more than a month.</li>
+  </ul>
+
+  <h3 id="buying">4. Buying guide (India / ₹)</h3>
+
+  <h4>Beginner — ₹5,000–₹10,000</h4>
+  <table>
+    <thead><tr><th>Type</th><th>Recommended models</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Acoustic</td><td>Yamaha F310, Cort AD810, Kadence Slowhand</td><td>Yamaha F310 is the gold standard — sounds way above its price.</td></tr>
+      <tr><td>Classical (nylon)</td><td>Yamaha C40, Granada PRLS-1</td><td>Nylon = softer on fingers, narrower neck better for fingerstyle.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Intermediate — ₹15,000–₹30,000</h4>
+  <table>
+    <thead><tr><th>Type</th><th>Recommended models</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Acoustic</td><td>Yamaha FG800, Cort Earth70, Fender CD-60S</td><td>Solid spruce top — noticeable upgrade in tone and projection.</td></tr>
+      <tr><td>Semi-acoustic</td><td>Yamaha APX600, Fender CD-60SCE</td><td>Acoustic with built-in pickup — for live shows or recording without a mic.</td></tr>
+      <tr><td>Electric</td><td>Squier Affinity Strat, Yamaha Pacifica 112V</td><td>The Pacifica 112V punches well above its price point.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Gigging — ₹40,000+</h4>
+  <table>
+    <thead><tr><th>Type</th><th>Recommended models</th></tr></thead>
+    <tbody>
+      <tr><td>Acoustic</td><td>Taylor Academy 10, Martin LX1, Seagull S6</td></tr>
+      <tr><td>Semi-acoustic</td><td>Taylor 114ce, Fender Newporter Player</td></tr>
+      <tr><td>Electric</td><td>Fender Player Strat, Epiphone Les Paul Standard, Gibson SG (entry)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Acoustic vs Semi-acoustic vs Electric — what to buy first</h4>
+  <table>
+    <thead><tr><th>Type</th><th>Best for</th><th>Trade-offs</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Acoustic</strong></td><td>Bollywood, ghazals, folk, songwriting, anyone who'll mostly play unplugged</td><td>Heavy strings = sore fingers at first; can't play loud rock</td></tr>
+      <tr><td><strong>Semi-acoustic</strong></td><td>Singers who'll perform live; recording without a mic</td><td>More expensive; slightly compromised acoustic tone</td></tr>
+      <tr><td><strong>Electric</strong></td><td>Rock, metal, blues, lead playing, anyone obsessed with effects pedals</td><td>Needs an amp (₹6,000+) to make any sound; less portable</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card tip">
+    <strong>The honest answer:</strong> if it's your first guitar, buy an acoustic. They're cheaper, simpler, and force you to play with your hands instead of relying on tone-shaping electronics. Once you can play, <em>then</em> decide if you need an electric.
+  </div>
+
+  <h3 id="progress">5. The 90-day progress chart</h3>
+  <p>Print this. Stick it on the wall. Tick a box every day you practise — even 10 minutes counts. The visual streak does most of the motivational work for you.</p>
+
+  <div class="img-prompt">
+    <span class="label">🎨 Image prompt — 90-day progress chart (printable)</span>
+    <p>"A printable A4-sized progress chart titled 'GUITAR — 90 DAYS' in elegant serif type. Layout: a 9×10 grid of circles (90 total), each circle large enough to mark with an X or fill in. Above the grid, three milestone bars: 'Day 30 — First chord cleanly', 'Day 60 — First full song', 'Day 90 — First performance'. To the right, a vertical column with weekly reflection prompts: 'What got easier?', 'What still hurts?', 'New song this week?'. Bottom: a small acoustic guitar illustration and a quote: 'Twenty minutes today beats two hours next week.' Warm cream paper texture, burnt-orange accents, hand-drawn line-art borders, vintage typography. Designed to be printed and pinned to a wall."</p>
+  </div>
+
+  <div class="viz">
+    <svg viewBox="0 0 600 220" width="100%" style="max-width:600px">
+      <text x="300" y="22" text-anchor="middle" font-family="Fraunces" font-size="18" font-weight="600" fill="var(--accent)">90 Days · 90 Practice Sessions</text>
+      <g>
+        <!-- 9 rows × 10 columns -->
+        <!-- Generate via repeating rect/circle patterns -->
+        <g fill="none" stroke="currentColor" stroke-width="1.2">
+          <!-- Row 1 (days 1-10) -->
+          <circle cx="60" cy="60" r="10"/><circle cx="110" cy="60" r="10"/><circle cx="160" cy="60" r="10"/>
+          <circle cx="210" cy="60" r="10"/><circle cx="260" cy="60" r="10"/><circle cx="310" cy="60" r="10"/>
+          <circle cx="360" cy="60" r="10"/><circle cx="410" cy="60" r="10"/><circle cx="460" cy="60" r="10"/>
+          <circle cx="510" cy="60" r="10"/>
+          <!-- Row 2 -->
+          <circle cx="60" cy="90" r="10"/><circle cx="110" cy="90" r="10"/><circle cx="160" cy="90" r="10"/>
+          <circle cx="210" cy="90" r="10"/><circle cx="260" cy="90" r="10"/><circle cx="310" cy="90" r="10"/>
+          <circle cx="360" cy="90" r="10"/><circle cx="410" cy="90" r="10"/><circle cx="460" cy="90" r="10"/>
+          <circle cx="510" cy="90" r="10"/>
+          <!-- Row 3 -->
+          <circle cx="60" cy="120" r="10"/><circle cx="110" cy="120" r="10"/><circle cx="160" cy="120" r="10"/>
+          <circle cx="210" cy="120" r="10"/><circle cx="260" cy="120" r="10"/><circle cx="310" cy="120" r="10"/>
+          <circle cx="360" cy="120" r="10"/><circle cx="410" cy="120" r="10"/><circle cx="460" cy="120" r="10"/>
+          <circle cx="510" cy="120" r="10"/>
+          <!-- Continued… 6 more rows for brevity shown with dotted ellipsis -->
+          <circle cx="60" cy="150" r="10"/><circle cx="110" cy="150" r="10"/><circle cx="160" cy="150" r="10"/>
+          <circle cx="210" cy="150" r="10"/><circle cx="260" cy="150" r="10"/><circle cx="310" cy="150" r="10"/>
+          <circle cx="360" cy="150" r="10"/><circle cx="410" cy="150" r="10"/><circle cx="460" cy="150" r="10"/>
+          <circle cx="510" cy="150" r="10"/>
+          <circle cx="60" cy="180" r="10"/><circle cx="110" cy="180" r="10"/><circle cx="160" cy="180" r="10"/>
+          <circle cx="210" cy="180" r="10"/><circle cx="260" cy="180" r="10"/><circle cx="310" cy="180" r="10"/>
+          <circle cx="360" cy="180" r="10"/><circle cx="410" cy="180" r="10"/><circle cx="460" cy="180" r="10"/>
+          <circle cx="510" cy="180" r="10"/>
+        </g>
+        <text x="20" y="65" font-family="JetBrains Mono" font-size="10" fill="var(--ink-mute)">W1</text>
+        <text x="20" y="95" font-family="JetBrains Mono" font-size="10" fill="var(--ink-mute)">W2</text>
+        <text x="20" y="125" font-family="JetBrains Mono" font-size="10" fill="var(--ink-mute)">W3</text>
+        <text x="20" y="155" font-family="JetBrains Mono" font-size="10" fill="var(--ink-mute)">W4</text>
+        <text x="20" y="185" font-family="JetBrains Mono" font-size="10" fill="var(--ink-mute)">W5</text>
+        <text x="300" y="210" text-anchor="middle" font-family="Outfit" font-style="italic" font-size="11" fill="var(--ink-mute)">…and so on through Day 90</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="resources">6. Resources — where to go next</h3>
+
+  <h4>YouTube</h4>
+  <ul>
+    <li><a href="https://www.youtube.com/@JustinGuitar" target="_blank">Justin Guitar</a> — beginner-to-intermediate gold standard, free</li>
+    <li><a href="https://www.youtube.com/@MartyMusic" target="_blank">Marty Music</a> — song tutorials, hundreds of them</li>
+    <li><a href="https://www.youtube.com/@PaulDavids" target="_blank">Paul Davids</a> — technique + theory + production</li>
+    <li><a href="https://www.youtube.com/@RickBeato" target="_blank">Rick Beato</a> — theory deep dives, music analysis</li>
+    <li><a href="https://www.youtube.com/results?search_query=guitar+lessons+hindi+songs" target="_blank">Hindi guitar tutorials</a> — search results for Bollywood-specific lessons</li>
+  </ul>
+
+  <h4>Apps</h4>
+  <ul>
+    <li><strong>GuitarTuna</strong> — tuning + metronome (free)</li>
+    <li><strong>Yousician</strong> — interactive lessons (paid)</li>
+    <li><strong>Ultimate Guitar</strong> — chord/tab database</li>
+    <li><strong>Songsterr</strong> — interactive tabs that play along</li>
+  </ul>
+
+  <h4>Books</h4>
+  <ul>
+    <li><em>Guitar Aerobics</em> — Troy Nelson (a 1-year daily exercise routine)</li>
+    <li><em>Hal Leonard Guitar Method</em> — comprehensive structured course</li>
+    <li><em>Music Theory for Guitarists</em> — Tom Kolb</li>
+  </ul>
+
+  <h4>Communities</h4>
+  <ul>
+    <li>r/guitar, r/guitarlessons (Reddit)</li>
+    <li>Local jam nights — search "open mic" + your city</li>
+    <li>Facebook groups for your specific guitar model (surprisingly active)</li>
+  </ul>
+
+  <div class="deco-divider">· · ·</div>
+
+  <blockquote style="text-align:center;font-size:24px;border:none;color:var(--accent)">
+    "Twenty minutes today beats two hours next week."
+  </blockquote>
+  <p style="text-align:center;color:var(--ink-mute);font-size:14px">— the only practice rule that matters</p>
+</section>
+</div><!-- /wrap -->
+
+<footer>
+  <div class="sig">Now go play. 🎸</div>
+  <p>The Complete Guitar Course · Beginner to Advanced<br/>
+     Compiled from a 31-day program, then expanded for the long road.</p>
+</footer>
+
+<script>
+  // Theme toggle with localStorage persistence
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+    try { localStorage.setItem('guitar-course-theme', next); } catch (e) {}
+  }
+
+  // Restore theme on load
+  (function() {
+    try {
+      const saved = localStorage.getItem('guitar-course-theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-label').textContent = 'Light';
+      }
+    } catch (e) {}
+  })();
+
+  // Fade-in observer for sections
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('section.part, .card, .day-card, .song-chart, .chord-diagram, .viz').forEach(el => {
+    el.classList.add('fade-in');
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
