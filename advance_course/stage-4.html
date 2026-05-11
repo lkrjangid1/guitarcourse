@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stage 4 · How Chords Move — Play By Ear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .cadence-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .cadence-card .label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--accent-3); font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .cadence-card .formula {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 28px; color: var(--accent);
+    margin: 12px 0;
+  }
+  .cadence-card .play-btn-inline {
+    background: var(--accent); color: white;
+    border: none; padding: 6px 14px; border-radius: 999px;
+    font-family: var(--body); font-weight: 600; font-size: 12px;
+    cursor: pointer;
+    margin: 8px 0;
+  }
+  .cadence-card .play-btn-inline:hover { background: var(--accent-2); color: var(--ink); }
+
+  .substitution-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .swap-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .swap-row:last-child { border-bottom: 0; }
+  .swap-row .from {
+    font-family: var(--mono); font-size: 14px; color: var(--ink-mute);
+    min-width: 60px; text-align: right;
+  }
+  .swap-row .arrow {
+    font-family: var(--display); font-style: italic;
+    color: var(--accent); font-size: 22px;
+  }
+  .swap-row .to {
+    flex: 1;
+    font-family: var(--mono); font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .swap-row .desc {
+    font-size: 13px; color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .modulation-diagram {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: var(--shadow);
+  }
+  .key-bubble {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: white;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 22px;
+    margin: 0 8px;
+    box-shadow: var(--shadow);
+  }
+  .key-bubble.faded { background: var(--bg-muted); color: var(--ink-mute); }
+  .key-arrow {
+    color: var(--accent); font-size: 28px;
+    margin: 0 4px;
+  }
+
+  .progression-builder {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 32px 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .progression-slots {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    padding: 18px;
+    background: var(--bg-muted);
+    border-radius: var(--radius-s);
+    margin: 14px 0;
+    min-height: 90px;
+  }
+  .prog-slot {
+    width: 90px; height: 70px;
+    border: 2px dashed var(--line);
+    border-radius: var(--radius-s);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-mute);
+    font-family: var(--mono); font-size: 12px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .prog-slot.filled {
+    border-style: solid;
+    border-color: var(--accent);
+    background: var(--bg-elev);
+  }
+  .roman-palette {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin: 14px 0;
+  }
+  .roman-btn {
+    padding: 10px 18px;
+    background: var(--bg-elev);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-s);
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 18px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .roman-btn:hover {
+    border-color: var(--accent); transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <nav>
+    <a href="advance_course.html">All stages</a>
+    <a href="stage-3.html">← Stage 3</a>
+    <a href="stage-4.html" class="current">Stage 4</a>
+    <a href="stage-5.html" style="opacity:.5">Stage 5 →</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="stage-pill">Stage 04 · Movement</div>
+  <h1>How chords <em>move</em>.</h1>
+  <p class="lede">Until now you've focused on <em>which</em> chord to play. This stage is about <em>where</em> chords want to go next. Cadences, substitutions, key changes, and the subtle decisions that separate a beginner accompaniment from one that sounds professional.</p>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">0</span>The motion principle</h2>
+
+<p>Music is movement. Chords don't sit still — they pull, push, resolve, suspend, and surprise. Every chord change creates a feeling, and the feeling depends on <em>what came before</em>.</p>
+
+<p>Consider these two two-chord phrases in G major:</p>
+<ul>
+  <li><span class="chord G">G</span> → <span class="chord C">C</span>: feels like "opening a door." Relaxing, expanding.</li>
+  <li><span class="chord G">G</span> → <span class="chord D">D</span>: feels like "going somewhere." Forward motion.</li>
+  <li><span class="chord G">G</span> → <span class="chord Em">Em</span>: feels like "remembering something sad." Inward turn.</li>
+  <li><span class="chord G">G</span> → <span class="chord Am">Am</span>: feels like "stepping aside." Gentle detour.</li>
+</ul>
+
+<p>Same starting chord. Four totally different emotional directions. This stage teaches you to <em>choose</em> the feeling.</p>
+
+<blockquote>
+"A great chord progression doesn't just play notes — it tells a story of leaving and returning home."
+</blockquote>
+
+<h2><span class="num">1</span>The four <em>cadences</em></h2>
+
+<p>A <strong>cadence</strong> is a short chord pattern that resolves (or fails to resolve) into the home chord. Think of it as the punctuation of music. The four cadences cover almost every "ending" you'll hear:</p>
+
+<div class="cadence-card">
+  <div class="label">Cadence 1 · Authentic (the period)</div>
+  <div class="formula">V → I</div>
+  <p>The strongest possible resolution. Sounds like "the end." Used at the end of verses, choruses, songs. In a sentence: this is the full stop.</p>
+  <p><strong>Example in G:</strong> <span class="chord D">D</span> → <span class="chord G">G</span> · feels conclusive, final, "home for sure."</p>
+  <button class="play-btn-inline" onclick="playCadence(['V','I'])">▶ Hear V → I in G</button>
+</div>
+
+<div class="cadence-card">
+  <div class="label">Cadence 2 · Plagal (the amen)</div>
+  <div class="formula">IV → I</div>
+  <p>Gentler than V→I. Called the "amen cadence" because it's how hymns end. Less dramatic, more peaceful. Used when a song wants to end softly.</p>
+  <p><strong>Example in G:</strong> <span class="chord C">C</span> → <span class="chord G">G</span> · feels peaceful, settled, like a sigh of relief.</p>
+  <button class="play-btn-inline" onclick="playCadence(['IV','I'])">▶ Hear IV → I in G</button>
+</div>
+
+<div class="cadence-card">
+  <div class="label">Cadence 3 · Deceptive (the surprise)</div>
+  <div class="formula">V → vi</div>
+  <p>You hear V — you <em>expect</em> I to follow. Instead the song goes to vi. Feels like a sudden plot twist. Used to create surprise, often at the end of a verse to set up an unexpected chorus.</p>
+  <p><strong>Example in G:</strong> <span class="chord D">D</span> → <span class="chord Em">Em</span> · feels unresolved, melancholy, "this story isn't over."</p>
+  <button class="play-btn-inline" onclick="playCadence(['V','vi'])">▶ Hear V → vi in G</button>
+</div>
+
+<div class="cadence-card">
+  <div class="label">Cadence 4 · Half (the question mark)</div>
+  <div class="formula">anything → V</div>
+  <p>Ends a phrase <em>on</em> V instead of resolving. Sounds like a question — unfinished, hanging. Used to lead into a new section (verse → chorus, etc.).</p>
+  <p><strong>Example in G:</strong> ending on <span class="chord D">D</span> after a sequence — feels suspended, waiting.</p>
+  <button class="play-btn-inline" onclick="playCadence(['IV','V'])">▶ Hear IV → V in G (half cadence)</button>
+</div>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #1</div>
+  <div class="drill-title">"Name that cadence"</div>
+  <p>I'll play one of the four cadences. Identify which one based on how it feels.</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="cad-play">Play cadence</button>
+    <button class="play-btn outline" id="cad-authentic">Authentic (V→I)</button>
+    <button class="play-btn outline" id="cad-plagal">Plagal (IV→I)</button>
+    <button class="play-btn outline" id="cad-deceptive">Deceptive (V→vi)</button>
+    <button class="play-btn outline" id="cad-half">Half (→V)</button>
+    <button class="play-btn outline" id="cad-new">New cadence</button>
+  </div>
+
+  <div class="drill-output" id="cad-output">
+    Press <strong>Play cadence</strong>. Listen to the feeling — final, peaceful, surprising, or unfinished?  Score: 0/0
+  </div>
+</div>
+
+<h2><span class="num">2</span>The <em>"axis"</em> progression — the four-chord song</h2>
+
+<p>You met this in Stage 2 as <strong>I – V – vi – IV</strong>. Now let's see why it's so popular and how to play with it.</p>
+
+<p>The axis is a perfect loop because each chord move feels "right":</p>
+<ul>
+  <li><strong>I → V:</strong> creates tension</li>
+  <li><strong>V → vi:</strong> deceptive cadence, surprise</li>
+  <li><strong>vi → IV:</strong> peaceful descent</li>
+  <li><strong>IV → I:</strong> plagal resolution, returns home</li>
+</ul>
+
+<p>Every move feels natural. Every move creates expectation for the next. That's why thousands of songs use this exact loop — and why you've heard it a thousand times without noticing.</p>
+
+<h4>The four rotations</h4>
+
+<p>The axis has four "starting points," each with its own feel:</p>
+
+<table>
+  <thead><tr><th>Rotation</th><th>Pattern</th><th>Feel</th><th>Examples</th></tr></thead>
+  <tbody>
+    <tr><td>Standard</td><td>I – V – vi – IV</td><td>Anthemic, optimistic</td><td>Let It Be, Channa Mereya</td></tr>
+    <tr><td>Sad</td><td>vi – IV – I – V</td><td>Reflective, romantic</td><td>Tum Hi Ho, Apologize</td></tr>
+    <tr><td>Rising</td><td>IV – I – V – vi</td><td>Hopeful, building</td><td>One Republic ballads</td></tr>
+    <tr><td>Falling</td><td>V – IV – I – vi</td><td>Resolution-then-melancholy</td><td>Many emo ballads</td></tr>
+  </tbody>
+</table>
+
+<div class="card tip">
+  <div class="card-label">Try this right now</div>
+  <p style="margin:0">Play all four rotations in G — strum each chord for 2 beats, loop them. Notice how the <em>same four chords</em> create radically different moods just by where they start. This is your playground.</p>
+</div>
+
+<h2><span class="num">3</span>Chord <em>substitutions</em> — sounding fresh</h2>
+
+<p>Substitutions are the secret of musicians who make familiar progressions feel new. The idea: replace a chord with another chord that shares notes, but adds different color.</p>
+
+<div class="substitution-card">
+  <h4 style="margin:0 0 12px">Common substitutions in any key</h4>
+
+  <div class="swap-row">
+    <div class="from">I</div>
+    <div class="arrow">↔</div>
+    <div class="to">vi</div>
+    <div class="desc">"Relative minor" — same family, sadder mood. Use when you want emotional weight on a chord that would normally feel bright.</div>
+  </div>
+
+  <div class="swap-row">
+    <div class="from">IV</div>
+    <div class="arrow">↔</div>
+    <div class="to">ii</div>
+    <div class="desc">"Predominant pair" — both lead naturally to V. ii sounds more wistful, IV sounds more open.</div>
+  </div>
+
+  <div class="swap-row">
+    <div class="from">V</div>
+    <div class="arrow">↔</div>
+    <div class="to">V7</div>
+    <div class="desc">"Add the 7th" — keeps the same root chord but adds extra pull toward I. Almost always an upgrade.</div>
+  </div>
+
+  <div class="swap-row">
+    <div class="from">I</div>
+    <div class="arrow">↔</div>
+    <div class="to">Imaj7</div>
+    <div class="desc">"Dreamy version" — Gmaj7 instead of G. Softer, more contemplative. Great for ballads and ghazals.</div>
+  </div>
+
+  <div class="swap-row">
+    <div class="from">V</div>
+    <div class="arrow">↔</div>
+    <div class="to">Vsus4 → V</div>
+    <div class="desc">"Suspension" — delays resolution. Play Dsus4 for a beat, then D, then I. Adds anticipation.</div>
+  </div>
+</div>
+
+<h4>Substitution example: refreshing a tired progression</h4>
+
+<div class="card">
+  <p><strong>Original (axis):</strong> <span class="chord G">G</span> — <span class="chord D">D</span> — <span class="chord Em">Em</span> — <span class="chord C">C</span></p>
+  <p><strong>Substituted version:</strong> <span class="chord G">Gmaj7</span> — <span class="chord D">D7</span> — <span class="chord Em">Em7</span> — <span class="chord C">Cmaj7</span></p>
+  <p style="margin:12px 0 0; font-size:14px; color:var(--ink-soft); font-style:italic">Same progression. Instantly sounds more sophisticated. Try it.</p>
+</div>
+
+<h2><span class="num">4</span>"Borrowed" <em>chords</em> from outside the key</h2>
+
+<p>Sometimes a song uses a chord that's <em>not</em> in the family. These are called borrowed chords — borrowed from the parallel minor (or major). They add color and surprise without changing the key.</p>
+
+<h4>The most common borrowed chord: ♭VII</h4>
+
+<p>In G major, the diatonic VII is F♯ diminished — almost never used. But the <strong>♭VII</strong> (F major in G) is borrowed from G minor, and it sounds <em>fantastic</em>.</p>
+
+<p><strong>Try this progression:</strong> <span class="chord G">G</span> — <span class="chord F">F</span> — <span class="chord C">C</span> — <span class="chord G">G</span> (I — ♭VII — IV — I)</p>
+
+<button class="play-btn" onclick="playProgInKey([55, 53, 60, 55], 'major')">▶ Hear it</button>
+
+<p style="margin-top:12px">That F chord is "outside" the key, but feels totally at home. Used constantly in rock and folk — also a signature of <em>Roop Tera Mastana</em> and many Kishore-era classics.</p>
+
+<h4>Other common borrowed chords</h4>
+
+<table>
+  <thead><tr><th>Borrowed chord</th><th>In G major</th><th>Where it comes from</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>♭VII</td><td>F major</td><td>Parallel minor</td><td>Bluesy, slightly suspended</td></tr>
+    <tr><td>♭VI</td><td>E♭ major</td><td>Parallel minor</td><td>Dark, cinematic</td></tr>
+    <tr><td>iv (minor)</td><td>C minor</td><td>Parallel minor</td><td>Aching, romantic — heavy use in Bollywood</td></tr>
+    <tr><td>V/V (secondary dominant)</td><td>A major</td><td>Key of V</td><td>Strong pull toward V — feels like a temporary detour</td></tr>
+  </tbody>
+</table>
+
+<div class="card teal">
+  <div class="card-label">The iv chord trick</div>
+  <p style="margin:0">In G major, the IV is C major. But if you play <strong>C minor</strong> instead — borrowed from G minor — it adds an instant "Bollywood ballad" feeling. Try: <span class="chord G">G</span> — <span class="chord C">C</span> — <span class="chord C">Cm</span> — <span class="chord G">G</span>. That move from C to Cm is gold.</p>
+</div>
+
+<h2><span class="num">5</span><em>Modulation</em> — changing keys mid-song</h2>
+
+<p>Modulation = changing keys partway through a song. Done well, it lifts the energy. Most commonly used in the last chorus to make it feel bigger.</p>
+
+<h4>The two easy modulations</h4>
+
+<div class="modulation-diagram">
+  <h4 style="margin:0 0 16px">1. Up by a half-step (the "key change")</h4>
+  <div style="text-align: center; margin: 16px 0;">
+    <span class="key-bubble">G</span>
+    <span class="key-arrow">→</span>
+    <span class="key-bubble" style="background: var(--accent-2); color: var(--ink)">A♭</span>
+  </div>
+  <p style="font-size:14px; color:var(--ink-soft); margin:8px 0 0">Every chord shifts up one fret. Sounds dramatic, classic ballad ending move. Common in Whitney Houston, '90s pop, dramatic Bollywood reprises.</p>
+</div>
+
+<div class="modulation-diagram">
+  <h4 style="margin:0 0 16px">2. Up by a whole step</h4>
+  <div style="text-align: center; margin: 16px 0;">
+    <span class="key-bubble">G</span>
+    <span class="key-arrow">→</span>
+    <span class="key-bubble" style="background: var(--accent-2); color: var(--ink)">A</span>
+  </div>
+  <p style="font-size:14px; color:var(--ink-soft); margin:8px 0 0">Every chord shifts up two frets. Even more dramatic. Common in showtune endings and inspirational anthems.</p>
+</div>
+
+<h4>The "pivot chord" smooth modulation</h4>
+
+<p>Instead of an abrupt jump, you can pivot through a chord that exists in both keys. For example, modulating from G major to D major:</p>
+
+<p style="font-family:var(--mono); font-size:14px; background:var(--bg-muted); padding:14px 18px; border-radius:6px">
+  <strong>G major:</strong>  G — D — Em — <strong>D</strong>     <em>(D is V in G major AND I in D major)</em><br/>
+  <strong>D major:</strong>  D — G — A — D    <em>(continues smoothly)</em>
+</p>
+
+<p>The shared D chord acts as a hinge. The listener barely notices the key shift — it just feels like the song "opened up."</p>
+
+<h2><span class="num">6</span>The "build-your-own" <em>progression workshop</em></h2>
+
+<p>Now let's apply movement principles to <em>create</em> progressions from scratch instead of just recognising them.</p>
+
+<div class="progression-builder">
+  <div style="font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 8px;">Workshop</div>
+  <h3 style="margin:0 0 12px; font-family:var(--display); font-weight:500">Build a 4-chord progression in G major</h3>
+  <p>Click chords from the palette below to fill the four slots. Try the "tendency rules" — start on I, end on I or V, and make each move feel right. Press <strong>Play</strong> to hear it.</p>
+
+  <div class="progression-slots" id="builder-slots">
+    <div class="prog-slot" data-idx="0">slot 1</div>
+    <div class="prog-slot" data-idx="1">slot 2</div>
+    <div class="prog-slot" data-idx="2">slot 3</div>
+    <div class="prog-slot" data-idx="3">slot 4</div>
+  </div>
+
+  <div style="font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-mute); margin-top: 14px;">Palette:</div>
+  <div class="roman-palette">
+    <button class="roman-btn" data-roman="I">I (G)</button>
+    <button class="roman-btn" data-roman="ii">ii (Am)</button>
+    <button class="roman-btn" data-roman="iii">iii (Bm)</button>
+    <button class="roman-btn" data-roman="IV">IV (C)</button>
+    <button class="roman-btn" data-roman="V">V (D)</button>
+    <button class="roman-btn" data-roman="vi">vi (Em)</button>
+  </div>
+
+  <div class="play-button-row" style="margin-top:14px">
+    <button class="play-btn" id="builder-play">▶ Play my progression</button>
+    <button class="play-btn outline" id="builder-clear">Clear</button>
+    <button class="play-btn outline" id="builder-loop">Loop 4 times</button>
+  </div>
+
+  <div class="drill-output" id="builder-output" style="margin-top:14px">
+    Empty slots. Click any Roman numeral to fill the next slot.
+  </div>
+</div>
+
+<h2><span class="num">7</span>The <em>secondary dominant</em> trick</h2>
+
+<p>This is the single coolest theory trick to add color to your playing: the <strong>secondary dominant</strong>.</p>
+
+<p>The idea: <em>any chord can have its own V</em> that temporarily pulls toward it.</p>
+
+<h4>Standard example</h4>
+
+<p>In G major, ii is Am. The V of Am would be... E major (the V of A minor is E). But E is not in G major — it's borrowed from another key.</p>
+
+<p><strong>Watch this progression:</strong> <span class="chord G">G</span> — <span class="chord D">E</span> — <span class="chord Am">Am</span> — <span class="chord D">D</span> — <span class="chord G">G</span></p>
+
+<button class="play-btn" onclick="playProgInKey([55, 64, 57, 62, 55], 'mixed')">▶ Hear it (V/ii in G)</button>
+
+<p style="margin-top:12px">The E major chord (V of Am) creates a strong pull <em>into</em> the Am. Then Am — D — G resolves normally. The E feels exotic, surprising, professional. This is called "V of ii" or V/ii.</p>
+
+<div class="card accent">
+  <div class="card-label">The cheat sheet</div>
+  <ul style="margin:6px 0 0">
+    <li><strong>V/ii</strong> = a major chord on degree 6 (in G major: E). Pulls toward ii (Am).</li>
+    <li><strong>V/IV</strong> = a major chord on degree 1, but with a ♭7 added — basically I7. In G: G7. Pulls toward IV (C).</li>
+    <li><strong>V/V</strong> = a major chord on degree 2 (in G: A major). Pulls toward V (D).</li>
+    <li><strong>V/vi</strong> = a major chord on degree 3 (in G: B major). Pulls toward vi (Em).</li>
+  </ul>
+</div>
+
+<p>Hindi songs use these constantly. Notice that "extra" chord in <em>Tum Hi Ho</em>'s pre-chorus that makes it feel cinematic? Often a secondary dominant.</p>
+
+<h2><span class="num">8</span>Bollywood-specific <em>movement patterns</em></h2>
+
+<p>A few chord-movement patterns that show up everywhere in Hindi music:</p>
+
+<h4>The minor descent</h4>
+<p><strong>Em — D — C — B7</strong> (or Em — D — C — D in simpler versions)</p>
+<p>The bass line walks down: E — D — C — B. Creates an aching, descending feeling. Used in countless ghazals and ballads.</p>
+<button class="play-btn" onclick="playProgInKey([52, 50, 48, 47], 'descent')">▶ Hear the descent</button>
+
+<h4>The Bollywood loop</h4>
+<p><strong>Am — F — C — G</strong> (vi — IV — I — V in C major)</p>
+<p>The "sad axis" rotated to start on vi. Half of Hindi ballads use this exact loop. Try it under any sad Hindi melody — it'll fit.</p>
+<button class="play-btn" onclick="playProgInKey([57, 53, 48, 55], 'loop')">▶ Hear the loop</button>
+
+<h4>The qawwali / sufi pulse</h4>
+<p><strong>Dm — Gm — Dm — Am — Dm</strong> (i — iv — i — v — i in D minor)</p>
+<p>Hypnotic, droning, all minor. The repeated i — iv — i creates a meditative quality. Used in sufi music, qawwali, ghazals.</p>
+<button class="play-btn" onclick="playProgInKey([50, 55, 50, 57, 50], 'sufi')">▶ Hear it</button>
+
+<h2><span class="num">9</span>Recognising <em>where you are</em> in a song</h2>
+
+<p>Beyond knowing chords and progressions, professional players can <em>predict</em> what's coming based on song structure. Here's the structural map of a typical pop song:</p>
+
+<table>
+  <thead><tr><th>Section</th><th>Typical progression</th><th>Function</th></tr></thead>
+  <tbody>
+    <tr><td>Intro</td><td>Often I or vi-IV-I-V</td><td>Establishes the key</td></tr>
+    <tr><td>Verse</td><td>Often I-V-vi-IV or vi-IV-I-V</td><td>Tells the story</td></tr>
+    <tr><td>Pre-chorus</td><td>IV-V or ii-V, ending unresolved</td><td>Builds tension</td></tr>
+    <tr><td>Chorus</td><td>Same as verse or bigger version</td><td>Releases tension, hook</td></tr>
+    <tr><td>Bridge</td><td>Often borrowed chords, modulates briefly</td><td>Surprise / new emotional angle</td></tr>
+    <tr><td>Final chorus</td><td>Sometimes modulated up</td><td>Maximum energy</td></tr>
+    <tr><td>Outro</td><td>Repeats hook, often plagal cadence</td><td>Wind down</td></tr>
+  </tbody>
+</table>
+
+<p>Knowing these tendencies lets you anticipate: if you've heard one verse, you know what the second verse will likely do. You can prepare the chord change before the song demands it.</p>
+
+<h2><span class="num">10</span>Putting it together: <em>Channa Mereya</em> analysed</h2>
+
+<p>Let's apply Stage 4 thinking to one song you know well.</p>
+
+<div class="card">
+  <p><strong>Key:</strong> G major (Stage 1)</p>
+  <p><strong>Family:</strong> G, Am, Bm, C, D, Em (Stage 2)</p>
+  <p><strong>Verse progression:</strong> <span class="chord G">G</span> — <span class="chord C">C</span> — <span class="chord G">G</span> — <span class="chord C">C</span> ... → I — IV loop</p>
+  <p style="font-size:14px; color:var(--ink-soft)">Just I and IV, slow. Creates a "wandering" feel. This is intentional — the song is reflective.</p>
+
+  <p style="margin-top:14px"><strong>Chorus progression:</strong> <span class="chord G">G</span> — <span class="chord D">D</span> — <span class="chord Em">Em</span> — <span class="chord C">C</span> ... → I — V — vi — IV (the axis)</p>
+  <p style="font-size:14px; color:var(--ink-soft)">Now the song "opens up." Adds V and vi, creating the full axis loop. The deceptive cadence V→vi mid-chorus (D→Em) gives that signature emotional twist.</p>
+
+  <p style="margin-top:14px"><strong>Why it works:</strong></p>
+  <ul style="margin:6px 0 0">
+    <li>Verse stays minimal (I-IV) so the chorus feels like a release.</li>
+    <li>The chorus axis pattern is universally satisfying.</li>
+    <li>The V→Em deceptive cadence creates the song's emotional core — "expected resolution, got melancholy instead."</li>
+    <li>Returns to I to feel resolved before looping.</li>
+  </ul>
+</div>
+
+<h2><span class="num">11</span>Mastery checklist for <em>Stage 4</em></h2>
+
+<div class="checklist">
+  <h4>Ready for Stage 5 when you can:</h4>
+  <ul>
+    <li>Identify which cadence (authentic, plagal, deceptive, half) you're hearing at the end of a phrase, ~70% accuracy.</li>
+    <li>Play all four rotations of the axis (I-V-vi-IV and its rotations) in G, D, and Em from memory.</li>
+    <li>Substitute V with V7, I with Imaj7, IV with ii — in real time, without stopping.</li>
+    <li>Recognise when a song uses a borrowed chord (especially ♭VII or iv) and identify which one.</li>
+    <li>Analyse a familiar song and label its sections (verse, pre-chorus, chorus, bridge) by chord patterns alone.</li>
+    <li>Build an original 4- or 8-bar progression that has a clear "starts at home, leaves, returns home" arc.</li>
+  </ul>
+</div>
+
+<h2><span class="num">12</span>Preview of <em>Stage 5</em></h2>
+
+<p>You've mastered <em>which</em> chords to play and <em>where</em> they're going. The next layer is <strong>rhythm</strong> — strumming, timing, and how to match the right rhythmic feel to the right song.</p>
+
+<p>This isn't about memorising more patterns. It's about hearing the <em>pulse</em> of a song and choosing rhythm by mood: ballad, peppy folk, ghazal, sufi, party. By the end of Stage 5 you'll stop searching YouTube for "strumming pattern for X" because you'll feel the right pattern yourself.</p>
+
+<div class="deco-divider">· · ·</div>
+
+<div class="stage-nav">
+  <a class="stage-nav-link" href="stage-3.html">
+    <div class="dir">← Previous</div>
+    <div class="title">Stage 3 · The Melody Bridge</div>
+  </a>
+  <a class="stage-nav-link next" href="stage-5.html">
+    <div class="dir">Next →</div>
+    <div class="title">Stage 5 · The Rhythm instinct</div>
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>Stage 4 of 6 · Play By Ear course</p>
+</footer>
+
+<script>
+// ============= Theme toggle =============
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('improv-course-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-label').textContent = 'Light';
+    }
+  } catch (e) {}
+})();
+
+// ============= Audio engine =============
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function playNote(midi, dur = 0.5, gain = 0.15, when = 0, type = 'triangle') {
+  const ctx = getCtx();
+  const t = ctx.currentTime + when;
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = midiToFreq(midi);
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(gain, t + 0.02);
+  env.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+function playChord(midis, dur = 1.0, when = 0) {
+  midis.forEach(m => playNote(m, dur, 0.10, when, 'triangle'));
+}
+function majorTriad(r) { return [r, r+4, r+7]; }
+function minorTriad(r) { return [r, r+3, r+7]; }
+
+const TONIC = 55; // G3
+function chordFor(roman) {
+  switch(roman) {
+    case 'I':   return majorTriad(TONIC);
+    case 'ii':  return minorTriad(TONIC + 2);
+    case 'iii': return minorTriad(TONIC + 4);
+    case 'IV':  return majorTriad(TONIC + 5);
+    case 'V':   return majorTriad(TONIC + 7);
+    case 'vi':  return minorTriad(TONIC + 9);
+  }
+}
+
+// Hindi sargam name to MIDI note
+function playCadence(romans) {
+  romans.forEach((r, i) => playChord(chordFor(r), 1.2, i * 1.3));
+  // For authentic and plagal, add an extra I at the end as resolution feel
+  if (romans.length === 2 && (romans[0] === 'V' || romans[0] === 'IV') && romans[1] === 'I') {
+    // already ends on I, do nothing extra
+  }
+}
+
+// Generic helper to play a progression by root MIDI numbers (with quality auto-major)
+function playProgInKey(roots, label) {
+  roots.forEach((r, i) => {
+    // Auto-detect: if root maps to a "minor" position in G, play minor
+    const offsetFromG = ((r - 55) % 12 + 12) % 12;
+    let chord;
+    // minor positions in G major: 2, 4, 9 (ii, iii, vi)
+    if ([2, 4, 9].includes(offsetFromG)) chord = minorTriad(r);
+    else chord = majorTriad(r);
+    playChord(chord, 1.2, i * 1.3);
+  });
+}
+
+// ============= Drill: Name that cadence =============
+const CADENCES = [
+  { seq: ['IV', 'V', 'I'], name: 'authentic', desc: 'V → I (authentic)' },
+  { seq: ['I', 'IV', 'I'], name: 'plagal', desc: 'IV → I (plagal / amen)' },
+  { seq: ['IV', 'V', 'vi'], name: 'deceptive', desc: 'V → vi (deceptive)' },
+  { seq: ['I', 'IV', 'V'], name: 'half', desc: 'Ends on V (half / unfinished)' },
+];
+
+let cadState = { current: null, score: 0, attempts: 0 };
+
+function newCad() {
+  cadState.current = CADENCES[Math.floor(Math.random() * CADENCES.length)];
+}
+
+function playCad() {
+  if (!cadState.current) newCad();
+  cadState.current.seq.forEach((r, i) => {
+    playChord(chordFor(r), 1.0, i * 1.1);
+  });
+  document.getElementById('cad-output').innerHTML =
+    `Playing... listen for the ending feel. Score: ${cadState.score}/${cadState.attempts}`;
+}
+
+function guessCad(name) {
+  if (!cadState.current) {
+    document.getElementById('cad-output').innerHTML = 'Press <strong>Play cadence</strong> first.';
+    return;
+  }
+  cadState.attempts++;
+  const correct = name === cadState.current.name;
+  if (correct) cadState.score++;
+  const verdict = correct ? '✓ Correct!' : '✗ Not quite —';
+  document.getElementById('cad-output').innerHTML =
+    `${verdict} That was a <strong>${cadState.current.desc}</strong> cadence. Score: ${cadState.score}/${cadState.attempts}`;
+  cadState.current = null;
+}
+
+document.getElementById('cad-play').addEventListener('click', playCad);
+document.getElementById('cad-authentic').addEventListener('click', () => guessCad('authentic'));
+document.getElementById('cad-plagal').addEventListener('click', () => guessCad('plagal'));
+document.getElementById('cad-deceptive').addEventListener('click', () => guessCad('deceptive'));
+document.getElementById('cad-half').addEventListener('click', () => guessCad('half'));
+document.getElementById('cad-new').addEventListener('click', () => {
+  newCad();
+  playCad();
+});
+
+// ============= Progression builder =============
+let builderState = ['', '', '', ''];
+
+function updateBuilderUI() {
+  document.querySelectorAll('#builder-slots .prog-slot').forEach((slot, i) => {
+    const roman = builderState[i];
+    if (roman) {
+      slot.classList.add('filled');
+      slot.innerHTML = `<div style="font-family:var(--display); font-style:italic; font-weight:600; color:var(--accent); font-size:18px">${roman}</div>`;
+    } else {
+      slot.classList.remove('filled');
+      slot.innerHTML = `slot ${i+1}`;
+    }
+  });
+
+  const filled = builderState.filter(x => x).length;
+  const out = document.getElementById('builder-output');
+  if (filled === 0) {
+    out.innerHTML = 'Empty slots. Click any Roman numeral to fill the next slot.';
+  } else if (filled < 4) {
+    out.innerHTML = `Filled ${filled}/4 — keep going.  Current: <strong>${builderState.filter(x => x).join(' — ')}</strong>`;
+  } else {
+    // Analyse the progression
+    let analysis = analyseProgression(builderState);
+    out.innerHTML = `<strong>${builderState.join(' — ')}</strong>  · ${analysis}`;
+  }
+}
+
+function analyseProgression(prog) {
+  // Provide commentary
+  const s = prog.join(' ');
+  if (s === 'I V vi IV') return '✓ The Axis! The most-used progression in pop. Anthemic and complete.';
+  if (s === 'vi IV I V') return '✓ The Sad Axis! Reflective, romantic. Used in Tum Hi Ho and many ballads.';
+  if (s === 'I vi IV V') return '✓ The 50s progression! Doo-wop classic.';
+  if (s === 'ii V I I') return '✓ Jazz turnaround variant.';
+  if (s.endsWith('I')) return 'Ends on I — feels resolved. Good "complete" progression.';
+  if (s.endsWith('V')) return 'Ends on V — feels unfinished, like a question. Great for setting up the next loop.';
+  if (s.endsWith('vi')) return 'Ends on vi — deceptive, melancholic. Good for emotional impact.';
+  return 'Custom progression — try playing it and listening to how it feels.';
+}
+
+document.querySelectorAll('.roman-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const roman = btn.dataset.roman;
+    const nextEmpty = builderState.findIndex(x => !x);
+    if (nextEmpty >= 0) {
+      builderState[nextEmpty] = roman;
+      updateBuilderUI();
+      // Play the chord
+      playChord(chordFor(roman), 0.8, 0);
+    }
+  });
+});
+
+document.querySelectorAll('#builder-slots .prog-slot').forEach(slot => {
+  slot.addEventListener('click', () => {
+    const idx = parseInt(slot.dataset.idx);
+    if (builderState[idx]) {
+      builderState[idx] = '';
+      updateBuilderUI();
+    }
+  });
+});
+
+document.getElementById('builder-play').addEventListener('click', () => {
+  const filled = builderState.filter(x => x);
+  if (filled.length === 0) {
+    document.getElementById('builder-output').innerHTML = 'Add at least one chord to the slots first.';
+    return;
+  }
+  filled.forEach((r, i) => playChord(chordFor(r), 1.0, i * 1.1));
+});
+
+document.getElementById('builder-loop').addEventListener('click', () => {
+  const filled = builderState.filter(x => x);
+  if (filled.length === 0) return;
+  for (let loop = 0; loop < 4; loop++) {
+    filled.forEach((r, i) => {
+      playChord(chordFor(r), 1.0, loop * filled.length * 1.1 + i * 1.1);
+    });
+  }
+});
+
+document.getElementById('builder-clear').addEventListener('click', () => {
+  builderState = ['', '', '', ''];
+  updateBuilderUI();
+});
+
+updateBuilderUI();
+
+// Fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.card, .cadence-card, .substitution-card, .modulation-diagram, .progression-builder, .drill, .checklist').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

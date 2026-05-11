@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stage 1 · The Key — Play By Ear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .home-test {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .home-test .test-step {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .home-test .test-step:last-child { border-bottom: 0; }
+  .home-test .step-num {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 32px; color: var(--accent); line-height: 1;
+    min-width: 40px;
+  }
+  .home-test .step-body { flex: 1; }
+  .home-test .step-body strong { color: var(--ink); }
+
+  .piano-key-row {
+    display: inline-flex; gap: 2px;
+    background: var(--ink); padding: 6px; border-radius: 6px;
+    margin: 8px 0;
+  }
+  .piano-key {
+    width: 26px; height: 80px;
+    background: white; color: #333;
+    border-radius: 0 0 4px 4px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .1s;
+  }
+  .piano-key.tonic { background: var(--accent); color: white; }
+  .piano-key:hover { background: var(--accent-2); }
+  .piano-key.playing { background: var(--accent-2); }
+
+  .play-button-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0;
+  }
+  .play-btn {
+    background: var(--accent); color: white;
+    border: none; padding: 8px 18px; border-radius: 999px;
+    font-family: var(--body); font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all .15s ease;
+  }
+  .play-btn:hover { background: var(--accent-2); color: var(--ink); transform: translateY(-1px); }
+  .play-btn.outline {
+    background: transparent; color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .play-btn.outline:hover { background: var(--accent); color: white; }
+  .play-btn::before {
+    content: "▶"; font-size: 10px;
+  }
+  .play-btn.stop::before { content: "■"; }
+
+  .key-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .key-card .key-title {
+    font-family: var(--display); font-weight: 500;
+    font-size: 22px; margin: 0 0 4px;
+  }
+  .key-card .key-chords {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    margin: 14px 0;
+  }
+  .key-card .key-chords .deg-num {
+    font-family: var(--display); font-style: italic;
+    color: var(--ink-mute); font-size: 13px;
+    min-width: 16px;
+  }
+
+  .song-example {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .song-example .song-name {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 17px; margin-bottom: 4px;
+  }
+  .song-example .song-meta {
+    font-size: 12px; color: var(--ink-mute);
+    margin-bottom: 10px;
+  }
+  .song-example .analysis {
+    background: var(--bg-muted);
+    padding: 10px 14px; border-radius: var(--radius-s);
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .checklist {
+    background: var(--bg-elev);
+    border-left: 4px solid var(--chord-G);
+    border: 1px solid var(--line);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    padding: 20px 26px;
+    margin: 24px 0;
+  }
+  .checklist h4 {
+    margin: 0 0 12px; font-style: normal; color: var(--chord-G);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .checklist ul { padding-left: 0; list-style: none; margin: 0; }
+  .checklist li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .checklist li::before {
+    content: "☐";
+    position: absolute; left: 0;
+    color: var(--chord-G); font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Inline tiny "play this note" button */
+  .note-play {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--bg-muted); color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: 10px; cursor: pointer;
+    margin: 0 4px;
+    transition: all .15s;
+  }
+  .note-play:hover { background: var(--accent); color: white; transform: scale(1.1); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <nav>
+    <a href="advance_course.html">All stages</a>
+    <a href="stage-1.html" class="current">Stage 1</a>
+    <a href="stage-2.html" style="opacity:.5">Stage 2 →</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="stage-pill">Stage 01 · Foundation</div>
+  <h1>The <em>Key</em>.</h1>
+  <p class="lede">Before you can play a song by ear, you need to know which "neighbourhood" it lives in. That neighbourhood is the <strong>key</strong>. Find the key, and you've gone from 12 possible chords to 6. Find the key in seconds — by ear — and you have the foundation everything else builds on.</p>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">0</span>Why this matters</h2>
+
+<p>Imagine you walk into a friend's birthday and someone hands you a guitar. They start singing <em>Tum Hi Ho</em>. What do you do?</p>
+
+<p>The "old way" answer: pull out your phone, search the chord sheet on Ultimate Guitar, try to read it while playing, fall behind, give up.</p>
+
+<p>The "by ear" answer:</p>
+
+<ol>
+  <li>Listen for two seconds. <strong>What key is this in?</strong></li>
+  <li>Once you know the key, you have ~6 chords available.</li>
+  <li>Your first chord is almost always the home chord of that key.</li>
+  <li>From there, your ear and the song's melody tell you when to change.</li>
+</ol>
+
+<p>That whole sequence takes maybe 8 seconds. Today we learn step 1 — the most important step — by mastering one idea:</p>
+
+<blockquote>
+"Every song has a home. The home is the key. Find the home, and the rest of the map opens up."
+</blockquote>
+
+<h2><span class="num">1</span>What is a <em>key</em>, really?</h2>
+
+<p>A key is a song's <strong>home note</strong> (also called the <em>tonic</em>) plus a <strong>flavour</strong> (major or minor). That's it.</p>
+
+<p>If a song is in <strong>G major</strong>:</p>
+<ul>
+  <li>The home note is <strong>G</strong> (सा, if you're using sargam — your tonic).</li>
+  <li>The flavour is major (bright, happy).</li>
+  <li>The home chord — the one the song most wants to "rest on" — is <span class="chord G">G</span>.</li>
+  <li>Only 7 notes are "in" this key. The other 5 are "outside notes" used sparingly.</li>
+  <li>From those 7 notes, exactly 6 useful chords can be built — and these 6 do 95% of the work in 95% of songs.</li>
+</ul>
+
+<p>That's the entire promise of "finding the key." You shrink your problem from infinite possibilities to a fixed family of 6.</p>
+
+<div class="card teal">
+  <div class="card-label">The key analogy</div>
+  <p style="margin:0">Think of a key like a <strong>city</strong>. The home note is your <em>house</em>. The 6 diatonic chords are <em>your neighbourhood — places you can walk to easily</em>. The other 5 chromatic notes are <em>the rest of the world — you can visit, but it's a trip.</em> Most songs never leave the neighbourhood.</p>
+</div>
+
+<h2><span class="num">2</span>The <em>home note test</em></h2>
+
+<p>Here's the practical method to find a song's key. You'll get good at this in about a week of doing it consciously.</p>
+
+<div class="home-test">
+  <div class="test-step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Listen to the song.</strong> Play 30 seconds. Don't worry about words or melody — just <em>feel</em> the music.
+    </div>
+  </div>
+  <div class="test-step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Hum along.</strong> Hum any random note while the song plays. Then slide your hum up or down until it feels <em>locked in</em> — like it belongs.
+    </div>
+  </div>
+  <div class="test-step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Stop the song.</strong> Keep humming. The note you're holding is almost always either the home note (tonic) or its perfect 5th. Eight times out of ten, it's the tonic.
+    </div>
+  </div>
+  <div class="test-step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>Find it on your guitar.</strong> Pluck the open strings and the basic frets until one of them matches your hum. That string/fret is your tonic.
+    </div>
+  </div>
+  <div class="test-step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <strong>Test the chord.</strong> Play the major chord of that note (e.g., if your hum matched G, play <span class="chord G">G</span>). Sing along — does it feel "at home"? If yes, you're in <em>that</em> major. If it feels off, try the minor instead — you're probably in the relative minor.
+    </div>
+  </div>
+</div>
+
+<p>That's the whole process. The trick is doing step 2 — finding the locked-in hum — quickly. Let's drill it.</p>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #1</div>
+  <div class="drill-title">"Find the home note"</div>
+  <p>I'll play a short chord progression in a random key. Your job: hum along, find the note that feels most "locked in," then click the piano key you think it is. The home note is highlighted in orange when revealed.</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="drill1-play">Play progression</button>
+    <button class="play-btn outline" id="drill1-new">New random key</button>
+    <button class="play-btn outline" id="drill1-reveal">Reveal answer</button>
+  </div>
+
+  <div style="margin: 16px 0;">
+    <div style="font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px;">Click the home note you hear:</div>
+    <div class="piano-key-row" id="drill1-piano">
+      <!-- Keys generated by JS -->
+    </div>
+  </div>
+
+  <div class="drill-output" id="drill1-output">Press <strong>Play progression</strong> to start. Hum along, then click the piano key that feels like "home".</div>
+</div>
+
+<h2><span class="num">3</span>The <em>"first and last chord" trick</em></h2>
+
+<p>Before you trust your ear completely, there's a sneaky shortcut that works ~85% of the time:</p>
+
+<div class="card accent">
+  <div class="card-label">The shortcut</div>
+  <p style="font-family:var(--display); font-style:italic; font-size:22px; margin:0; color: var(--ink)">
+    The first chord of a song is almost always the home chord. The last chord almost certainly is.
+  </p>
+</div>
+
+<p>So when you hear a song and you have access to <em>any</em> reference — your ear, an Instagram clip, a 5-second YouTube snippet — listen for the very first chord (or the very last one before the song ends). That's your key.</p>
+
+<h4>Why this works</h4>
+<p>Songs are built to feel "complete." The most natural way to start a song is on its tonic (home). The most natural way to end is on its tonic. Composers do this without thinking because anything else feels unresolved — like leaving the front door open when you go to bed.</p>
+
+<h4>Examples from songs you know</h4>
+
+<div class="song-example">
+  <div class="song-name">Tum Hi Ho — Aashiqui 2</div>
+  <div class="song-meta">Arijit Singh · 2013</div>
+  <p style="margin:0">First chord: <span class="chord Em">Em</span>. Last chord: <span class="chord Em">Em</span>. The song lives in <strong>E minor</strong>.</p>
+  <div class="analysis">
+    <strong>What this tells you:</strong> the home is Em. The chord family you can use is the E minor family — Em, Am, B7 (or Bm), C, D, G. Suddenly you're not guessing 12 chords; you're picking from 6.
+  </div>
+</div>
+
+<div class="song-example">
+  <div class="song-name">Kal Ho Na Ho — title track</div>
+  <div class="song-meta">Sonu Nigam · 2003</div>
+  <p style="margin:0">First chord: <span class="chord G">G</span>. Last chord: <span class="chord G">G</span>. The song lives in <strong>G major</strong>.</p>
+  <div class="analysis">
+    <strong>What this tells you:</strong> home is G. Your family is G, C, D, Em, Am, Bm. And — sure enough — the entire song uses exactly those.
+  </div>
+</div>
+
+<div class="song-example">
+  <div class="song-name">Channa Mereya</div>
+  <div class="song-meta">Arijit Singh · ADHM, 2016</div>
+  <p style="margin:0">First chord: <span class="chord G">G</span>. Verse moves through G, Em, C, D. Last chord: <span class="chord G">G</span>. Lives in <strong>G major</strong> (but it leans toward the Em/minor flavour, which is why it feels nostalgic).</p>
+  <div class="analysis">
+    <strong>What this tells you:</strong> in G major, the <em>vi</em> chord (Em) is the relative minor. Songs that feel "sad in a happy key" usually lean on the vi. We'll explore this in Stage 2.
+  </div>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Where the shortcut fails</div>
+  <p>About 15% of songs start on a chord that <em>isn't</em> the tonic — usually IV or V. They do this deliberately to create a feeling of "starting in motion." If the first chord doesn't feel like home, check the last chord. If <em>that</em> doesn't feel like home either, the song probably modulates (changes key) — rare in pop, common in Bollywood interludes.</p>
+</div>
+
+<h2><span class="num">4</span>Major vs minor — the <em>flavour test</em></h2>
+
+<p>Once you've found the home note, the second question is: is the song major (bright) or minor (sad)?</p>
+
+<p>This is easier than it sounds. There's a simple test:</p>
+
+<div class="card accent">
+  <div class="card-label">The flavour test</div>
+  <p style="margin:0">Play the home note. Sing the home note. Then sing the 3rd note above it.</p>
+  <ul style="margin:10px 0 0">
+    <li>If the 3rd feels <strong>4 frets above</strong> the home (a major third) → it's <strong>major</strong>. Bright, happy, resolved.</li>
+    <li>If the 3rd feels <strong>3 frets above</strong> (a minor third) → it's <strong>minor</strong>. Sad, soulful, unresolved.</li>
+  </ul>
+</div>
+
+<h4>Quick reference: which 3rd sounds like which mood</h4>
+
+<table>
+  <thead><tr><th>Home (tonic)</th><th>Major 3rd (4 frets up)</th><th>Minor 3rd (3 frets up)</th></tr></thead>
+  <tbody>
+    <tr><td>G</td><td>B → makes <span class="chord G">G</span> Major</td><td>B♭ → makes Gm</td></tr>
+    <tr><td>C</td><td>E → makes <span class="chord C">C</span> Major</td><td>E♭ → makes Cm</td></tr>
+    <tr><td>D</td><td>F♯ → makes <span class="chord D">D</span> Major</td><td>F → makes Dm</td></tr>
+    <tr><td>A</td><td>C♯ → makes <span class="chord A">A</span> Major</td><td>C → makes <span class="chord Am">Am</span></td></tr>
+    <tr><td>E</td><td>G♯ → makes E Major</td><td>G → makes <span class="chord Em">Em</span></td></tr>
+  </tbody>
+</table>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #2</div>
+  <div class="drill-title">"Major or minor?"</div>
+  <p>I'll play a chord. Click <strong>Major</strong> or <strong>Minor</strong>. The trick: don't analyse — just feel. Major sounds open, light, "smiling." Minor sounds darker, contemplative, "thinking."</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="drill2-play">Play chord</button>
+    <button class="play-btn outline" id="drill2-major">It's Major</button>
+    <button class="play-btn outline" id="drill2-minor">It's Minor</button>
+    <button class="play-btn outline" id="drill2-new">Next chord</button>
+  </div>
+
+  <div class="drill-output" id="drill2-output">
+    Score: 0 correct / 0 attempts. Press <strong>Play chord</strong> to begin.
+  </div>
+</div>
+
+<h2><span class="num">5</span>Mapping <em>melody</em> to key — the singer's shortcut</h2>
+
+<p>Here's a singer-specific trick that's pure gold:</p>
+
+<p>When you're <em>singing</em> a song you know but don't have chords for, your voice almost always lands on the home note at <strong>the end of a phrase</strong>. The end of the last line of the verse. The end of the chorus. The held-out final note. That note <em>is</em> your tonic.</p>
+
+<h4>Try this right now</h4>
+<ol>
+  <li>Sing the chorus of <em>Tum Hi Ho</em> in your head. Sing it out loud if you can.</li>
+  <li>Notice where you naturally <em>land</em> on "...tum hi <strong>ho</strong>."</li>
+  <li>That landing note — the "ho" — is the tonic of the song.</li>
+  <li>Find it on your guitar. Play that note's major or minor chord depending on the mood.</li>
+  <li>You just identified the key by singing.</li>
+</ol>
+
+<p>This is the easiest, fastest, most reliable method when you don't have a recording handy. Your voice already knows the song — it'll find the home note for you.</p>
+
+<div class="card tip">
+  <div class="card-label">Practice this daily</div>
+  <p style="margin:0">Pick any song you know by heart. Sing it. Catch where your voice rests at phrase endings. Find that note on your guitar. Try its major and minor chord. Done — you've found the key, no chord sheet required.</p>
+</div>
+
+<h2><span class="num">6</span>The <em>six common keys</em> for guitar</h2>
+
+<p>You don't need to know all 24 major and minor keys. On guitar, about <strong>six keys</strong> account for 90% of pop, folk, and Bollywood music — because these are the keys that lay out comfortably under your fingers.</p>
+
+<p>Here are the six. Memorise these and you can probably play along with any pop song you'll ever hear:</p>
+
+<div class="key-card">
+  <div class="key-title">G major</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">Open-string friendly. The "default" guitar key.</p>
+  <div class="key-chords">
+    <span class="chord G">G</span> <span class="chord Am">Am</span> <span class="chord Bm">Bm</span> <span class="chord C">C</span> <span class="chord D">D</span> <span class="chord Em">Em</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in G:</strong> Kal Ho Na Ho · Channa Mereya · Raabta · Tujhe Kitna Chahne Lage · countless others</p>
+</div>
+
+<div class="key-card">
+  <div class="key-title">D major</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">Bright. Common in folk and country.</p>
+  <div class="key-chords">
+    <span class="chord D">D</span> <span class="chord Em">Em</span> F♯m <span class="chord G">G</span> <span class="chord A">A</span> <span class="chord Bm">Bm</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in D:</strong> Kesariya · Summer of '69 · Wonderful Tonight · many devotional songs</p>
+</div>
+
+<div class="key-card">
+  <div class="key-title">C major</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">No sharps or flats. Neutral, balanced.</p>
+  <div class="key-chords">
+    <span class="chord C">C</span> <span class="chord D">Dm</span> <span class="chord Em">Em</span> <span class="chord F">F</span> <span class="chord G">G</span> <span class="chord Am">Am</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in C:</strong> Let It Be · Imagine · many ghazals</p>
+</div>
+
+<div class="key-card">
+  <div class="key-title">E minor</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">The "sad cousin" of G major. Most expressive minor key for guitarists.</p>
+  <div class="key-chords">
+    <span class="chord Em">Em</span> F♯° <span class="chord G">G</span> <span class="chord Am">Am</span> <span class="chord Bm">Bm</span> <span class="chord C">C</span> <span class="chord D">D</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in Em:</strong> Tum Hi Ho · Galliyan · Kabira · most ballads in their original key</p>
+</div>
+
+<div class="key-card">
+  <div class="key-title">A minor</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">The "sad cousin" of C major. Pure, classic minor.</p>
+  <div class="key-chords">
+    <span class="chord Am">Am</span> B° <span class="chord C">C</span> <span class="chord D">Dm</span> <span class="chord Em">Em</span> <span class="chord F">F</span> <span class="chord G">G</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in Am:</strong> Agar Tum Saath Ho · Stairway to Heaven · countless ghazals</p>
+</div>
+
+<div class="key-card">
+  <div class="key-title">D minor</div>
+  <p style="font-size:14px; margin:0; color:var(--ink-mute)">The "saddest of all keys" (Spinal Tap was right). Common in old Bollywood.</p>
+  <div class="key-chords">
+    <span class="chord D">Dm</span> E° <span class="chord F">F</span> <span class="chord G">Gm</span> <span class="chord Am">Am</span> <span class="chord Bm">B♭</span> <span class="chord C">C</span>
+  </div>
+  <p style="font-size:13px; margin:0; color: var(--ink-soft);"><strong>Songs in Dm:</strong> Mere Naina Sawan Bhadon · many Kishore-da classics</p>
+</div>
+
+<div class="card teal">
+  <div class="card-label">Capo trick</div>
+  <p style="margin:0">If a song is in a "hard" key like B♭ or F♯m, you don't actually need to know that key. Put a capo on the right fret and play familiar G/C/D/Em shapes. For example: capo 3 with Em shapes = G minor. Capo 5 with G major shapes = C major. We'll cover this fully in Stage 4 — for now, just know it's an option.</p>
+</div>
+
+<h2><span class="num">7</span>Real-world drill: <em>identify the key</em> of 5 songs</h2>
+
+<p>This is the homework for Stage 1. Do this every day for a week.</p>
+
+<div class="checklist">
+  <h4>Your week-1 practice</h4>
+  <ul>
+    <li>Pick 5 songs you know well. Random ones — don't think about it.</li>
+    <li>For each song, hum the chorus. Find where your voice <em>lands</em> at the end of phrases.</li>
+    <li>Match that landing note to a string/fret on your guitar.</li>
+    <li>Try playing the major chord first. If it feels right, the song is in that major key.</li>
+    <li>If major feels wrong, try the minor. If <em>that</em> feels right, the song is in the minor.</li>
+    <li>Write down your guess. Check by looking up the chord sheet afterwards.</li>
+    <li>Aim for 70% correct in the first week. By week two, you'll be at 90%+.</li>
+  </ul>
+</div>
+
+<h4>Sample worked example: <em>Hawayein</em> (Jab Harry Met Sejal)</h4>
+
+<div class="song-example">
+  <div class="song-name">Hawayein — Arijit Singh</div>
+  <div class="song-meta">Pritam · 2017</div>
+  <p><strong>Step 1:</strong> Hum the chorus. "Hawayein... bata rahi hain..."</p>
+  <p><strong>Step 2:</strong> Where does your voice land at the end of "tera pata"? Sing it out — feel the resolution.</p>
+  <p><strong>Step 3:</strong> That landing note is the song's tonic. On guitar, it matches the open <strong>D string</strong> (with capo on fret 4 it sits at F♯).</p>
+  <p><strong>Step 4:</strong> Try playing <span class="chord D">D</span> major while singing. Feels right? Yes — bright, optimistic.</p>
+  <p><strong>Step 5:</strong> Song is in <strong>D major</strong>. (Without capo. With capo 4, you play D shapes but it sounds like F♯ major — the original recording's actual key.)</p>
+  <div class="analysis">
+    <strong>What you've gained:</strong> you didn't look up a single chord sheet, and you already know the song uses some combination of D, Em, F♯m, G, A, Bm. That's enough to start playing along immediately.
+  </div>
+</div>
+
+<h2><span class="num">8</span>The five <em>most common mistakes</em> at this stage</h2>
+
+<div class="card warn">
+  <div class="card-label">Mistake 1</div>
+  <p style="margin:0"><strong>Confusing the tonic with the perfect 5th.</strong> When you hum along, sometimes your voice locks onto the 5th instead of the tonic — they both sound "stable." Test: try singing <em>down</em> from your hum to a lower note that feels even more "settled." If you find one, that lower note is probably the real tonic.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 2</div>
+  <p style="margin:0"><strong>Mistaking the relative minor for the home key.</strong> G major and E minor share the same notes. So if a song uses G, Em, C, D, you might say "it's in G" when it's actually "in Em." Test: play the song and end on <span class="chord G">G</span>. Does it feel resolved? If yes, it's G major. If it still feels like wanting more, end on <span class="chord Em">Em</span> — if <em>that</em> resolves, it's E minor.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 3</div>
+  <p style="margin:0"><strong>Trying to find the key while the song is still playing.</strong> Stop the song. Sit in silence. <em>Then</em> sing what you remember. The music's spectrum confuses your ear when you're trying to isolate one note.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 4</div>
+  <p style="margin:0"><strong>Not singing out loud.</strong> Humming in your head doesn't work nearly as well. Your voice and ear are connected in a feedback loop — humming aloud uses both.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 5</div>
+  <p style="margin:0"><strong>Skipping the verification step.</strong> Always test your guess by playing the major (or minor) chord of your guessed tonic <em>while</em> singing the song. If it feels at home, you're right. If it clashes, your tonic is wrong — try a different note.</p>
+</div>
+
+<h2><span class="num">9</span>What you should be able to do <em>before Stage 2</em></h2>
+
+<div class="checklist">
+  <h4>Stage 1 mastery checklist</h4>
+  <ul>
+    <li>Hum a song you know and identify the note your voice lands on at phrase endings.</li>
+    <li>Match that note to a string or fret on your guitar without much hunting.</li>
+    <li>Play the major chord of that note and tell whether it "feels at home" with the song.</li>
+    <li>If major feels wrong, switch to minor — and verify it sounds right.</li>
+    <li>Tell, by ear, whether a song is in a major key or a minor key with 80%+ accuracy.</li>
+    <li>Name the six diatonic chords of G major, D major, C major, Em, Am, Dm <em>without thinking</em>.</li>
+    <li>Identify the key of any of the 50+ songs in your Arijit/Kishore songbook by humming the chorus.</li>
+  </ul>
+</div>
+
+<p>If you can check off all of these, you're ready for Stage 2. Don't move on without them — Stage 2 builds directly on these skills, and skipping ahead just makes you re-learn this later.</p>
+
+<h2><span class="num">10</span>A <em>preview</em> of Stage 2</h2>
+
+<p>Now that you can identify a song's key, the next question is: <em>which chord do I play, and when?</em></p>
+
+<p>The answer involves understanding the <strong>family of six chords</strong> that lives in every key — and learning the personality of each family member. Some chords are "stable" (you can sit on them). Some are "transitional" (they want to move somewhere). Some are "tense" (they need to resolve).</p>
+
+<p>In Stage 2 you'll learn Roman numerals (I, IV, V, vi etc.) — not because they're fancy, but because they let you talk about chord progressions in a way that works in <em>any</em> key. The same I–V–vi–IV progression that powers <em>Tum Hi Ho</em> also powers <em>Let It Be</em>, <em>With or Without You</em>, and thousands of other songs.</p>
+
+<p>For now: do the drills, identify keys for one week, and let your ear catch up. See you in Stage 2.</p>
+
+<div class="deco-divider">· · ·</div>
+
+<div class="stage-nav">
+  <a class="stage-nav-link" href="advance_course.html">
+    <div class="dir">← Back</div>
+    <div class="title">All stages</div>
+  </a>
+  <a class="stage-nav-link next" href="stage-2.html">
+    <div class="dir">next →</div>
+    <div class="title">Stage 2 · The Six Friends</div>
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>Stage 1 of 6 · Play By Ear course</p>
+</footer>
+
+<script>
+// ============= Theme toggle =============
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('improv-course-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-label').textContent = 'Light';
+    }
+  } catch (e) {}
+})();
+
+// ============= Web Audio engine =============
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+// Convert MIDI note number to frequency
+function midiToFreq(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+// Note name to MIDI (e.g., 'C4' = 60, 'A4' = 69)
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function noteToMidi(note) {
+  // e.g. "C4", "F#4", "Bb3"
+  const m = note.match(/^([A-G])(b|#)?(-?\d+)$/);
+  if (!m) return 60;
+  let [_, letter, accidental, octaveStr] = m;
+  const octave = parseInt(octaveStr, 10);
+  let semitone = NOTE_NAMES.indexOf(letter);
+  if (semitone < 0) semitone = NOTE_NAMES.indexOf(letter + '#') - 1; // shouldn't happen
+  if (accidental === '#') semitone += 1;
+  if (accidental === 'b') semitone -= 1;
+  return semitone + (octave + 1) * 12;
+}
+
+// Play a note for a given duration (seconds) at a given gain (0-1)
+function playNote(midi, duration = 0.5, gain = 0.18, when = 0, type = 'triangle') {
+  const ctx = getCtx();
+  const t = ctx.currentTime + when;
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = midiToFreq(midi);
+  // ADSR-ish envelope
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(gain, t + 0.02);
+  env.gain.exponentialRampToValueAtTime(0.001, t + duration);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + duration + 0.05);
+}
+
+// Play a chord (array of MIDI notes) for a duration
+function playChord(midis, duration = 1.0, when = 0) {
+  midis.forEach(m => playNote(m, duration, 0.10, when, 'triangle'));
+}
+
+// Chord builders (root MIDI -> array of MIDI for triad)
+function majorTriad(root) {
+  return [root, root + 4, root + 7];
+}
+function minorTriad(root) {
+  return [root, root + 3, root + 7];
+}
+
+// Build the diatonic chords for a major key (root MIDI of tonic, octave 3-ish)
+// Returns: [I, ii, iii, IV, V, vi]
+function diatonicMajor(tonicMidi) {
+  return [
+    majorTriad(tonicMidi),         // I
+    minorTriad(tonicMidi + 2),     // ii
+    minorTriad(tonicMidi + 4),     // iii
+    majorTriad(tonicMidi + 5),     // IV
+    majorTriad(tonicMidi + 7),     // V
+    minorTriad(tonicMidi + 9),     // vi
+  ];
+}
+
+// ============= Drill 1: Find the home note =============
+const KEYS = [
+  {name: 'C major', tonic: 60, type: 'major', label: 'C'},
+  {name: 'D major', tonic: 62, type: 'major', label: 'D'},
+  {name: 'E minor', tonic: 64, type: 'minor', label: 'E'},
+  {name: 'F major', tonic: 65, type: 'major', label: 'F'},
+  {name: 'G major', tonic: 55, type: 'major', label: 'G'},
+  {name: 'A minor', tonic: 57, type: 'minor', label: 'A'},
+];
+
+let drill1Key = null;
+let drill1Revealed = false;
+
+function pickRandomKey() {
+  drill1Key = KEYS[Math.floor(Math.random() * KEYS.length)];
+  drill1Revealed = false;
+  document.getElementById('drill1-output').innerHTML =
+    'New key chosen! Press <strong>Play progression</strong> and hum along.';
+  renderDrill1Piano();
+}
+
+function renderDrill1Piano() {
+  const row = document.getElementById('drill1-piano');
+  row.innerHTML = '';
+  const startMidi = 60; // C4
+  const notes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  for (let i = 0; i < 12; i++) {
+    const midi = startMidi + i;
+    const noteName = notes[i];
+    const key = document.createElement('div');
+    key.className = 'piano-key';
+    key.dataset.midi = midi;
+    key.dataset.note = noteName;
+    key.textContent = noteName;
+    if (drill1Revealed && drill1Key) {
+      // Highlight the tonic (normalize tonic to within 60-71 range)
+      let tonicPC = drill1Key.tonic % 12;
+      let thisPC = midi % 12;
+      if (tonicPC === thisPC) key.classList.add('tonic');
+    }
+    key.addEventListener('click', () => {
+      // Play this note
+      playNote(midi, 0.6, 0.2);
+      // Highlight briefly
+      key.classList.add('playing');
+      setTimeout(() => key.classList.remove('playing'), 300);
+      // Check answer
+      if (drill1Key) {
+        const tonicPC = drill1Key.tonic % 12;
+        const guessedPC = midi % 12;
+        if (tonicPC === guessedPC) {
+          document.getElementById('drill1-output').innerHTML =
+            `✓ Correct! The home note is <strong>${notes[tonicPC]}</strong>. The song is in <strong>${drill1Key.name}</strong>.`;
+          drill1Revealed = true;
+          renderDrill1Piano();
+        } else {
+          document.getElementById('drill1-output').innerHTML =
+            `✗ That was <strong>${notes[guessedPC]}</strong> — not quite. Try humming along again and listen for a more "locked in" feeling.`;
+        }
+      }
+    });
+    row.appendChild(key);
+  }
+}
+
+document.getElementById('drill1-new').addEventListener('click', () => {
+  pickRandomKey();
+});
+
+document.getElementById('drill1-reveal').addEventListener('click', () => {
+  if (!drill1Key) {
+    document.getElementById('drill1-output').innerHTML = 'Press <strong>Play progression</strong> first.';
+    return;
+  }
+  drill1Revealed = true;
+  const notes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const tonicPC = drill1Key.tonic % 12;
+  document.getElementById('drill1-output').innerHTML =
+    `The home note is <strong>${notes[tonicPC]}</strong>. The song is in <strong>${drill1Key.name}</strong>.`;
+  renderDrill1Piano();
+});
+
+document.getElementById('drill1-play').addEventListener('click', () => {
+  if (!drill1Key) {
+    pickRandomKey();
+  }
+  const tonic = drill1Key.tonic;
+  // Play I - IV - V - I progression so the tonic is obvious
+  let chords;
+  if (drill1Key.type === 'major') {
+    chords = [
+      majorTriad(tonic),         // I
+      majorTriad(tonic + 5),     // IV
+      majorTriad(tonic + 7),     // V
+      majorTriad(tonic),         // I (return home)
+    ];
+  } else {
+    chords = [
+      minorTriad(tonic),         // i
+      minorTriad(tonic + 5),     // iv
+      majorTriad(tonic + 7),     // V (major in minor key)
+      minorTriad(tonic),         // i (return home)
+    ];
+  }
+  // Schedule each chord 1.2s apart
+  chords.forEach((chord, i) => {
+    playChord(chord, 1.0, i * 1.2);
+  });
+  document.getElementById('drill1-output').innerHTML =
+    'Playing I–IV–V–I progression. Hum along, find the "locked in" note, then click the piano key you think is the home note.';
+});
+
+renderDrill1Piano();
+
+// ============= Drill 2: Major or minor? =============
+let drill2State = { current: null, score: 0, attempts: 0 };
+
+function newDrill2Chord() {
+  // Pick a random root (60-71, C4 to B4) and random major/minor
+  const root = 60 + Math.floor(Math.random() * 12);
+  const isMajor = Math.random() < 0.5;
+  drill2State.current = { root, isMajor };
+  return drill2State.current;
+}
+
+function playDrill2() {
+  if (!drill2State.current) newDrill2Chord();
+  const { root, isMajor } = drill2State.current;
+  const chord = isMajor ? majorTriad(root) : minorTriad(root);
+  playChord(chord, 1.5, 0);
+  // Also arpeggiate
+  chord.forEach((m, i) => playNote(m, 0.4, 0.18, 1.6 + i * 0.3, 'sine'));
+  document.getElementById('drill2-output').innerHTML =
+    `Chord played. <strong>Major or Minor?</strong>  ·  Score: ${drill2State.score} / ${drill2State.attempts}`;
+}
+
+function answerDrill2(guess) {
+  if (!drill2State.current) {
+    document.getElementById('drill2-output').innerHTML = 'Press <strong>Play chord</strong> first.';
+    return;
+  }
+  drill2State.attempts++;
+  const correct = (guess === 'major' && drill2State.current.isMajor) ||
+                  (guess === 'minor' && !drill2State.current.isMajor);
+  if (correct) drill2State.score++;
+  const verdict = correct ? '✓ Correct!' : '✗ Not quite —';
+  const actual = drill2State.current.isMajor ? 'Major' : 'Minor';
+  document.getElementById('drill2-output').innerHTML =
+    `${verdict} That was <strong>${actual}</strong>. Score: ${drill2State.score} / ${drill2State.attempts} (${Math.round(100 * drill2State.score / drill2State.attempts)}%)`;
+  drill2State.current = null;
+}
+
+document.getElementById('drill2-play').addEventListener('click', playDrill2);
+document.getElementById('drill2-major').addEventListener('click', () => answerDrill2('major'));
+document.getElementById('drill2-minor').addEventListener('click', () => answerDrill2('minor'));
+document.getElementById('drill2-new').addEventListener('click', () => {
+  newDrill2Chord();
+  playDrill2();
+});
+
+// ============= Fade-in observer =============
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.card, .key-card, .song-example, .drill, .home-test, .checklist').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

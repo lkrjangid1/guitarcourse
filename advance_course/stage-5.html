@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stage 5 · The Rhythm Instinct — Play By Ear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .pattern-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin: 18px 0;
+    box-shadow: var(--shadow);
+  }
+  .pattern-card .pname {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 22px; margin: 0 0 4px;
+  }
+  .pattern-card .pmeta {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-mute); margin-bottom: 14px;
+  }
+  .pattern-card .pgrid {
+    display: flex; gap: 4px; margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .pcell {
+    width: 36px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    border: 1.5px solid var(--line);
+    font-family: var(--display); font-size: 22px; font-weight: 700;
+    background: var(--bg-elev);
+  }
+  .pcell.D { color: var(--chord-D); border-color: var(--chord-D); background: var(--chord-D-bg); }
+  .pcell.U { color: var(--chord-C); border-color: var(--chord-C); background: var(--chord-C-bg); }
+  .pcell.X { color: var(--ink-mute); border-style: dashed; opacity: .4; }
+  .pcell.playing { transform: scale(1.15); box-shadow: var(--shadow); }
+
+  .mood-board {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .mood-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .mood-card .mood-icon {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 32px; color: var(--accent); margin-bottom: 8px;
+  }
+  .mood-card .mood-name {
+    font-family: var(--display); font-weight: 500;
+    font-size: 19px; margin-bottom: 8px;
+  }
+  .mood-card .mood-pattern {
+    font-family: var(--mono); font-size: 13px; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .mood-card .mood-bpm {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+  .mood-card .mood-songs {
+    font-size: 13px; color: var(--ink-soft); font-style: italic;
+  }
+
+  .bpm-tap-zone {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    margin: 28px 0;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    user-select: none;
+    transition: all .15s ease;
+  }
+  .bpm-tap-zone:active {
+    background: var(--accent);
+    color: white;
+    transform: scale(.98);
+  }
+  .bpm-tap-zone .tap-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 12px;
+  }
+  .bpm-tap-zone .tap-display {
+    font-family: var(--display); font-style: italic;
+    font-size: 64px; font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .bpm-tap-zone .tap-hint {
+    font-family: var(--body); font-size: 14px;
+    color: var(--ink-soft); margin-top: 12px;
+  }
+
+  .pulse-feel {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 24px 0;
+  }
+  .feel-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .feel-card .feel-title {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 20px; margin: 0 0 8px;
+    color: var(--accent);
+  }
+  .feel-card .feel-grid {
+    display: flex; gap: 4px;
+    align-items: center;
+    margin: 10px 0;
+  }
+  .feel-card .beat {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg-muted);
+    border: 1.5px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .feel-card .beat.strong {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+
+  .dynamics-bar {
+    display: flex; gap: 6px;
+    margin: 12px 0;
+    align-items: flex-end;
+  }
+  .dyn-bar {
+    flex: 1;
+    background: var(--accent);
+    border-radius: 3px 3px 0 0;
+    min-height: 8px;
+    transition: height .3s ease;
+  }
+  .dyn-bar.q   { height: 12px; }
+  .dyn-bar.s   { height: 22px; }
+  .dyn-bar.m   { height: 38px; }
+  .dyn-bar.l   { height: 58px; }
+  .dyn-bar.xl  { height: 78px; }
+
+  .play-pattern-btn {
+    background: var(--accent); color: white;
+    border: none; padding: 8px 16px; border-radius: 999px;
+    font-family: var(--body); font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    margin: 8px 0;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .play-pattern-btn:hover { background: var(--accent-2); color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <nav>
+    <a href="advance_course.html">All stages</a>
+    <a href="stage-4.html">← Stage 4</a>
+    <a href="stage-5.html" class="current">Stage 5</a>
+    <a href="stage-6.html" style="opacity:.5">Stage 6 →</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="stage-pill">Stage 05 · Rhythm by feel</div>
+  <h1>The <em>Rhythm</em><br/>instinct.</h1>
+  <p class="lede">Stop searching YouTube for "strumming pattern for X." Learn to hear a song's <em>pulse</em> and pick rhythm by mood — ballad, peppy folk, ghazal, sufi, party. By the end of this stage, the right pattern will come to you automatically.</p>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">0</span>Why rhythm matters as much as chords</h2>
+
+<p>You can play the right chords and still sound wrong. Why? Because <strong>rhythm carries the song's emotion more than chord choice does</strong>. The same I–V–vi–IV played with:</p>
+<ul>
+  <li>Slow fingerstyle = a ballad like <em>Tum Hi Ho</em>.</li>
+  <li>D-D-U-U-D-U with a peppy bounce = <em>Hawayein</em>.</li>
+  <li>All downstrokes, heavy and slow = a marching anthem.</li>
+  <li>Reggae offbeats = a totally different song.</li>
+</ul>
+
+<p>The chords are identical. The rhythm changes the meaning. So once you can pick chords, the question becomes: <strong>which rhythm fits this song?</strong></p>
+
+<blockquote>
+"Get the rhythm right and even wrong chords will sound musical. Get the rhythm wrong and even perfect chords will fall flat."
+</blockquote>
+
+<h2><span class="num">1</span>Finding a song's <em>pulse</em></h2>
+
+<p>Before you pick a pattern, you must find the pulse — the heartbeat of the song. Two things to identify:</p>
+
+<ol>
+  <li><strong>Tempo (BPM):</strong> how fast is the heartbeat? 60 BPM (very slow ballad) to 140 BPM (party)?</li>
+  <li><strong>Time signature:</strong> are beats grouped in 4 (most songs), 3 (waltz, ghazal), or 6 (sufi, qawwali)?</li>
+</ol>
+
+<h4>Method 1: tap your foot</h4>
+<p>Play the song. Tap your foot until you feel synced with it. Once you're locked in, count: "1, 2, 3, 4" or "1, 2, 3." If 1-2-3-4 feels natural and falls on the snare hits, it's 4/4. If it feels lopsided in 4 but smooth in 3, it's 3/4. If it feels in 6 (one-two-three-four-five-six, faster), it's 6/8.</p>
+
+<h4>Method 2: count between taps</h4>
+<p>Tap on every "1" and count BPM in seconds. Most songs are between 60 and 140. Anything below 80 = slow. 80–110 = medium. 110+ = fast.</p>
+
+<div class="bpm-tap-zone" id="bpm-tap">
+  <div class="tap-label">Tap with the beat</div>
+  <div class="tap-display" id="bpm-display">— BPM</div>
+  <div class="tap-hint">Click anywhere here on each beat. After 4+ taps, it'll show the BPM.</div>
+</div>
+
+<button class="play-btn outline" id="bpm-reset">Reset</button>
+
+<h2><span class="num">2</span>Time signatures: <em>4, 3, and 6</em></h2>
+
+<p>Most music sits in three time-signature families. Hearing the difference is the foundation of rhythmic choice.</p>
+
+<div class="pulse-feel">
+  <div class="feel-card">
+    <div class="feel-title">4/4 — the standard pulse</div>
+    <p style="font-size:14px; margin:0 0 10px">Four beats per bar, accent on beats 1 and 3. The default for pop, rock, Bollywood, country.</p>
+    <div class="feel-grid">
+      <div class="beat strong">1</div>
+      <div class="beat">2</div>
+      <div class="beat strong">3</div>
+      <div class="beat">4</div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); font-style:italic">~95% of pop songs are here.</p>
+    <button class="play-pattern-btn" onclick="playMetronome(4, 100)">▶ Hear 4/4 at 100 BPM</button>
+  </div>
+
+  <div class="feel-card">
+    <div class="feel-title">3/4 — the waltz</div>
+    <p style="font-size:14px; margin:0 0 10px">Three beats per bar, strong accent on beat 1. Sways. Common in ghazals, lullabies, ballads.</p>
+    <div class="feel-grid">
+      <div class="beat strong">1</div>
+      <div class="beat">2</div>
+      <div class="beat">3</div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); font-style:italic">Hawayein, many old Bollywood ballads.</p>
+    <button class="play-pattern-btn" onclick="playMetronome(3, 100)">▶ Hear 3/4 at 100 BPM</button>
+  </div>
+
+  <div class="feel-card">
+    <div class="feel-title">6/8 — the lilting</div>
+    <p style="font-size:14px; margin:0 0 10px">Six beats per bar, grouped as 2 sets of 3. Rolling, hypnotic. Common in qawwali, sufi, English folk.</p>
+    <div class="feel-grid">
+      <div class="beat strong">1</div>
+      <div class="beat">2</div>
+      <div class="beat">3</div>
+      <div class="beat strong">4</div>
+      <div class="beat">5</div>
+      <div class="beat">6</div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); font-style:italic">Channa Mereya (in places), House of the Rising Sun.</p>
+    <button class="play-pattern-btn" onclick="playMetronome(6, 100)">▶ Hear 6/8 at 100 BPM</button>
+  </div>
+
+  <div class="feel-card">
+    <div class="feel-title">2/4 — the train</div>
+    <p style="font-size:14px; margin:0 0 10px">Two strong beats. Fast, peppy, marching. Used in classic Bollywood up-tempo numbers.</p>
+    <div class="feel-grid">
+      <div class="beat strong">1</div>
+      <div class="beat">2</div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); font-style:italic">Mere Sapno Ki Rani, Zindagi Ek Safar.</p>
+    <button class="play-pattern-btn" onclick="playMetronome(2, 140)">▶ Hear 2/4 at 140 BPM</button>
+  </div>
+</div>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #1</div>
+  <div class="drill-title">"Identify the time signature"</div>
+  <p>I'll play a beat pattern. Identify whether it's 4/4, 3/4, or 6/8.</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="ts-play">Play beats</button>
+    <button class="play-btn outline" id="ts-44">4/4</button>
+    <button class="play-btn outline" id="ts-34">3/4</button>
+    <button class="play-btn outline" id="ts-68">6/8</button>
+    <button class="play-btn outline" id="ts-new">New beat</button>
+  </div>
+
+  <div class="drill-output" id="ts-output">
+    Press <strong>Play beats</strong>. Count along, feel the grouping.  Score: 0/0
+  </div>
+</div>
+
+<h2><span class="num">2</span>The <em>mood-to-pattern map</em></h2>
+
+<p>Songs have moods, and each mood has a family of strumming patterns that "fits." Here's the map:</p>
+
+<div class="mood-board">
+
+  <div class="mood-card">
+    <div class="mood-icon">💧</div>
+    <div class="mood-name">Slow ballad</div>
+    <div class="mood-pattern">D&nbsp;_&nbsp;DU&nbsp;_&nbsp;DU</div>
+    <div class="mood-bpm">60–80 BPM · 4/4</div>
+    <p class="mood-songs">Tum Hi Ho, Channa Mereya, Hum Bewafa, Tere Bina Zindagi Se</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','_','D','U','_','D','U'], 80)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🌅</div>
+    <div class="mood-name">Easy folk</div>
+    <div class="mood-pattern">D&nbsp;D&nbsp;U&nbsp;U&nbsp;D&nbsp;U</div>
+    <div class="mood-bpm">85–110 BPM · 4/4</div>
+    <p class="mood-songs">Kabira, Raabta, Sajni, Pal, most folk songs</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','D','U','U','D','U'], 100)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">⚡</div>
+    <div class="mood-name">Peppy / dance</div>
+    <div class="mood-pattern">D&nbsp;DU&nbsp;UDU</div>
+    <div class="mood-bpm">110–140 BPM · 4/4</div>
+    <p class="mood-songs">Hawayein, Bachna Ae Haseeno, dance numbers</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','D','U','U','D','U'], 130)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🌙</div>
+    <div class="mood-name">Ghazal / waltz</div>
+    <div class="mood-pattern">D&nbsp;_&nbsp;D&nbsp;_&nbsp;DU</div>
+    <div class="mood-bpm">70–95 BPM · 3/4 or 6/8</div>
+    <p class="mood-songs">Hothon Se Chu Lo Tum, classic ghazals</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','_','D','_','D','U'], 80)">▶ Hear it (3/4)</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🕊</div>
+    <div class="mood-name">Sufi / qawwali</div>
+    <div class="mood-pattern">D&nbsp;D&nbsp;U&nbsp;D&nbsp;U (6/8)</div>
+    <div class="mood-bpm">90–110 BPM · 6/8</div>
+    <p class="mood-songs">Maula Mere Maula, sufi compositions</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','D','U','D','U','D'], 100)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🎉</div>
+    <div class="mood-name">Big anthem</div>
+    <div class="mood-pattern">D&nbsp;D&nbsp;D&nbsp;D (downstrokes)</div>
+    <div class="mood-bpm">90–130 BPM · 4/4</div>
+    <p class="mood-songs">Ae Watan, marching anthems, intro sections</p>
+    <button class="play-pattern-btn" onclick="playStrum(['D','D','D','D'], 100)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🎈</div>
+    <div class="mood-name">Bouncy reggae-ish</div>
+    <div class="mood-pattern">_&nbsp;U&nbsp;_&nbsp;U</div>
+    <div class="mood-bpm">75–100 BPM · 4/4</div>
+    <p class="mood-songs">Some Bombay Bicycle Club tracks; not common in Bollywood</p>
+    <button class="play-pattern-btn" onclick="playStrum(['_','U','_','U'], 90)">▶ Hear it</button>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🌀</div>
+    <div class="mood-name">Fingerpicked ballad</div>
+    <div class="mood-pattern">Arpeggio: bass → 3 → 2 → 1</div>
+    <div class="mood-bpm">60–85 BPM · 4/4</div>
+    <p class="mood-songs">Galliyan reprise, Phir Le Aaya Dil</p>
+    <button class="play-pattern-btn" onclick="playArpeggio(80)">▶ Hear it</button>
+  </div>
+
+</div>
+
+<h2><span class="num">3</span>How to choose a pattern <em>in real time</em></h2>
+
+<p>When you hear a new song, here's the 3-step process to pick a strumming pattern:</p>
+
+<div class="card accent">
+  <div class="card-label">Step 1</div>
+  <p style="margin:0"><strong>Find the BPM.</strong> Tap along until you're locked in. Note whether it's slow (&lt;80), medium (80–110), or fast (&gt;110).</p>
+</div>
+
+<div class="card accent">
+  <div class="card-label">Step 2</div>
+  <p style="margin:0"><strong>Find the time signature.</strong> Count "1-2-3-4" along — does the cycle fit? If yes, 4/4. If you feel "1-2-3, 1-2-3" instead, it's 3/4. If 1-2-3-4-5-6, it's 6/8.</p>
+</div>
+
+<div class="card accent">
+  <div class="card-label">Step 3</div>
+  <p style="margin:0"><strong>Match the mood.</strong> Is the song sad and slow? → ballad pattern. Sad but mid-tempo? → easy folk. Fast and danceable? → peppy. Wistful and lilting? → 3/4 or 6/8 ghazal. Loud and proud? → all-downstrokes anthem.</p>
+</div>
+
+<p>Once you've made those three decisions, you've narrowed the choice from "infinite patterns" to one of maybe 2–3 candidates. Pick one, start strumming. If it doesn't feel right after 8 bars, switch to another candidate.</p>
+
+<h2><span class="num">4</span>The <em>dynamics</em> layer</h2>
+
+<p>Dynamics = how <em>loud</em> you strum from beat to beat. Most beginners strum every chord at the same volume — flat. Pros vary volume constantly:</p>
+
+<ul>
+  <li><strong>Verse:</strong> softer, more intimate. Use lighter strums, maybe fingerpicked.</li>
+  <li><strong>Pre-chorus:</strong> building. Add more energy, harder strums.</li>
+  <li><strong>Chorus:</strong> full power. Hit hard, ring out.</li>
+  <li><strong>Bridge:</strong> often pulled back for contrast.</li>
+  <li><strong>Last chorus:</strong> loudest, fullest.</li>
+</ul>
+
+<div class="card teal">
+  <div class="card-label">The dynamics rule of thumb</div>
+  <p style="margin:0">Your strumming volume should <em>follow</em> the singer's volume. If the singer is whispering the verse, play softly. If they're belting the chorus, hit hard. Match the energy — don't fight it.</p>
+</div>
+
+<div class="dynamics-bar">
+  <div class="dyn-bar q"></div>
+  <div class="dyn-bar s"></div>
+  <div class="dyn-bar m"></div>
+  <div class="dyn-bar l"></div>
+  <div class="dyn-bar xl"></div>
+  <div class="dyn-bar l"></div>
+  <div class="dyn-bar m"></div>
+  <div class="dyn-bar s"></div>
+</div>
+<p style="font-size:13px; color:var(--ink-mute); text-align:center; font-style:italic">A typical song's dynamic arc: quiet intro → building verse → big chorus → pulled-back verse → biggest chorus → fade</p>
+
+<h2><span class="num">5</span>Strumming for <em>melody phrasing</em></h2>
+
+<p>The advanced trick: your strumming should <em>breathe with the singer's phrases</em>. Most beginners strum on autopilot regardless of what the melody is doing. Pros leave gaps when the singer holds a long note. They emphasise downstrokes on the singer's accents. They <em>respond</em>.</p>
+
+<h4>Practical examples</h4>
+
+<div class="card">
+  <p><strong>Long held note in melody:</strong> reduce to a single downstrum and let it ring. Don't keep strumming — give the held note room.</p>
+  <p><strong>Quick, busy lyrics:</strong> simplify your strum. The voice is doing the rhythmic work. You play sparse chord roots, maybe palm-muted.</p>
+  <p><strong>End of a phrase, singer takes a breath:</strong> this is when you can add a strumming flourish — a quick UDU fill, a chord change, anything that fills the gap.</p>
+</div>
+
+<h2><span class="num">6</span>Worked example: <em>Tum Hi Ho</em> rhythm choice</h2>
+
+<div class="card">
+  <p><strong>Step 1 — BPM:</strong> ~66 BPM. Slow.</p>
+  <p><strong>Step 2 — Time signature:</strong> 4/4. You can count "1-2-3-4" smoothly.</p>
+  <p><strong>Step 3 — Mood:</strong> sad, longing, slow ballad.</p>
+  <p><strong>Conclusion:</strong> use the <strong>slow ballad pattern</strong> — <code class="inline">D _ DU _ DU</code> at 66 BPM. Or fingerpick if you can.</p>
+
+  <p style="margin-top:14px"><strong>What NOT to do:</strong> don't play it with the peppy <code class="inline">D D U U D U</code> pattern. The chords would be correct but the song's emotion would die. The rhythm <em>is</em> the emotion here.</p>
+
+  <p><strong>Dynamics:</strong> verse — very soft, maybe fingerpicked. Chorus ("kyunki tum hi ho...") — strum the slow ballad pattern, louder. Last chorus — fullest sound. Outro — pull back, end softly.</p>
+</div>
+
+<h2><span class="num">7</span>Common <em>mistakes</em> at this stage</h2>
+
+<div class="card warn">
+  <div class="card-label">Mistake 1</div>
+  <p style="margin:0"><strong>Choosing a pattern by song instead of by feel.</strong> Searching "tum hi ho strumming pattern" gives you one answer for one song. Choosing by mood lets you play 100 songs with the same approach. Always think mood first.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 2</div>
+  <p style="margin:0"><strong>Strumming at the same dynamic the whole song.</strong> Even if you pick the right pattern, identical volume throughout makes the song feel flat. Get louder for the chorus, softer for the verse.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 3</div>
+  <p style="margin:0"><strong>Strumming faster than the song wants.</strong> Beginners often play 16th-note patterns on songs that only call for 8th-notes. Result: cluttered, busy, unmusical. When in doubt, simplify.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 4</div>
+  <p style="margin:0"><strong>Not leaving gaps.</strong> Silence is part of music. When the singer pauses, sometimes you should too. Constant strumming is exhausting and amateurish.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 5</div>
+  <p style="margin:0"><strong>Ignoring the time signature.</strong> Playing a 4/4 strum over a 3/4 song will sound wrong even if the chords are right. Always check the meter first.</p>
+</div>
+
+<h2><span class="num">8</span>Real-world drill: <em>3 songs, 3 patterns</em></h2>
+
+<div class="checklist">
+  <h4>This week's homework</h4>
+  <ul>
+    <li>Pick 3 songs you know well — one slow ballad, one mid-tempo folk, one peppy dance number.</li>
+    <li>For each: find the BPM (tap method), the time signature, and the mood family.</li>
+    <li>Choose a pattern from the mood map that fits.</li>
+    <li>Play along with the recording. Try to lock in with the drums or percussion.</li>
+    <li>Note when the song dynamics shift — soft verse to loud chorus — and adjust your strumming volume accordingly.</li>
+    <li>Record yourself playing each one (phone is fine). Listen back. Does your rhythm "breathe" with the song, or is it mechanical?</li>
+  </ul>
+</div>
+
+<h2><span class="num">9</span>Mastery checklist for <em>Stage 5</em></h2>
+
+<div class="checklist">
+  <h4>Ready for Stage 6 when you can:</h4>
+  <ul>
+    <li>Tap along with any song and identify BPM within ±5.</li>
+    <li>Identify time signature (4/4, 3/4, 6/8) within 8 bars of listening.</li>
+    <li>Pick an appropriate strumming pattern from the mood map for a new song within 15 seconds.</li>
+    <li>Switch dynamics between verse and chorus naturally — without thinking about it.</li>
+    <li>Leave appropriate gaps in strumming during long held melody notes.</li>
+    <li>Play any familiar song with a strumming feel that matches its mood — even if it's a totally new song to you.</li>
+  </ul>
+</div>
+
+<h2><span class="num">10</span>Preview of <em>Stage 6 — Live Play</em></h2>
+
+<p>You've now learned to find a key, name its chords, pick chords by melody, move chords with intention, and choose rhythm by mood. The final stage is putting all five skills together — <em>simultaneously, in real time, on the spot</em>.</p>
+
+<p>Stage 6 is the live-play stage. Sit-in drills, "song roulette" (a random song you've never figured out, played live), the 4-step live method synthesised from all previous stages, and how to recover gracefully when things go wrong on stage. After Stage 6, you're playing by ear. The transformation is complete.</p>
+
+<div class="deco-divider">· · ·</div>
+
+<div class="stage-nav">
+  <a class="stage-nav-link" href="stage-4.html">
+    <div class="dir">← Previous</div>
+    <div class="title">Stage 4 · How chords move</div>
+  </a>
+  <a class="stage-nav-link next" href="stage-6.html">
+    <div class="dir">Next →</div>
+    <div class="title">Stage 6 · Playing on the spot</div>
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>Stage 5 of 6 · Play By Ear course</p>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('improv-course-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-label').textContent = 'Light';
+    }
+  } catch (e) {}
+})();
+
+// Audio engine
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function playNote(midi, dur = 0.5, gain = 0.15, when = 0, type = 'triangle') {
+  const ctx = getCtx();
+  const t = ctx.currentTime + when;
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = midiToFreq(midi);
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(gain, t + 0.02);
+  env.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+
+// Strum sound — a quick burst of a G major chord
+function strumDown(when = 0, volume = 0.15) {
+  const chord = [55, 59, 62, 67, 71, 79]; // G3, B3, D4, G4, B4, G5
+  chord.forEach((m, i) => {
+    playNote(m, 0.3, volume, when + i * 0.012, 'triangle');
+  });
+}
+function strumUp(when = 0, volume = 0.1) {
+  const chord = [79, 71, 67, 62, 59, 55].reverse(); // up = top to bottom strings
+  [79, 71, 67].forEach((m, i) => {
+    playNote(m, 0.25, volume, when + i * 0.012, 'triangle');
+  });
+}
+
+// Click sound for metronome
+function metronomeClick(when = 0, isStrong = false) {
+  const ctx = getCtx();
+  const t = ctx.currentTime + when;
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = isStrong ? 1500 : 1000;
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(0.08, t + 0.001);
+  env.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + 0.06);
+}
+
+// Play a metronome pattern (beats per bar, bpm)
+function playMetronome(beatsPerBar, bpm) {
+  const beatDur = 60 / bpm;
+  for (let bar = 0; bar < 2; bar++) {
+    for (let b = 0; b < beatsPerBar; b++) {
+      const when = (bar * beatsPerBar + b) * beatDur;
+      metronomeClick(when, b === 0);
+    }
+  }
+}
+
+// Play a strumming pattern. Pattern is array of "D", "U", "_"
+function playStrum(pattern, bpm = 100) {
+  const stepDur = 60 / bpm / 2; // each cell is an 8th note
+  pattern.forEach((s, i) => {
+    const when = i * stepDur;
+    if (s === 'D') strumDown(when, 0.16);
+    else if (s === 'U') strumUp(when, 0.11);
+    // '_' = silence
+  });
+}
+
+// Fingerpicked arpeggio
+function playArpeggio(bpm = 80) {
+  // P-I-M-A-M-I pattern: bass, 3rd, 2nd, 1st, 2nd, 3rd
+  const notes = [43, 59, 62, 67, 62, 59]; // G2, B3, D4, G4, D4, B3
+  const stepDur = 60 / bpm / 2;
+  notes.forEach((m, i) => {
+    playNote(m, 0.4, 0.13, i * stepDur, 'sine');
+  });
+}
+
+// BPM tap zone
+let tapTimes = [];
+const tapZone = document.getElementById('bpm-tap');
+const bpmDisplay = document.getElementById('bpm-display');
+tapZone.addEventListener('click', () => {
+  const now = performance.now();
+  tapTimes.push(now);
+  if (tapTimes.length > 6) tapTimes.shift();
+  if (tapTimes.length >= 2) {
+    // Calculate average interval
+    let sum = 0;
+    for (let i = 1; i < tapTimes.length; i++) {
+      sum += tapTimes[i] - tapTimes[i-1];
+    }
+    const avg = sum / (tapTimes.length - 1);
+    const bpm = Math.round(60000 / avg);
+    bpmDisplay.textContent = `${bpm} BPM`;
+  } else {
+    bpmDisplay.textContent = `tap 2+ times`;
+  }
+});
+document.getElementById('bpm-reset').addEventListener('click', () => {
+  tapTimes = [];
+  bpmDisplay.textContent = '— BPM';
+});
+
+// Time signature drill
+const TS_OPTIONS = [
+  { beats: 4, bpm: 100, name: '44' },
+  { beats: 3, bpm: 100, name: '34' },
+  { beats: 6, bpm: 100, name: '68' },
+];
+let tsState = { current: null, score: 0, attempts: 0 };
+
+function newTs() {
+  tsState.current = TS_OPTIONS[Math.floor(Math.random() * TS_OPTIONS.length)];
+}
+function playTs() {
+  if (!tsState.current) newTs();
+  playMetronome(tsState.current.beats, tsState.current.bpm);
+  document.getElementById('ts-output').innerHTML = `Playing... count along. Score: ${tsState.score}/${tsState.attempts}`;
+}
+function guessTs(name) {
+  if (!tsState.current) {
+    document.getElementById('ts-output').innerHTML = 'Press <strong>Play beats</strong> first.';
+    return;
+  }
+  tsState.attempts++;
+  const correct = name === tsState.current.name;
+  if (correct) tsState.score++;
+  const labels = { '44': '4/4', '34': '3/4', '68': '6/8' };
+  const verdict = correct ? '✓ Correct!' : '✗ Not quite —';
+  document.getElementById('ts-output').innerHTML =
+    `${verdict} That was <strong>${labels[tsState.current.name]}</strong>. Score: ${tsState.score}/${tsState.attempts}`;
+  tsState.current = null;
+}
+document.getElementById('ts-play').addEventListener('click', playTs);
+document.getElementById('ts-44').addEventListener('click', () => guessTs('44'));
+document.getElementById('ts-34').addEventListener('click', () => guessTs('34'));
+document.getElementById('ts-68').addEventListener('click', () => guessTs('68'));
+document.getElementById('ts-new').addEventListener('click', () => { newTs(); playTs(); });
+
+// Fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.card, .pattern-card, .mood-card, .feel-card, .bpm-tap-zone, .drill, .checklist').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

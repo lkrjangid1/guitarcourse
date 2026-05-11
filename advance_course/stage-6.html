@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stage 6 · Playing on the Spot — Play By Ear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .method-step {
+    display: flex; gap: 22px;
+    padding: 24px 26px;
+    margin: 14px 0;
+    background: var(--bg-elev);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    align-items: flex-start;
+  }
+  .method-step .step-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-style: italic; font-weight: 700;
+    font-size: 26px; line-height: 1;
+    flex-shrink: 0;
+  }
+  .method-step .step-body { flex: 1; }
+  .method-step h4 {
+    margin: 0 0 6px;
+    font-family: var(--display); font-style: italic;
+    font-size: 20px; font-weight: 500;
+    color: var(--ink);
+  }
+  .method-step .time-tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent-3); font-weight: 700; margin-bottom: 4px;
+  }
+  .method-step p { margin: 0 0 8px; color: var(--ink-soft); }
+
+  .roulette-wheel {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 28px 0;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .roulette-wheel .label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .roulette-display {
+    min-height: 200px;
+    background: var(--bg-muted);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 18px 0;
+    display: flex; flex-direction: column; justify-content: center;
+    transition: all .3s ease;
+  }
+  .roulette-display.spinning {
+    background: var(--accent);
+    color: white;
+  }
+  .roulette-display .song-title {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 32px; color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .roulette-display.spinning .song-title { color: white; }
+  .roulette-display .song-meta {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .1em;
+    color: var(--ink-mute); margin-bottom: 14px;
+  }
+  .roulette-display.spinning .song-meta { color: rgba(255,255,255,.8); }
+  .roulette-display .song-hint {
+    color: var(--ink-soft); font-size: 14px;
+  }
+  .roulette-display.spinning .song-hint { color: white; }
+
+  .recovery-card {
+    background: var(--bg-elev);
+    border-left: 4px solid var(--accent-3);
+    border: 1px solid var(--line);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+  }
+  .recovery-card .scenario {
+    font-family: var(--display); font-style: italic;
+    font-size: 17px; color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .recovery-card .move {
+    font-size: 14px; color: var(--ink);
+    margin: 6px 0;
+  }
+  .recovery-card .move strong { color: var(--accent-3); }
+
+  .jam-scenario {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 8%, var(--bg-elev)),
+      color-mix(in srgb, var(--accent-3) 6%, var(--bg-elev)));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 28px 0;
+  }
+  .jam-scenario h4 {
+    margin: 0 0 12px;
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 22px;
+  }
+
+  .skills-tree {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: var(--shadow);
+  }
+  .skill-branch {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: center;
+  }
+  .skill-branch:last-child { border-bottom: 0; }
+  .skill-branch .stage-num {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 36px; color: var(--accent);
+    text-align: center; line-height: 1;
+  }
+  .skill-branch .skill-text strong {
+    font-family: var(--display); font-style: italic; font-weight: 500;
+    font-size: 16px; color: var(--ink); display: block; margin-bottom: 2px;
+  }
+  .skill-branch .skill-text {
+    color: var(--ink-soft); font-size: 14px;
+  }
+
+  .belt-progression {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .belt-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .belt-card .belt-icon {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 28px; color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .belt-card .belt-name {
+    font-family: var(--display); font-style: italic;
+    font-size: 15px; font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .belt-card .belt-time {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--accent-3); margin-bottom: 6px;
+  }
+  .belt-card .belt-desc {
+    font-size: 12px; color: var(--ink-soft);
+  }
+
+  .final-words {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 12%, var(--bg-elev)),
+      color-mix(in srgb, var(--accent-2) 10%, var(--bg-elev)));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    margin: 40px 0;
+    text-align: center;
+  }
+  .final-words .quote {
+    font-family: var(--display); font-style: italic; font-weight: 400;
+    font-size: 26px; line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <nav>
+    <a href="advance_course.html">All stages</a>
+    <a href="stage-5.html">← Stage 5</a>
+    <a href="stage-6.html" class="current">Stage 6</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="stage-pill">Stage 06 · Live play · The finale</div>
+  <h1>Playing on the <em>spot</em>.</h1>
+  <p class="lede">This is where everything you've learned becomes one skill — <em>played live, in real time, with people watching</em>. Sit-in drills, song roulette, the live method, and how to recover when things go wrong. After Stage 6, you don't play <em>from</em> chord sheets. You play <em>without</em> them.</p>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">0</span>What changes in Stage 6</h2>
+
+<p>For five stages we've trained one skill at a time. Stage 6 is different — there's almost no new theory. The whole point is <strong>synthesis</strong>: doing all five skills <em>simultaneously</em>, under the pressure of a live moment, without freezing.</p>
+
+<p>Imagine: someone hands you a guitar. They say "play something I can sing along to." You have 5 seconds to decide:</p>
+
+<ul>
+  <li>What key?</li>
+  <li>What progression?</li>
+  <li>What rhythm pattern?</li>
+  <li>What dynamics?</li>
+  <li>And — go.</li>
+</ul>
+
+<p>If even one of these decisions takes more than a beat, the moment dies. Stage 6 is about making all five decisions instant, automatic, and good <em>enough</em> — not perfect.</p>
+
+<blockquote>
+"The audience doesn't notice if your chord was the 'best' one. They notice if you played confidently and the music kept moving."
+</blockquote>
+
+<h2><span class="num">1</span>The skill <em>tree</em> you've built</h2>
+
+<p>Before we put it all together, let's name what's now in your toolkit:</p>
+
+<div class="skills-tree">
+  <div class="skill-branch">
+    <div class="stage-num">01</div>
+    <div class="skill-text">
+      <strong>Find the key in 5 seconds</strong>
+      Hum the chorus, find the home note, pick major or minor. You can do this with any song you can sing.
+    </div>
+  </div>
+  <div class="skill-branch">
+    <div class="stage-num">02</div>
+    <div class="skill-text">
+      <strong>Name the family of six</strong>
+      Given any key, you can name its I, ii, iii, IV, V, vi chords without thinking. Roman numerals are your second language.
+    </div>
+  </div>
+  <div class="skill-branch">
+    <div class="stage-num">03</div>
+    <div class="skill-text">
+      <strong>Match melody to chord</strong>
+      You hear a melody note, you know which chord contains it. You can accompany yourself singing songs nobody taught you.
+    </div>
+  </div>
+  <div class="skill-branch">
+    <div class="stage-num">04</div>
+    <div class="skill-text">
+      <strong>Know where chords want to go</strong>
+      Cadences, the axis, substitutions, borrowed chords. You can predict the next chord and surprise the listener when you want to.
+    </div>
+  </div>
+  <div class="skill-branch">
+    <div class="stage-num">05</div>
+    <div class="skill-text">
+      <strong>Pick rhythm by mood</strong>
+      Find BPM, identify time signature, choose the right strumming family. Match the emotional energy of any song.
+    </div>
+  </div>
+</div>
+
+<p>These five skills, used together, are <em>playing by ear</em>. Stage 6 is just practicing all of them simultaneously until they become one fluid action.</p>
+
+<h2><span class="num">2</span>The <em>4-step live method</em></h2>
+
+<p>When you walk into a live situation, here's the sequence you run — in your head, in about 10 seconds total:</p>
+
+<div class="method-step">
+  <div class="step-circle">1</div>
+  <div class="step-body">
+    <div class="time-tag">0–3 seconds</div>
+    <h4>Lock in the key</h4>
+    <p>Hum the first two lines of the melody to yourself (silently, if alone, or out loud if jamming). Find the home note — usually where your voice naturally settles. Test: would the song "end here"? If yes, that's the tonic.</p>
+    <p style="font-size:13px; font-style:italic; color:var(--ink-mute)">→ Output: "We're in G major" (or whatever).</p>
+  </div>
+</div>
+
+<div class="method-step">
+  <div class="step-circle">2</div>
+  <div class="step-body">
+    <div class="time-tag">3–5 seconds</div>
+    <h4>Pick the rhythm family</h4>
+    <p>Quick check: slow ballad? Mid-tempo folk? Peppy dance? 4/4 or 3/4 or 6/8? You're not designing — you're just classifying the mood into a known family (from Stage 5's mood map).</p>
+    <p style="font-size:13px; font-style:italic; color:var(--ink-mute)">→ Output: "Slow ballad pattern, 4/4."</p>
+  </div>
+</div>
+
+<div class="method-step">
+  <div class="step-circle">3</div>
+  <div class="step-body">
+    <div class="time-tag">5–7 seconds</div>
+    <h4>Start on I and listen</h4>
+    <p>Play the I chord with your chosen rhythm. Sing or hum along quietly. Within 2 bars, your ear will tell you where to go next. Don't <em>think</em> — listen, then move.</p>
+    <p style="font-size:13px; font-style:italic; color:var(--ink-mute)">→ Output: "G... G... feels like wanting C now... C..."</p>
+  </div>
+</div>
+
+<div class="method-step">
+  <div class="step-circle">4</div>
+  <div class="step-body">
+    <div class="time-tag">Ongoing</div>
+    <h4>Use gravity rules to keep moving</h4>
+    <p>From any chord, you have 2–3 "natural next moves" baked in (Stage 4). If you're on V, head home to I. On IV, you can go to V or back to I. On vi, IV is a peaceful next step. Use these defaults to <em>never freeze</em>.</p>
+    <p style="font-size:13px; font-style:italic; color:var(--ink-mute)">→ Output: continuous, confident chord changes that fit the song.</p>
+  </div>
+</div>
+
+<div class="card teal">
+  <div class="card-label">The key insight</div>
+  <p style="margin:0">Notice you spend more time on key/rhythm (steps 1–2) than on chord choice (steps 3–4). That's deliberate. <strong>Get key and rhythm right and the chords will mostly take care of themselves.</strong></p>
+</div>
+
+<h2><span class="num">3</span>The <em>sit-in</em> drill</h2>
+
+<p>The single best practice exercise: simulate a jam where you're sitting in with someone you've never played with.</p>
+
+<div class="jam-scenario">
+  <h4>Drill: "Friend has a song, you have a guitar"</h4>
+  <p><strong>Setup:</strong> open YouTube or Spotify. Pick a random song from your library (or a random Bollywood number you sort of know). Don't look up the chords.</p>
+  <p><strong>Goal:</strong> within 15 seconds of pressing play, be strumming along with chords that <em>fit</em> — even if they're not the "correct" ones from the recording.</p>
+  <ol>
+    <li>Press play. Don't pause.</li>
+    <li>0–3 sec: find the key (Stage 1).</li>
+    <li>3–5 sec: identify rhythm/mood (Stage 5).</li>
+    <li>5–7 sec: start strumming I.</li>
+    <li>7+ sec: let your ear lead you to IV, V, vi based on what fits.</li>
+    <li>If you make a wrong chord choice, just <em>move on</em> to the next chord. Don't stop. Don't apologise.</li>
+  </ol>
+  <p style="margin-top:14px; font-style:italic; color:var(--ink-soft); font-size:14px">
+    First time: it will feel chaotic. After 20 attempts: you'll catch the key in 3 seconds. After 100 attempts: it'll feel automatic. This is the rep that builds your reflexes.
+  </p>
+</div>
+
+<h2><span class="num">4</span><em>Song roulette</em></h2>
+
+<p>Once sit-in feels comfortable, level up with song roulette: a randomly chosen song you've <em>never</em> figured out the chords for. The harder version of sit-in.</p>
+
+<div class="roulette-wheel">
+  <div class="label">Song Roulette</div>
+  <div class="roulette-display" id="roulette-display">
+    <div class="song-title">Press "Spin"</div>
+    <div class="song-meta">Random Hindi acoustic song</div>
+    <div class="song-hint">You'll get a song to figure out on the spot. No chord sheet allowed.</div>
+  </div>
+  <button class="play-btn" id="roulette-spin">🎰 Spin the wheel</button>
+</div>
+
+<p style="font-size:14px; color:var(--ink-soft); font-style:italic">Pull a random song from the wheel. Open YouTube. Find it. Start the live method. Try to play along within 30 seconds of pressing play. No phone, no chord sheet, no shame in being wrong.</p>
+
+<h2><span class="num">5</span>Recovering when things <em>go wrong</em></h2>
+
+<p>You will make mistakes live. Everyone does. The difference between an amateur and a confident player is what happens in the next half-second after the mistake. Three common scenarios:</p>
+
+<div class="recovery-card">
+  <div class="scenario">Scenario 1: "I played the wrong chord, and it clashed."</div>
+  <p class="move"><strong>Wrong move:</strong> stop, look apologetic, look at the chord sheet.</p>
+  <p class="move"><strong>Right move:</strong> immediately move to a related chord. If you played V when you should've played IV, V is one move from I — just go to I next. Most "wrong" chords are one step from "right" chords.</p>
+  <p class="move"><strong>The trick:</strong> the audience almost never notices brief wrong notes. They notice when you stop playing. <em>Don't stop.</em></p>
+</div>
+
+<div class="recovery-card">
+  <div class="scenario">Scenario 2: "I lost the key entirely."</div>
+  <p class="move"><strong>Wrong move:</strong> keep flailing through chords hoping one sticks.</p>
+  <p class="move"><strong>Right move:</strong> simplify. Drop to a single sustained chord — usually whatever you last played. Let the song re-orient around you. Listen for one whole phrase. Then re-enter on the next phrase boundary.</p>
+  <p class="move"><strong>The trick:</strong> a held chord is musical. Confused chord changes are not.</p>
+</div>
+
+<div class="recovery-card">
+  <div class="scenario">Scenario 3: "The song modulated and I'm playing in the wrong key."</div>
+  <p class="move"><strong>Wrong move:</strong> push through, playing chords that no longer fit.</p>
+  <p class="move"><strong>Right move:</strong> if everything sounds off all of a sudden, the song likely moved up a half-step or whole-step (Stage 4 modulation). Move all your shapes up 1 or 2 frets and continue.</p>
+  <p class="move"><strong>The trick:</strong> a capo on your guitar makes this dead easy — just slap it on, mid-song, between two strums.</p>
+</div>
+
+<div class="recovery-card">
+  <div class="scenario">Scenario 4: "I forgot the next chord."</div>
+  <p class="move"><strong>Wrong move:</strong> stop playing.</p>
+  <p class="move"><strong>Right move:</strong> repeat the chord you're on. Keep strumming it. The melody will tell you when to move and where to. Eight times out of ten, the next move is V or IV from wherever you are.</p>
+</div>
+
+<h2><span class="num">6</span>The <em>3 levels</em> of live competence</h2>
+
+<p>Treat this stage as a 3-tier journey. You don't reach the top in a week — but you can <em>start</em> level 1 today.</p>
+
+<div class="belt-progression">
+  <div class="belt-card">
+    <div class="belt-icon">1</div>
+    <div class="belt-name">Sing-along</div>
+    <div class="belt-time">Weeks 1–4</div>
+    <div class="belt-desc">You can pick up a guitar and accompany yourself or a friend on songs you both know, in real time, without chord sheets. Mistakes happen but you don't stop.</div>
+  </div>
+  <div class="belt-card">
+    <div class="belt-icon">2</div>
+    <div class="belt-name">Sit-in</div>
+    <div class="belt-time">Weeks 4–10</div>
+    <div class="belt-desc">You can join an existing jam where someone else is leading, listen for 4 bars, then play along confidently. You don't need to know the song.</div>
+  </div>
+  <div class="belt-card">
+    <div class="belt-icon">3</div>
+    <div class="belt-name">Lead</div>
+    <div class="belt-time">Weeks 10+</div>
+    <div class="belt-desc">You can <em>start</em> a jam. Pick a key, set the tempo, lead a group through verses and choruses, change the feel mid-song. People follow your guitar.</div>
+  </div>
+</div>
+
+<h2><span class="num">7</span>Daily <em>practice routine</em></h2>
+
+<p>Stage 6 is mostly about reps. Here's a 20-minute daily routine that will get you to Level 1 in about a month:</p>
+
+<div class="card accent">
+  <div class="card-label">The "20 minute live routine"</div>
+  <ol style="margin:8px 0 0">
+    <li><strong>5 minutes — warm-up (Stages 1–2):</strong> pick a random key. Play I, IV, V, vi in that key. Move on to a different key. Repeat for 5 keys.</li>
+    <li><strong>5 minutes — one new song (Stage 3):</strong> open a Bollywood song you don't know well. Don't look up the chords. Use the live method to figure out the chord changes by ear. Get as close as you can in 5 minutes.</li>
+    <li><strong>5 minutes — sit-in practice (Stage 6):</strong> open Spotify, hit shuffle, play along with whatever comes on. Don't pause. Don't skip. Just play.</li>
+    <li><strong>5 minutes — record yourself singing & playing one song:</strong> phone is fine. Listen back. Note what worked, what didn't. Tomorrow, fix one of the things that didn't.</li>
+  </ol>
+</div>
+
+<h2><span class="num">8</span>How to know <em>you've made it</em></h2>
+
+<p>Hard checkpoints — when you can do these without thinking, you've completed the course:</p>
+
+<div class="checklist">
+  <h4>The "Stage 6 graduation" checklist</h4>
+  <ul>
+    <li>You can sit in any acoustic jam with friends and play along, with no chord sheets, on songs you've never figured out before.</li>
+    <li>Someone hums a melody you've never heard, and within 30 seconds you're playing chords behind them that sound musical.</li>
+    <li>You can transpose any song you know on the spot to a new key — just shift the Roman numerals and play the equivalent chords.</li>
+    <li>You can lead a sing-along of 4+ songs from start to finish without referring to your phone.</li>
+    <li>You can identify the chord progression of a new song on first listen, ~70% accurately.</li>
+    <li>You make mistakes live and recover so smoothly that people don't notice they happened.</li>
+    <li>You enjoy not knowing what's coming next. The uncertainty has become the fun part.</li>
+  </ul>
+</div>
+
+<h2><span class="num">9</span>Where to go <em>after this course</em></h2>
+
+<p>You've finished the playing-by-ear curriculum. Here are natural next directions if you want to keep growing:</p>
+
+<ul>
+  <li><strong>Jazz comping</strong> — learn 7th chords (maj7, m7, dom7) and apply them to ii-V-I changes. Opens up jazz, fusion, and the more sophisticated Bollywood arrangements.</li>
+  <li><strong>Fingerstyle arrangements</strong> — taking the playing-by-ear approach and adding bass + melody + chord all on one guitar. Sungha Jung, Andy McKee territory.</li>
+  <li><strong>Lead playing & soloing</strong> — once you can hear chord changes, you can hear melodies that fit them. Pentatonic scales, blues licks, raag improvisation.</li>
+  <li><strong>Songwriting</strong> — knowing how chords move means you can <em>create</em> progressions that move people, not just identify them. The skills are identical.</li>
+  <li><strong>Producing & arranging</strong> — for solo guitarists who want to add layers — bass lines, harmony vocals, additional instruments — your chord-by-chord understanding is the foundation.</li>
+</ul>
+
+<h2><span class="num">10</span>The <em>final mindset</em></h2>
+
+<p>One last thing — the most important thing.</p>
+
+<p>You've now learned to play by ear. But this isn't an end state — it's a way of <em>relating to music</em>. Every song you ever hear from now on, your brain will automatically start running the live method. "What key is this in? What's the progression? What's the rhythm pattern?"</p>
+
+<p>You will never listen to music the same way again. This is the gift and the curse of ear training — you can't un-hear what you now hear.</p>
+
+<p>Some final principles to carry forward:</p>
+
+<ul>
+  <li><strong>The mistakes are the practice.</strong> Every wrong chord teaches your ear. Every fumble builds the recovery reflex. There's no "perfect playing" — only "good enough to keep going."</li>
+  <li><strong>Simple is usually right.</strong> Three chords played with great feel beats six chords played with hesitation. Always.</li>
+  <li><strong>Listen more than you play.</strong> The musicians who progress fastest are the ones who spend more time analysing what they hear than running through scales.</li>
+  <li><strong>Play with humans.</strong> Apps can't replace jamming with another person. Even one weekly jam will accelerate everything you've learned.</li>
+  <li><strong>Stay curious.</strong> The moment you think you "know" how a song works, you've stopped growing. Keep asking "why does this feel that way?"</li>
+</ul>
+
+<div class="final-words">
+  <p class="quote">
+    "Theory is what we use when we don't have the ear. Once we have the ear, theory becomes a way to describe what we already hear."
+  </p>
+  <p style="color: var(--ink-soft); font-size: 15px; margin: 0; font-style: italic;">
+    — the unofficial motto of every musician who got there
+  </p>
+</div>
+
+<h2 style="border:none; margin-top: 40px;">You've reached the end.</h2>
+
+<p>Six stages. Probably 8–12 weeks of work. Hopefully many years of playing ahead.</p>
+
+<p>If you're reading this and you've actually <em>done</em> the work — not just read it — you can now do something most guitar players never can: hear a song, find its key, and start playing it within 30 seconds, without anyone teaching you how it goes.</p>
+
+<p>That's it. That's the whole skill. Everything else is reps.</p>
+
+<p>Go play.</p>
+
+<div class="deco-divider">· · ·</div>
+
+<div class="stage-nav">
+  <a class="stage-nav-link" href="stage-5.html">
+    <div class="dir">← Previous</div>
+    <div class="title">Stage 5 · The Rhythm Instinct</div>
+  </a>
+  <a class="stage-nav-link next" href="advance_course.html">
+    <div class="dir">↩ Back to</div>
+    <div class="title">All stages</div>
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>Stage 6 of 6 · Play By Ear · The end of the beginning.</p>
+</footer>
+
+<script>
+// ============= Theme toggle =============
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('improv-course-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-label').textContent = 'Light';
+    }
+  } catch (e) {}
+})();
+
+// ============= Song roulette =============
+const ROULETTE_SONGS = [
+  { title: "Tum Hi Ho", artist: "Arijit Singh", hint: "Em key · slow ballad · 66 BPM" },
+  { title: "Channa Mereya", artist: "Arijit Singh", hint: "G major · medium ballad · ~75 BPM" },
+  { title: "Kal Ho Na Ho", artist: "Sonu Nigam", hint: "G major · folk feel · ~90 BPM" },
+  { title: "Hawayein", artist: "Arijit Singh", hint: "D major (often capo'd) · peppy folk · ~120 BPM" },
+  { title: "Kesariya", artist: "Arijit Singh", hint: "D major · medium · ~100 BPM" },
+  { title: "Galliyan", artist: "Ankit Tiwari", hint: "Em · slow ballad · ~70 BPM" },
+  { title: "Phir Le Aaya Dil", artist: "Arijit Singh", hint: "Am · slow ballad · ~62 BPM" },
+  { title: "Raabta", artist: "Arijit Singh", hint: "G major · folk · ~100 BPM" },
+  { title: "Tujhe Kitna Chahne Lage", artist: "Arijit Singh", hint: "G major · medium · ~90 BPM" },
+  { title: "Sajni", artist: "Arijit Singh", hint: "G major · folk · ~100 BPM" },
+  { title: "Mere Sapno Ki Rani", artist: "Kishore Kumar", hint: "Em · 2/4 train rhythm · ~165 BPM" },
+  { title: "Roop Tera Mastana", artist: "Kishore Kumar", hint: "Em · medium · ~130 BPM" },
+  { title: "Pal Pal Dil Ke Paas", artist: "Kishore Kumar", hint: "G major (capo 2) · slow ballad · ~90 BPM" },
+  { title: "O Mere Dil Ke Chain", artist: "Kishore Kumar", hint: "G major (capo 2) · slow · ~95 BPM" },
+  { title: "Chukar Mere Mann Ko", artist: "Kishore Kumar", hint: "G major · slow ballad · ~100 BPM" },
+  { title: "Aap Ki Aankhon Mein Kuch", artist: "Kishore Kumar", hint: "G major · slow · ~95 BPM" },
+  { title: "Kabira", artist: "Tochi Raina", hint: "Em · medium folk · ~95 BPM" },
+  { title: "Iktara", artist: "Kavita Seth", hint: "G major · medium · ~85 BPM" },
+  { title: "Phir Mohabbat", artist: "Arijit Singh", hint: "Em · medium ballad · ~90 BPM" },
+  { title: "Hothon Se Chu Lo Tum", artist: "Jagjit Singh", hint: "G major · ghazal feel · 3/4 time · ~80 BPM" },
+];
+
+const display = document.getElementById('roulette-display');
+const spinBtn = document.getElementById('roulette-spin');
+
+spinBtn.addEventListener('click', () => {
+  display.classList.add('spinning');
+  let counter = 0;
+  const maxFlash = 20;
+  const flashInterval = setInterval(() => {
+    const random = ROULETTE_SONGS[Math.floor(Math.random() * ROULETTE_SONGS.length)];
+    display.innerHTML = `
+      <div class="song-title">${random.title}</div>
+      <div class="song-meta">${random.artist}</div>
+      <div class="song-hint">${random.hint}</div>
+    `;
+    counter++;
+    if (counter >= maxFlash) {
+      clearInterval(flashInterval);
+      display.classList.remove('spinning');
+      const final = ROULETTE_SONGS[Math.floor(Math.random() * ROULETTE_SONGS.length)];
+      display.innerHTML = `
+        <div class="song-title">${final.title}</div>
+        <div class="song-meta">${final.artist}</div>
+        <div class="song-hint">🎯 ${final.hint}<br/>
+        <small style="opacity:.7">Open YouTube. Find it. Start the live method. No chord sheets.</small></div>
+      `;
+    }
+  }, 100);
+});
+
+// Fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.card, .method-step, .recovery-card, .jam-scenario, .skills-tree, .belt-card, .roulette-wheel, .final-words, .checklist').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

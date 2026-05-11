@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stage 3 · The Melody Bridge — Play By Ear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..900;1,300..900&family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .scale-degree-map {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin: 28px 0;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .degree-row {
+    display: grid;
+    grid-template-columns: 80px 70px 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .degree-row:last-child { border-bottom: 0; }
+  .degree-row.header {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-bottom: 8px;
+  }
+  .degree-row .deg-label {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 24px; color: var(--accent);
+    text-align: center;
+  }
+  .degree-row .note-cell {
+    font-family: var(--mono); font-weight: 600; font-size: 18px;
+    color: var(--ink);
+    text-align: center;
+  }
+  .degree-row .chords-cell {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .degree-row .role-cell {
+    font-size: 14px; color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .melody-tester {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 32px 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .melody-tester .label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 8px;
+  }
+
+  .note-picker {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin: 14px 0;
+  }
+  .note-btn {
+    background: var(--bg-elev);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-s);
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: all .15s ease;
+    text-align: center;
+  }
+  .note-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .note-btn.active {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+  .note-btn .deg-small {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
+    color: var(--ink-mute);
+    display: block; margin-bottom: 2px;
+  }
+  .note-btn.active .deg-small { color: rgba(255,255,255,.7); }
+  .note-btn .note-name {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 20px; color: var(--ink);
+  }
+  .note-btn.active .note-name { color: white; }
+
+  .matrix-table {
+    overflow-x: auto;
+    background: var(--bg-elev);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    margin: 24px 0;
+  }
+  .matrix-table table {
+    box-shadow: none; margin: 0;
+  }
+  .matrix-table .yes { color: var(--chord-G); font-weight: 700; }
+  .matrix-table .yes-best { color: var(--chord-G); font-weight: 700; }
+  .matrix-table .yes-best::after { content: " ★"; }
+  .matrix-table .no { color: var(--ink-mute); }
+
+  .melody-example {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 22px 0;
+    box-shadow: var(--shadow);
+  }
+  .melody-line {
+    font-family: var(--mono); font-size: 14px;
+    background: var(--bg-muted);
+    padding: 12px 16px;
+    border-radius: var(--radius-s);
+    margin: 12px 0;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.8;
+  }
+  .melody-note {
+    display: inline-block;
+    padding: 1px 6px;
+    margin: 0 2px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .melody-note.tone {
+    background: var(--chord-G-bg); color: var(--chord-G-ink);
+    border: 1px solid var(--chord-G);
+  }
+  .melody-note.passing {
+    background: var(--bg-muted);
+    color: var(--ink-mute);
+    border: 1px dashed var(--ink-mute);
+  }
+
+  .four-step-method {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent-3) 8%, var(--bg-elev)),
+      color-mix(in srgb, var(--accent) 6%, var(--bg-elev)));
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin: 28px 0;
+    border: 1px solid var(--line);
+  }
+  .four-step-method .step-large {
+    display: flex; gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: flex-start;
+  }
+  .four-step-method .step-large:last-child { border-bottom: 0; }
+  .four-step-method .step-large .num-big {
+    font-family: var(--display); font-style: italic; font-weight: 600;
+    font-size: 52px; color: var(--accent); line-height: 1;
+    min-width: 60px;
+  }
+  .four-step-method .step-large .step-content h4 {
+    margin: 0 0 6px;
+    font-style: normal; font-family: var(--body);
+    font-weight: 700; font-size: 17px;
+  }
+  .four-step-method .step-large .step-content p {
+    margin: 0; color: var(--ink-soft); font-size: 15px;
+  }
+
+  .voice-test-box {
+    background: var(--bg-elev);
+    border: 2px solid var(--accent-3);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 28px 0;
+    box-shadow: var(--shadow-lg);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <nav>
+    <a href="advance_course.html">All stages</a>
+    <a href="stage-2.html">← Stage 2</a>
+    <a href="stage-3.html" class="current">Stage 3</a>
+    <a href="stage-4.html" style="opacity:.5">Stage 4 →</a>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
+<header class="hero">
+  <div class="stage-pill">Stage 03 · Melody to chord</div>
+  <h1>The <em>Melody Bridge</em>.</h1>
+  <p class="lede">The single most useful skill in this course. You'll learn to hear (or sing) any melody note, instantly identify which scale degree it is, and pick the chord that contains it. This is how you accompany yourself singing a song no one taught you.</p>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">0</span>The big idea</h2>
+
+<p>Here's the secret nobody tells beginners: <strong>melody and chords are not separate things</strong>. A chord is just three notes from the scale stacked up. A melody is one note from the scale at a time. So any given moment, your melody note <em>belongs</em> to one or more of the six chords in the key.</p>
+
+<p>If you can answer "which scale degree is my voice singing right now?" — you can pick a chord that contains that degree, and it will sound right.</p>
+
+<blockquote>
+"Every melody note tells you which chord it lives in. You just have to listen."
+</blockquote>
+
+<div class="card teal">
+  <div class="card-label">What this stage requires</div>
+  <p style="margin:0">Stage 1 (key identification) and Stage 2 (chord families and Roman numerals) need to be fairly fluent before this clicks. If you can't yet name the six chords of G major in two seconds, go back and drill Stage 2 a few more days before continuing.</p>
+</div>
+
+<h2><span class="num">1</span>The <em>scale degree map</em></h2>
+
+<p>Recall from Stage 2: a key has 7 scale notes, numbered 1 through 7. Each note belongs to certain chords in the key. Here's the complete map for any major key:</p>
+
+<div class="scale-degree-map">
+  <div class="degree-row header">
+    <div>Degree</div>
+    <div>Note (in G)</div>
+    <div>Lives in chords</div>
+    <div>Role / feel</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">1</div>
+    <div class="note-cell">G</div>
+    <div class="chords-cell">
+      <span class="chord G">I</span>
+      <span class="chord C">IV</span>
+      <span class="chord Em">vi</span>
+    </div>
+    <div class="role-cell">"Home" — feels resolved on I</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">2</div>
+    <div class="note-cell">A</div>
+    <div class="chords-cell">
+      <span class="chord Am">ii</span>
+      <span class="chord D">V</span>
+    </div>
+    <div class="role-cell">Slight tension, leans toward V</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">3</div>
+    <div class="note-cell">B</div>
+    <div class="chords-cell">
+      <span class="chord G">I</span>
+      <span class="chord Em">vi</span>
+      <span class="chord Bm">iii</span>
+    </div>
+    <div class="role-cell">Defines major/minor flavour</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">4</div>
+    <div class="note-cell">C</div>
+    <div class="chords-cell">
+      <span class="chord C">IV</span>
+      <span class="chord Am">ii</span>
+    </div>
+    <div class="role-cell">"Opening the door" feel</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">5</div>
+    <div class="note-cell">D</div>
+    <div class="chords-cell">
+      <span class="chord G">I</span>
+      <span class="chord C">IV</span>
+      <span class="chord D">V</span>
+    </div>
+    <div class="role-cell">Strong stable note — fits everywhere</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">6</div>
+    <div class="note-cell">E</div>
+    <div class="chords-cell">
+      <span class="chord Em">vi</span>
+      <span class="chord C">IV</span>
+    </div>
+    <div class="role-cell">Bittersweet, leans minor</div>
+  </div>
+  <div class="degree-row">
+    <div class="deg-label">7</div>
+    <div class="note-cell">F♯</div>
+    <div class="chords-cell">
+      <span class="chord D">V</span>
+      <span class="chord Bm">iii</span>
+    </div>
+    <div class="role-cell">Maximum tension — wants 1 next</div>
+  </div>
+</div>
+
+<div class="card accent">
+  <div class="card-label">The killer insight</div>
+  <p style="margin:0">Notice that <strong>degrees 1, 3, and 5</strong> are the safest because they live in the most chords. <strong>Degrees 4 and 7</strong> are the most "pointed" — they nail down specific chords (IV and V respectively). When your melody hits a 4 or 7, the chord choice is almost predetermined.</p>
+</div>
+
+<h2><span class="num">2</span>How to find your <em>scale degree</em> in real time</h2>
+
+<p>The fundamental skill: while singing, know which number you're on. This is the "ear-training muscle" that takes the longest to build — but pays off forever.</p>
+
+<h4>The method</h4>
+<ol>
+  <li>Play the I chord on your guitar and sing along.</li>
+  <li>Sing scale-degree numbers out loud: "ONE, two, three, four, five, six, seven, ONE."</li>
+  <li>Cycle through them ascending and descending.</li>
+  <li>Now play I again and sing just the <strong>1</strong>. Then jump randomly to other degrees while saying their numbers: "1... 3... 5... 1... 7... 2... 1...".</li>
+  <li>The aim is to <em>feel</em> what degree 5 sounds like vs degree 3 vs degree 4 — they each have a distinct flavour.</li>
+</ol>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #1</div>
+  <div class="drill-title">"Name that scale degree"</div>
+  <p>I'll play the I chord, then a melody note. Tell me which scale degree it is (1–7). Sing along with each note before guessing — it helps your ear lock in.</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="deg-play">Play I, then note</button>
+    <button class="play-btn outline" id="deg-new">New note</button>
+  </div>
+
+  <div class="note-picker" id="deg-picker">
+    <button class="note-btn" data-deg="1"><span class="deg-small">1</span><span class="note-name">Sa</span></button>
+    <button class="note-btn" data-deg="2"><span class="deg-small">2</span><span class="note-name">Re</span></button>
+    <button class="note-btn" data-deg="3"><span class="deg-small">3</span><span class="note-name">Ga</span></button>
+    <button class="note-btn" data-deg="4"><span class="deg-small">4</span><span class="note-name">Ma</span></button>
+    <button class="note-btn" data-deg="5"><span class="deg-small">5</span><span class="note-name">Pa</span></button>
+    <button class="note-btn" data-deg="6"><span class="deg-small">6</span><span class="note-name">Dha</span></button>
+    <button class="note-btn" data-deg="7"><span class="deg-small">7</span><span class="note-name">Ni</span></button>
+  </div>
+
+  <div class="drill-output" id="deg-output">Press <strong>Play I, then note</strong>. Listen to both, click the scale degree you heard.</div>
+</div>
+
+<h2><span class="num">3</span>The <em>melody-to-chord matrix</em></h2>
+
+<p>This is the most important table in the entire course. Print it. Stick it on your wall. The columns are scale degrees (which note you're singing). The rows are chords (which chord you might play). A ★ means "this is the most natural fit." A ✓ means "works fine." Empty means "avoid — it'll clash."</p>
+
+<div class="matrix-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Chord ↓ / Melody note →</th>
+        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="chord G">I</span></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="chord Am">ii</span></td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="chord Bm">iii</span></td>
+        <td></td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+      </tr>
+      <tr>
+        <td><span class="chord C">IV</span></td>
+        <td class="yes">✓</td>
+        <td></td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="chord D">V</span></td>
+        <td></td>
+        <td class="yes">✓</td>
+        <td></td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+      </tr>
+      <tr>
+        <td><span class="chord Em">vi</span></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+        <td></td>
+        <td class="yes-best">★</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>How to read this:</p>
+<ul>
+  <li>When your voice sings note <strong>1</strong> (G, in G major), the most natural chord is <span class="chord G">I</span> or <span class="chord Em">vi</span>. Either works.</li>
+  <li>When your voice sings note <strong>4</strong> (C), the natural chord is <span class="chord C">IV</span> or <span class="chord Am">ii</span>.</li>
+  <li>When your voice sings note <strong>7</strong> (F♯), the natural chord is almost always <span class="chord D">V</span>.</li>
+</ul>
+
+<div class="card tip">
+  <div class="card-label">The 80/20 rule</div>
+  <p style="margin:0">You don't need to memorise the whole matrix. Just remember: <strong>degree 1, 3, or 5 → play I</strong>. <strong>Degree 4 or 6 → play IV</strong>. <strong>Degree 2, 5, or 7 → play V</strong>. <strong>Degree 6 with sad mood → play vi</strong>. That covers most situations.</p>
+</div>
+
+<h2><span class="num">4</span>Worked example: building chords from <em>Tum Hi Ho</em></h2>
+
+<p>Let's reverse-engineer the chorus melody and pick chords from scratch.</p>
+
+<div class="melody-example">
+  <div style="font-family:var(--display); font-style:italic; font-size:20px; margin-bottom: 8px">Chorus melody (E minor key)</div>
+  <div style="font-size:14px; color:var(--ink-mute); margin-bottom:8px">Note: in E minor, the 1 is E. Note degrees here are <em>relative to E minor</em>.</div>
+
+  <div class="melody-line">"Kyun  -  ki   tum     hi     ho"
+deg:    <span class="melody-note tone">3</span>    <span class="melody-note tone">3</span>   <span class="melody-note tone">5</span>    <span class="melody-note tone">3</span>    <span class="melody-note tone">1</span></div>
+
+  <p style="margin:12px 0 6px"><strong>Analysis:</strong></p>
+  <ul style="margin:0">
+    <li>"Kyunki" lands on degree 3 (G note). Best chord: <span class="chord G">III</span> (which is G major in E minor). Try playing G — feels great.</li>
+    <li>"Tum" jumps to degree 5 (B note). Best chord: still <span class="chord G">III</span> or <span class="chord Em">i</span>. Both work.</li>
+    <li>"Hi ho" resolves to degree 1 (E note). Best chord: <span class="chord Em">i</span>. The song "lands home" — that's why it feels conclusive.</li>
+  </ul>
+
+  <p style="margin:12px 0 6px"><strong>So the chord progression under this melody:</strong></p>
+  <p style="margin:0"><span class="chord G">G</span> &nbsp; → &nbsp; <span class="chord G">G</span> &nbsp; → &nbsp; <span class="chord Em">Em</span></p>
+
+  <p style="margin:12px 0 0; font-size:14px; color:var(--ink-soft); font-style:italic">
+    That's exactly what the song does. You just derived the chord progression by listening to the melody and using the matrix.
+  </p>
+</div>
+
+<h2><span class="num">5</span>The <em>4-step live method</em></h2>
+
+<p>Here's how to use everything you've learned in real time, while sitting at a guitar with a song to figure out.</p>
+
+<div class="four-step-method">
+
+  <div class="step-large">
+    <div class="num-big">1</div>
+    <div class="step-content">
+      <h4>Find the key (Stage 1 skills)</h4>
+      <p>Hum the chorus. Where does your voice land at the end of phrases? That note is the tonic. Test major vs minor. Now you know "key of X" and have 6 chord choices instead of 12.</p>
+    </div>
+  </div>
+
+  <div class="step-large">
+    <div class="num-big">2</div>
+    <div class="step-content">
+      <h4>Start with I and let your ear lead</h4>
+      <p>Play the I chord. Sing the song's opening line over it. Does it sound right? Most songs start on I, so this works ~85% of the time. If it clashes, try IV or vi — start there instead.</p>
+    </div>
+  </div>
+
+  <div class="step-large">
+    <div class="num-big">3</div>
+    <div class="step-content">
+      <h4>Listen for the "wants to change" moment</h4>
+      <p>As you sing, you'll feel a specific spot where the I chord stops feeling right — your voice has moved to a note that clashes. That's your cue. Stop singing for half a second, listen to the melody note you're on, and consult the matrix: which chord contains that note? Switch to it.</p>
+    </div>
+  </div>
+
+  <div class="step-large">
+    <div class="num-big">4</div>
+    <div class="step-content">
+      <h4>Use the gravity rules</h4>
+      <p>If you're on V, you can almost always go back to I next. If you're on IV, going to V (and then I) is natural. If you've been on I a while, IV is the easiest move. Trust these gravity rules and you'll rarely pick a wrong next chord.</p>
+    </div>
+  </div>
+
+</div>
+
+<h2><span class="num">6</span>Phrase endings — the <em>chord-change signposts</em></h2>
+
+<p>Here's a practical trick: most songs change chords <em>between</em> phrases, not in the middle. So instead of trying to track chord changes note-by-note, listen for where the singer takes a breath. The chord likely changes right there.</p>
+
+<p>Example from <em>Channa Mereya</em>:</p>
+
+<div class="melody-example">
+  <div style="font-family:var(--display); font-style:italic; font-size:18px; margin-bottom: 8px">Verse opening</div>
+  <div class="melody-line">"Accha chalta hoon"  [breath]  "duaaon mein yaad rakhna"  [breath]
+chord: <span class="chord G">G</span>                            <span class="chord D">D</span>                                          <span class="chord C">C</span></div>
+
+  <p style="margin:12px 0 0; font-size:14px; color:var(--ink-soft)">
+    Each phrase = one chord. Listen for the breath. Change chord at the breath. That's a huge chunk of the puzzle.
+  </p>
+</div>
+
+<h2><span class="num">7</span>Live singer's drill: <em>accompany yourself</em></h2>
+
+<div class="voice-test-box">
+  <div style="font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent-3); font-weight:700; margin-bottom:8px">The most valuable drill in this course</div>
+  <h3 style="margin:0 0 12px; font-family:var(--display); font-weight:500">"Sing & switch"</h3>
+
+  <ol style="margin:0">
+    <li>Pick any song you can sing well from memory (Happy Birthday, a Bollywood verse, an English ballad — anything).</li>
+    <li>Identify its key using Stage 1 methods.</li>
+    <li>Play the I chord. Start singing the song.</li>
+    <li>Hold the I chord as long as it sounds right. The moment it clashes, <em>stop singing</em> and try each of the family chords (IV, V, vi) silently in your head. Pick the one that "fits" — usually the one containing the note you're about to sing.</li>
+    <li>Switch chord. Continue singing.</li>
+    <li>Repeat. Make mistakes. The mistakes teach you the patterns.</li>
+  </ol>
+
+  <p style="margin:14px 0 0; font-style:italic; color:var(--ink-soft); font-size:14px">
+    First time: this will feel awkward and slow. After 50 attempts (about a week of daily practice), you'll start anticipating chord changes a beat before they happen. After 200 attempts, you'll do it without thinking — like talking.
+  </p>
+</div>
+
+<h2><span class="num">8</span>The <em>melody-chord match</em> drill</h2>
+
+<div class="drill">
+  <div class="drill-label">Interactive drill #2</div>
+  <div class="drill-title">"Which chord fits this melody?"</div>
+  <p>I'll play a short melody phrase in G major. Pick which chord best supports it (I, IV, V, or vi).</p>
+
+  <div class="play-button-row">
+    <button class="play-btn" id="match-play">Play melody</button>
+    <button class="play-btn outline" id="match-I">I (G)</button>
+    <button class="play-btn outline" id="match-IV">IV (C)</button>
+    <button class="play-btn outline" id="match-V">V (D)</button>
+    <button class="play-btn outline" id="match-vi">vi (Em)</button>
+    <button class="play-btn outline" id="match-new">New melody</button>
+  </div>
+
+  <div class="drill-output" id="match-output">
+    Press <strong>Play melody</strong>. Listen carefully — which family chord supports it best?  Score: 0/0
+  </div>
+</div>
+
+<h2><span class="num">9</span>Common <em>mistakes</em> at this stage</h2>
+
+<div class="card warn">
+  <div class="card-label">Mistake 1</div>
+  <p style="margin:0"><strong>Changing chords too often.</strong> Beginners want to switch chords every half-second. Most songs hold one chord for 2–4 beats minimum. If your accompaniment feels frantic, hold each chord longer.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 2</div>
+  <p style="margin:0"><strong>Following the melody too literally.</strong> Not every melody note needs its own chord. Most melodies have a few "passing notes" between landing notes. Only the landing notes (where your voice rests for a beat) matter for chord choice.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 3</div>
+  <p style="margin:0"><strong>Ignoring the rhythm of phrases.</strong> A chord that fits the melody at one moment might be the wrong chord rhythmically because the song wants more movement. Trust the breath rule — change chords at phrase boundaries, not mid-phrase.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 4</div>
+  <p style="margin:0"><strong>Not using vi enough.</strong> Beginners get stuck on I, IV, V because those are the "happy three." But vi is what makes ballads emotional. If a song feels sad, try using vi much more than you think you should.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-label">Mistake 5</div>
+  <p style="margin:0"><strong>Holding back vocally because you're afraid of being wrong.</strong> The whole point of this stage is that you have to sing out loud to develop the ear-to-hand connection. Sing badly, sing wrong notes, sing too quiet — but sing. Otherwise you're just reading theory.</p>
+</div>
+
+<h2><span class="num">10</span>Mastery checklist for <em>Stage 3</em></h2>
+
+<div class="checklist">
+  <h4>Ready for Stage 4 when you can:</h4>
+  <ul>
+    <li>Identify scale degrees (1-7) when you hear single notes against a I-chord drone, ~70% accuracy.</li>
+    <li>Sing a familiar song without backing and tell where the phrase-ending notes land (degree-wise).</li>
+    <li>Pick up your guitar, identify the key of a new song in &lt;30 seconds, and play I along with the song.</li>
+    <li>Take a known melody and figure out the chord changes by ear within 2-3 listens.</li>
+    <li>Sing any song you know while comping yourself on guitar using I, IV, V, and vi — even if it's not the original chords, as long as it sounds musical.</li>
+    <li>Apply the 4-step live method without re-reading these notes.</li>
+  </ul>
+</div>
+
+<h2><span class="num">11</span>Preview of <em>Stage 4</em></h2>
+
+<p>You can now find a key, name its chords, and pick chord changes that match a melody. The next stage is about <em>movement</em> — why certain chord sequences feel inevitable while others feel jarring. Cadences, the axis progression, modulation tricks, and the subtle art of substituting one chord for another to refresh a tired progression.</p>
+
+<p>Stage 4 is where your playing starts sounding "professional" instead of "correct."</p>
+
+<div class="deco-divider">· · ·</div>
+
+<div class="stage-nav">
+  <a class="stage-nav-link" href="stage-2.html">
+    <div class="dir">← Previous</div>
+    <div class="title">Stage 2 · The Six Friends</div>
+  </a>
+  <a class="stage-nav-link next" href="stage-4.html">
+    <div class="dir">Next →</div>
+    <div class="title">Stage 4 · How chords move</div>
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>Stage 3 of 6 · Play By Ear course</p>
+</footer>
+
+<script>
+// ============= Theme toggle =============
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
+  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('improv-course-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-label').textContent = 'Light';
+    }
+  } catch (e) {}
+})();
+
+// ============= Audio engine =============
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function playNote(midi, dur = 0.5, gain = 0.18, when = 0, type = 'triangle') {
+  const ctx = getCtx();
+  const t = ctx.currentTime + when;
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = midiToFreq(midi);
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(gain, t + 0.02);
+  env.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  osc.connect(env);
+  env.connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+}
+function playChord(midis, dur = 1.0, when = 0) {
+  midis.forEach(m => playNote(m, dur, 0.10, when, 'triangle'));
+}
+function majorTriad(r) { return [r, r+4, r+7]; }
+function minorTriad(r) { return [r, r+3, r+7]; }
+
+const TONIC = 55; // G3
+// Major scale offsets from tonic: 0, 2, 4, 5, 7, 9, 11
+const SCALE_OFFSETS = [0, 2, 4, 5, 7, 9, 11];
+
+// ============= Drill 1: Name that scale degree =============
+let degState = { current: null, score: 0, attempts: 0 };
+
+function newDegree() {
+  degState.current = 1 + Math.floor(Math.random() * 7); // 1-7
+}
+
+function playDegree() {
+  if (!degState.current) newDegree();
+  // Play I chord first
+  playChord(majorTriad(TONIC), 1.0, 0);
+  // Then the melody note an octave higher (so it's clearly above the chord)
+  const noteMidi = TONIC + 12 + SCALE_OFFSETS[degState.current - 1];
+  playNote(noteMidi, 1.2, 0.25, 1.1, 'sine');
+  document.getElementById('deg-output').innerHTML =
+    `Played I chord then a melody note. Which degree (1-7)?  Score: ${degState.score}/${degState.attempts}`;
+}
+
+document.querySelectorAll('#deg-picker .note-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!degState.current) {
+      document.getElementById('deg-output').innerHTML = 'Press <strong>Play I, then note</strong> first.';
+      return;
+    }
+    const guess = parseInt(btn.dataset.deg);
+    degState.attempts++;
+    const correct = guess === degState.current;
+    if (correct) degState.score++;
+    // Highlight clicked
+    document.querySelectorAll('#deg-picker .note-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const verdict = correct ? '✓ Correct!' : '✗ Not quite —';
+    const sargam = ['Sa','Re','Ga','Ma','Pa','Dha','Ni'];
+    document.getElementById('deg-output').innerHTML =
+      `${verdict} That was degree <strong>${degState.current}</strong> (${sargam[degState.current-1]}). Score: ${degState.score}/${degState.attempts} (${Math.round(100*degState.score/Math.max(1,degState.attempts))}%)`;
+    degState.current = null;
+  });
+});
+
+document.getElementById('deg-play').addEventListener('click', playDegree);
+document.getElementById('deg-new').addEventListener('click', () => {
+  newDegree();
+  document.querySelectorAll('#deg-picker .note-btn').forEach(b => b.classList.remove('active'));
+  playDegree();
+});
+
+// ============= Drill 2: Match melody to chord =============
+// Predefined melody phrases with their "correct" supporting chord
+const MELODY_PHRASES = [
+  // [scale-degree sequence, correct chord]
+  { degrees: [1, 3, 5, 3], chord: 'I',  why: '1, 3, 5 — all chord tones of I' },
+  { degrees: [4, 6, 4, 1], chord: 'IV', why: '4 and 6 are chord tones of IV' },
+  { degrees: [2, 5, 7, 5], chord: 'V',  why: '2, 5, 7 are chord tones of V' },
+  { degrees: [3, 5, 6, 3], chord: 'vi', why: 'vi contains 1, 3, 6 — 6 is the key note here' },
+  { degrees: [5, 7, 2, 5], chord: 'V',  why: '5-7-2 are all V chord tones' },
+  { degrees: [1, 5, 3, 1], chord: 'I',  why: 'classic I-chord arpeggio' },
+  { degrees: [4, 1, 6, 4], chord: 'IV', why: '4-6-1 are IV chord tones' },
+  { degrees: [6, 1, 3, 6], chord: 'vi', why: 'vi chord arpeggio (degrees 6, 1, 3)' },
+];
+
+let matchState = { current: null, score: 0, attempts: 0 };
+
+function newMatch() {
+  matchState.current = MELODY_PHRASES[Math.floor(Math.random() * MELODY_PHRASES.length)];
+}
+
+function playMatchMelody() {
+  if (!matchState.current) newMatch();
+  // Play I chord briefly as a reference
+  playChord(majorTriad(TONIC), 0.6, 0);
+  // Then the melody notes
+  matchState.current.degrees.forEach((d, i) => {
+    const noteMidi = TONIC + 12 + SCALE_OFFSETS[d - 1];
+    playNote(noteMidi, 0.45, 0.22, 0.8 + i * 0.5, 'sine');
+  });
+  document.getElementById('match-output').innerHTML =
+    `Played reference I, then 4 melody notes. Which chord supports them best?  Score: ${matchState.score}/${matchState.attempts}`;
+}
+
+function guessMatch(chord) {
+  if (!matchState.current) {
+    document.getElementById('match-output').innerHTML = 'Press <strong>Play melody</strong> first.';
+    return;
+  }
+  matchState.attempts++;
+  const correct = chord === matchState.current.chord;
+  if (correct) matchState.score++;
+  // Play the correct chord under the melody
+  const chordMap = {
+    I:  majorTriad(TONIC),
+    IV: majorTriad(TONIC + 5),
+    V:  majorTriad(TONIC + 7),
+    vi: minorTriad(TONIC + 9),
+  };
+  playChord(chordMap[matchState.current.chord], 2.0, 0);
+  matchState.current.degrees.forEach((d, i) => {
+    const noteMidi = TONIC + 12 + SCALE_OFFSETS[d - 1];
+    playNote(noteMidi, 0.45, 0.22, 0.1 + i * 0.5, 'sine');
+  });
+  const verdict = correct ? '✓ Correct!' : '✗ Not quite —';
+  document.getElementById('match-output').innerHTML =
+    `${verdict} Best chord was <strong>${matchState.current.chord}</strong>. <em>${matchState.current.why}</em>. (Playing answer now.) Score: ${matchState.score}/${matchState.attempts}`;
+  matchState.current = null;
+}
+
+document.getElementById('match-play').addEventListener('click', playMatchMelody);
+document.getElementById('match-I').addEventListener('click', () => guessMatch('I'));
+document.getElementById('match-IV').addEventListener('click', () => guessMatch('IV'));
+document.getElementById('match-V').addEventListener('click', () => guessMatch('V'));
+document.getElementById('match-vi').addEventListener('click', () => guessMatch('vi'));
+document.getElementById('match-new').addEventListener('click', () => {
+  newMatch();
+  playMatchMelody();
+});
+
+// Fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.card, .scale-degree-map, .matrix-table, .drill, .melody-example, .four-step-method, .voice-test-box, .checklist').forEach(el => {
+  el.classList.add('fade-in');
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
