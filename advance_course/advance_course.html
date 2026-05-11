@@ -109,19 +109,36 @@
     .stage-card .stage-num { font-size: 44px; min-width: auto; }
   }
 </style>
+<link rel="stylesheet" href="../assets/site-shell.css" />
 </head>
 <body>
 
-<div class="topbar">
-  <a class="brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="4"/>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-    </svg>
-    <span id="theme-label">Dark</span>
+<header class="topbar site-header">
+  <a class="brand site-brand" href="advance_course.html"><em style="font-style:italic">Play</em> <span>By Ear</span></a>
+  <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-menu">
+    <span></span><span></span><span></span>
   </button>
-</div>
+  <div class="site-menu" id="site-menu">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html">Home</a>
+      <a class="current" href="advance_course.html">All Stages</a>
+      <a href="stage-1.html">Stage 1</a>
+      <a href="stage-2.html">Stage 2</a>
+      <a href="stage-3.html">Stage 3</a>
+      <a href="../songbooks/arijit_singh_songbook.html">Arijit Songbook</a>
+      <a href="../songbooks/kishore_kumar_songbook.html">Kishore Songbook</a>
+    </nav>
+    <div class="site-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <span id="theme-label">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
 
 <header class="hero">
   <div class="eyebrow">A six-stage course · for the working guitarist</div>
@@ -304,27 +321,6 @@
   <p style="margin-top: 4px;">Six stages · roughly 6–12 weeks · the only course your ears will thank you for.</p>
 </footer>
 
-<script>
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
-  try { localStorage.setItem('improv-course-theme', next); } catch (e) {}
-}
-(function() {
-  try {
-    const saved = localStorage.getItem('improv-course-theme');
-    if (saved) {
-      document.documentElement.setAttribute('data-theme', saved);
-      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('theme-label').textContent = 'Light';
-    }
-  } catch (e) {}
-})();
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

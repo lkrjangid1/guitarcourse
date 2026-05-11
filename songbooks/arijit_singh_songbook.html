@@ -457,22 +457,34 @@ footer .sig {
   .chord-line { flex-wrap: wrap; }
 }
 </style>
+<link rel="stylesheet" href="../assets/site-shell.css" />
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand"><em style="font-style:italic">Arijit</em> · <span>Acoustic Songbook</span></div>
-  <div class="controls">
-    <input type="search" class="search" id="searchBox" placeholder="Search songs…" />
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-      <span id="theme-label">Dark</span>
-    </button>
+<header class="topbar site-header">
+  <a class="brand site-brand" href="../index.html"><em style="font-style:italic">Arijit</em> · <span>Acoustic Songbook</span></a>
+  <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="site-menu" id="site-menu">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html">Home</a>
+      <a href="../advance_course/advance_course.html">Advanced Course</a>
+      <a class="current" href="arijit_singh_songbook.html">Arijit Songbook</a>
+      <a href="kishore_kumar_songbook.html">Kishore Songbook</a>
+    </nav>
+    <div class="controls site-actions">
+      <input type="search" class="search" id="searchBox" placeholder="Search songs…" />
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <span id="theme-label">Dark</span>
+      </button>
+    </div>
   </div>
-</div>
+</header>
 
 <header class="hero">
   <div class="eyebrow">A guitar songbook · 52 songs · 2007–2024</div>
@@ -3279,28 +3291,6 @@ Chord progressions are commonly-played acoustic interpretations, often using cap
 </footer>
 
 <script>
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
-  try { localStorage.setItem('arijit-songbook-theme', next); } catch (e) {}
-}
-
-(function() {
-  try {
-    const saved = localStorage.getItem('arijit-songbook-theme');
-    if (saved) {
-      document.documentElement.setAttribute('data-theme', saved);
-      document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('theme-label').textContent = 'Light';
-    }
-  } catch (e) {}
-})();
-
 // Search filter
 const searchBox = document.getElementById('searchBox');
 const songBlocks = document.querySelectorAll('.song-block');
@@ -3340,5 +3330,6 @@ document.querySelectorAll('.song-block, .idx-card, .quick-guide, .chord-legend')
 });
 </script>
 
+<script src="../assets/site.js"></script>
 </body>
 </html>

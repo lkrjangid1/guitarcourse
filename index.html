@@ -518,30 +518,39 @@ footer .sig {
 .fade-in { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 </style>
+<link rel="stylesheet" href="assets/site-shell.css" />
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">The <em style="font-style: italic">Complete</em> <span>Guitar Course</span></div>
-  <nav>
-    <a href="#part-foundations">Foundations</a>
-    <a href="#part-strumming">Strumming</a>
-    <a href="#part-chords">Chords</a>
-    <a href="#part-songbook">Songbook</a>
-    <a href="#part-theory">Theory</a>
-    <a href="#part-advanced">Advanced</a>
-    <a href="./songbooks/arijit_singh_songbook.html">Arijit Singh Songbook</a>
-    <a href="./songbooks/kishore_kumar_songbook.html">Kishore Kumar Songbook</a>
-    <a href="./advance_course/advance_course.html">Advanced Course</a>
-  </nav>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="4"/>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-    </svg>
-    <span id="theme-label">Dark</span>
+<header class="topbar site-header">
+  <a class="brand site-brand" href="index.html">The <em style="font-style: italic">Complete</em> <span>Guitar Course</span></a>
+  <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-menu">
+    <span></span><span></span><span></span>
   </button>
-</div>
+  <div class="site-menu" id="site-menu">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="current" href="index.html">Home</a>
+      <a href="#part-foundations">Foundations</a>
+      <a href="#part-strumming">Strumming</a>
+      <a href="#part-chords">Chords</a>
+      <a href="#part-songbook">Songbook</a>
+      <a href="#part-theory">Theory</a>
+      <a href="#part-advanced">Advanced</a>
+      <a href="./advance_course/advance_course.html">Advanced Course</a>
+      <a href="./songbooks/arijit_singh_songbook.html">Arijit Songbook</a>
+      <a href="./songbooks/kishore_kumar_songbook.html">Kishore Songbook</a>
+    </nav>
+    <div class="site-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <span id="theme-label">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
 
 <header class="hero">
   <div class="eyebrow">A 31-day course · expanded for the long road</div>
@@ -2448,30 +2457,6 @@ E |--x--3--5--|     ← thickest string (low E)
 </footer>
 
 <script>
-  // Theme toggle with localStorage persistence
-  function toggleTheme() {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    const next = current === 'light' ? 'dark' : 'light';
-    html.setAttribute('data-theme', next);
-    document.getElementById('theme-label').textContent = next === 'light' ? 'Dark' : 'Light';
-    try { localStorage.setItem('guitar-course-theme', next); } catch (e) {}
-  }
-
-  // Restore theme on load
-  (function() {
-    try {
-      const saved = localStorage.getItem('guitar-course-theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('theme-label').textContent = saved === 'light' ? 'Dark' : 'Light';
-      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.getElementById('theme-label').textContent = 'Light';
-      }
-    } catch (e) {}
-  })();
-
   // Fade-in observer for sections
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -2488,5 +2473,6 @@ E |--x--3--5--|     ← thickest string (low E)
   });
 </script>
 
+<script src="assets/site.js"></script>
 </body>
 </html>
